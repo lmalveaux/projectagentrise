@@ -1,0 +1,3949 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent Rise — Client Journey</title>
+    <style>
+      /* ---- Base (Palette A: Charcoal / Burgundy / Gold) ---- */
+:root {
+  --page: #F8F5EF;
+  --surface: #FFFFFF;
+  --panel: #F0EBE0;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --line: #E0D8C8;
+  --accent: #6B1F2C;
+  --accent-dark: #4E1620;
+  --accent-soft: rgba(107, 31, 44, 0.08);
+  --gold: #C9A227;
+  --gold-soft: rgba(201, 162, 39, 0.16);
+  --shadow: 0 22px 58px rgba(43, 43, 43, 0.10);
+  --radius: 20px;
+  --focus: 0 0 0 4px rgba(107, 31, 44, 0.18);
+}
+
+/* ---- Palette B: Brown / Khaki / Forest / Gold ---- */
+body[data-theme="palette-b"] {
+  --page: #F4F1EA;
+  --surface: #FFFFFF;
+  --panel: #EDE6D5;
+  --text: #3A261C;
+  --muted: #7A6A55;
+  --line: #D8CDB4;
+  --accent: #1F3D2B;
+  --accent-dark: #142A1C;
+  --accent-soft: rgba(31, 61, 43, 0.08);
+  --gold: #C9A227;
+  --gold-soft: rgba(201, 162, 39, 0.18);
+  --shadow: 0 22px 58px rgba(58, 38, 28, 0.12);
+  --focus: 0 0 0 4px rgba(31, 61, 43, 0.18);
+}
+body[data-theme="palette-b"] .brand-mark { background: #5A3B2E; color: #C8B88A; border-color: #A88C5E; }
+body[data-theme="palette-b"] .button-primary { background: #1F3D2B; color: #F4F1EA; }
+body[data-theme="palette-b"] .button-primary:hover { background: #142A1C; }
+body[data-theme="palette-b"] .due-badge { background: #D97B4A; color: #FFFFFF; }
+body[data-theme="palette-b"] .status { background: rgba(168, 213, 186, 0.28); color: #1F3D2B; }
+
+/* ---- Palette C: Turquoise / Tropical / Charcoal / Gold ---- */
+body[data-theme="palette-c"] {
+  --page: #1E2328;
+  --surface: #2A3038;
+  --panel: #232A31;
+  --text: #F2EDE4;
+  --muted: #9CA7B0;
+  --line: #3A424B;
+  --accent: #1FA6A6;
+  --accent-dark: #178A8A;
+  --accent-soft: rgba(31, 166, 166, 0.14);
+  --gold: #F2C14E;
+  --gold-soft: rgba(242, 193, 78, 0.18);
+  --shadow: 0 22px 58px rgba(0, 0, 0, 0.42);
+  --focus: 0 0 0 4px rgba(31, 166, 166, 0.28);
+}
+body[data-theme="palette-c"] .brand-mark { background: #C75B39; color: #F2C14E; border-color: #E2593A; }
+body[data-theme="palette-c"] .button-primary { background: #1FA6A6; color: #0F1417; }
+body[data-theme="palette-c"] .button-primary:hover { background: #178A8A; }
+body[data-theme="palette-c"] .button-secondary { background: #2A3038; color: #F2EDE4; }
+body[data-theme="palette-c"] .button-secondary:hover { background: #323A43; }
+body[data-theme="palette-c"] .due-badge { background: #E2593A; color: #FFFFFF; }
+body[data-theme="palette-c"] .status { background: rgba(31, 166, 166, 0.18); color: #1FA6A6; }
+body[data-theme="palette-c"] input,
+body[data-theme="palette-c"] select,
+body[data-theme="palette-c"] textarea { background: #232A31; color: #F2EDE4; border-color: #3A424B; }
+body[data-theme="palette-c"] .filter { background: #232A31; color: #9CA7B0; border-color: #3A424B; }
+body[data-theme="palette-c"] .filter.is-active { background: rgba(31, 166, 166, 0.16); color: #F2C14E; border-color: rgba(31, 166, 166, 0.45); }
+
+/* ---- Legacy themes (kept for existing users) ---- */
+body[data-theme="pink-mauve"] { --page:#fff4f8; --surface:#ffffff; --panel:#f8e7ef; --text:#321f2b; --muted:#6f5362; --line:#e7c7d5; --accent:#9b2f62; --accent-dark:#742149; --focus:0 0 0 4px rgba(155,47,98,.25); --shadow:0 22px 58px rgba(87,27,57,.14); }
+body[data-theme="dark-charcoal"] { --page:#202225; --surface:#fffdf8; --panel:#f2e7d7; --text:#29231f; --muted:#665b51; --line:#d2b991; --accent:#713f28; --accent-dark:#4c2718; --focus:0 0 0 4px rgba(205,148,54,.34); --shadow:0 22px 58px rgba(0,0,0,.3); }
+body[data-theme="burgundy-champagne"] { --page:#f2eee8; --surface:#fffdf8; --panel:#f4e8cf; --text:#302426; --muted:#6d5a5d; --line:#d9c39a; --accent:#861f3d; --accent-dark:#61142c; --focus:0 0 0 4px rgba(134,31,61,.25); --shadow:0 22px 58px rgba(83,22,39,.16); }
+body[data-theme="dark-charcoal"] .topbar,
+body[data-theme="dark-charcoal"] .topbar .brand,
+body[data-theme="dark-charcoal"] .header .title-block,
+body[data-theme="dark-charcoal"] .header .subtitle { color:#fff8ea; }
+body[data-theme="dark-charcoal"] .header h1,
+body[data-theme="dark-charcoal"] .topbar .date { color:#fff8ea; }
+body[data-theme="dark-charcoal"] .brand-mark { background:#38271f; color:#efbd64; border-color:#9c6c38; }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: var(--page);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          linear-gradient(180deg, rgba(245, 245, 245, 0.72), rgba(255, 255, 255, 0) 340px),
+          var(--page);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+      }
+
+      .app {
+        width: min(100%, 1120px);
+        margin: 0 auto;
+        padding: 20px 16px 28px;
+      }
+
+      .topbar {.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: -20px -16px 24px;
+  padding: 14px 20px;
+  background: #1A1A1A;
+  border-bottom: 1px solid #2B2B2B;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+}
+
+.topbar .brand {
+  color: #FFFFFF;
+}
+
+.topbar .brand span {
+  color: #FFFFFF;
+}
+
+.topbar .import-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.topbar .button {
+  min-height: 38px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  color: #1A1A1A;
+  border: 1px solid #2B2B2B;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  transition: all 140ms ease;
+}
+
+.topbar .button:hover {
+  background: #FFFFFF;
+  border-color: #C9A227;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.25);
+  transform: translateY(-1px);
+}
+
+.topbar .button-secondary {
+  background: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.topbar .button-secondary:hover {
+  background: #FFFFFF;
+}
+
+.topbar .button-primary {
+  background: #7A2333;
+  color: #FFFFFF;
+  border-color: #7A2333;
+}
+
+.topbar .button-primary:hover {
+  background: #8E2A3D;
+  border-color: #C9A227;
+}
+
+.topbar .button-quiet {
+  background: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.topbar .button-quiet:hover {
+  background: #FFFFFF;
+  border-color: #C9A227;
+}
+
+.topbar .date {
+  color: #C9A227;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    margin: -20px -16px 20px;
+    padding: 12px 14px;
+  }
+}
+        
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--surface);
+        color: var(--accent);
+        font-weight: 800;
+      }
+
+      .date {
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: right;
+      }
+
+      .header {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      .title-block {
+        display: grid;
+        gap: 8px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 0;
+        color: var(--text);
+        font-size: clamp(2.35rem, 11vw, 4.6rem);
+        font-weight: 760;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1.03rem, 3.5vw, 1.2rem);
+        line-height: 1.55;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 50px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: 800;
+        outline: none;
+        padding: 0 18px;
+        text-decoration: none;
+        transition:
+          background 140ms ease,
+          box-shadow 140ms ease,
+          color 140ms ease,
+          transform 140ms ease;
+      }
+
+      .button:focus-visible,
+      input:focus,
+      select:focus,
+      textarea:focus {
+        box-shadow: var(--focus);
+      }
+
+      .button:active {
+        transform: translateY(1px);
+      }
+
+      .button-primary {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .button-primary:hover {
+        background: var(--accent-dark);
+      }
+
+      .button-secondary {
+        background: var(--panel);
+        color: var(--text);
+      }
+
+      .button-secondary:hover {
+        background: #eceff3;
+      }
+
+      .button-quiet {
+        background: transparent;
+        color: var(--muted);
+      }
+
+      .button-quiet:hover {
+        color: var(--text);
+      }
+
+      .button-danger {
+        background: #fff1f2;
+        color: #9f1d2d;
+      }
+
+      .button-danger:hover {
+        background: #ffe4e6;
+      }
+
+      .controls {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .search {
+        width: 100%;
+        min-height: 54px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 140ms ease,
+          box-shadow 140ms ease,
+          background 140ms ease;
+      }
+
+      .search:focus,
+      select:focus,
+      input:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        background: var(--surface);
+      }
+
+      .filters {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+      .internal-filters { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+      .settings-backdrop { display:none; position:fixed; inset:0; z-index:50; padding:16px; background:rgba(12,16,22,.58); overflow-y:auto; }
+      .script-output {
+        white-space: pre-wrap;
+        font-family: inherit;
+        background: rgba(213, 173, 104, 0.14);
+        border-radius: 14px;
+        padding: 14px 16px;
+        max-height: 360px;
+        overflow-y: auto;
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+      .script-quick-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .script-customize-panel { border-top:1px solid var(--line); padding-top:14px; }
+
+      .training-form { display:grid; gap:12px; }
+      .training-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .training-list { display:grid; gap:10px; margin-top:4px; }
+      .training-empty { margin:0; color:var(--muted); font-size:.92rem; }
+      .training-card {
+        display:grid;
+        gap:8px;
+        padding:14px;
+        border:1px solid var(--line);
+        border-radius:14px;
+        background:var(--surface);
+      }
+      .training-card-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+      .training-card-title { margin:0; font-size:1rem; }
+      .training-meta { margin:2px 0 0; color:var(--muted); font-size:.84rem; line-height:1.45; }
+      .training-actions { display:flex; flex-wrap:wrap; gap:8px; }
+      .training-actions .button { min-height:40px; }
+
+      .settings-backdrop.is-visible { display:grid; place-items:start center; }
+      .settings-panel { width:min(100%,620px); display:grid; gap:16px; padding:20px; margin:5vh auto; }
+      .settings-section { display:grid; gap:8px; padding-top:4px; }
+      .theme-options { display:grid; gap:8px; }
+      .theme-option { display:flex; align-items:center; gap:10px; min-height:44px; padding:9px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface); font-weight:750; }
+
+      .filter {
+        min-height: 42px;
+        flex: 0 0 auto;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        color: var(--muted);
+        cursor: pointer;
+        font-weight: 800;
+        padding: 0 14px;
+      }
+
+      .filter.is-active {
+        border-color: rgba(22, 79, 159, 0.35);
+        background: rgba(22, 79, 159, 0.08);
+        color: var(--accent-dark);
+      }
+
+      .list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .follow-up-queue {
+        display: none;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding: 18px;
+      }
+
+      .follow-up-queue.is-visible {
+        display: grid;
+      }
+
+      .queue-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .queue-title {
+        margin: 0;
+        color: var(--text);
+        font-size: 1.12rem;
+        font-weight: 820;
+        line-height: 1.15;
+      }
+
+      .queue-count {
+        min-height: 28px;
+        border-radius: 999px;
+        background: rgba(22, 79, 159, 0.08);
+        color: var(--accent-dark);
+        font-size: 0.76rem;
+        font-weight: 800;
+        padding: 6px 10px;
+        white-space: nowrap;
+      }
+
+      .queue-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .queue-summary-item {
+        display: grid;
+        min-width: 0;
+        gap: 3px;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+      }
+
+      .queue-summary-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+      }
+
+      .queue-summary-value {
+        margin: 0;
+        color: var(--text);
+        font-size: 1rem;
+        font-weight: 820;
+        line-height: 1.1;
+      }
+
+      .queue-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .queue-row {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+      }
+
+      .queue-main {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .queue-name {
+        margin: 0;
+        color: var(--text);
+        font-size: 1rem;
+        font-weight: 820;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+      }
+
+      .due-badge {
+        border-radius: 999px;
+        background: var(--accent);
+        color: #ffffff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 6px 9px;
+        white-space: nowrap;
+      }
+
+      .queue-meta {
+        display: grid;
+        gap: 8px;
+      }
+
+      .queue-item {
+        display: grid;
+        gap: 3px;
+      }
+
+      .queue-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .queue-value {
+        margin: 0;
+        color: var(--text);
+        font-size: 0.88rem;
+        font-weight: 740;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
+      .queue-action {
+        min-height: 48px;
+        align-self: start;
+        padding: 0 14px;
+      }
+
+      .prospect-card,
+      .empty-card,
+      .follow-up-queue,
+      .modal-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .prospect-card {
+        display: grid;
+        gap: 18px;
+        padding: 20px;
+      }
+
+      .card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .name {
+        margin: 0;
+        color: var(--text);
+        font-size: 1.35rem;
+        font-weight: 820;
+        line-height: 1.1;
+      }
+
+      .status {
+        min-height: 32px;
+        border-radius: 999px;
+        background: rgba(22, 79, 159, 0.08);
+        color: var(--accent-dark);
+        font-size: 0.78rem;
+        font-weight: 800;
+        padding: 7px 11px;
+        white-space: nowrap;
+      }
+
+      .details {
+        display: grid;
+        gap: 10px;
+      }
+
+      .detail {
+        display: grid;
+        gap: 4px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+      }
+
+      .label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .value {
+        margin: 0;
+        color: var(--text);
+        font-size: 0.98rem;
+        font-weight: 760;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .phone-link {
+        color: var(--accent-dark);
+        text-decoration: none;
+      }
+
+      .phone-link:hover {
+        text-decoration: underline;
+      }
+
+      .phone-modal-link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 54px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        font-weight: 700;
+      }
+
+      .card-actions,
+      .form-actions {
+        display: grid;
+        gap: 10px;
+      }
+
+      .card-actions .button-danger {
+        margin-top: 8px;
+        border: 1px solid rgba(159, 29, 45, 0.22);
+      }
+
+      .empty-card {
+        display: grid;
+        justify-items: start;
+        gap: 14px;
+        padding: 24px;
+      }
+
+      .empty-card h2 {
+        margin: 0;
+        color: var(--text);
+        font-size: 1.55rem;
+        font-weight: 820;
+        line-height: 1.15;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        align-items: flex-start;
+        justify-content: center;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.78);
+        padding: 18px 16px;
+      }
+
+      .modal.is-open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(100%, 720px);
+        max-height: calc(100vh - 36px);
+        max-height: calc(100dvh - 36px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 22px;
+      }
+
+      .modal-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(1.85rem, 8vw, 3rem);
+        font-weight: 760;
+        line-height: 1.02;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 54px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 140ms ease,
+          box-shadow 140ms ease,
+          background 140ms ease;
+      }
+
+      textarea {
+        min-height: 118px;
+        padding: 14px 16px;
+        resize: vertical;
+      }
+
+      .email-composer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .email-preview {
+        min-height: 22px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+
+      input[readonly],
+      textarea[readonly],
+      select:disabled {
+        color: var(--text);
+        opacity: 1;
+      }
+
+
+
+      .header-actions { display: grid; gap: 10px; }
+      .import-trigger { justify-self:end; padding:8px 12px; font-size:.82rem; }
+      .import-panel { display: none; gap: 14px; margin-bottom: 16px; padding: 18px; }
+      .import-panel.is-visible { display: grid; }
+      .import-head { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; }
+      .import-close { position:sticky; top:10px; z-index:3; margin-left:auto; background:var(--surface); border:2px solid var(--primary); box-shadow:0 4px 14px rgba(25,50,80,.14); }
+      .import-title { margin:0; font-size:1.25rem; font-weight:820; }
+      .import-help { margin:0; color:var(--muted); line-height:1.5; }
+      .mapping-grid { display:grid; gap:10px; }
+      .preview-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:16px; }
+      .preview-table { width:100%; border-collapse:collapse; min-width:760px; background:var(--surface); }
+      .preview-table th,.preview-table td { padding:10px; border-bottom:1px solid var(--line); text-align:left; font-size:.86rem; vertical-align:top; }
+      .preview-table th { background:var(--panel); font-weight:800; }
+      .preview-table tr:last-child td { border-bottom:0; }
+      .duplicate-warning { color:#8a4b00; font-weight:800; }
+      .import-summary { margin:0; color:var(--muted); font-weight:700; }
+      .import-counts { display:flex; flex-wrap:wrap; gap:8px; }
+      .import-count { padding:7px 10px; border-radius:999px; background:var(--panel); border:1px solid var(--line); font-size:.78rem; font-weight:800; }
+      .master-select { display:flex; align-items:center; gap:9px; font-weight:800; cursor:pointer; }
+      .master-select input { width:22px; height:22px; min-height:22px; padding:0; accent-color:var(--accent); flex:none; }
+      .selection-list { overflow:hidden; border:1px solid var(--line); border-radius:14px; background:var(--surface); }
+      .selection-list #exportContactList .master-select { padding:10px 12px; border-top:1px solid var(--line); }
+      .select-all-option { min-height:48px; padding:10px 12px; background:var(--panel); color:var(--text); }
+      .circle-toggle {
+        appearance:none;
+        -webkit-appearance:none;
+        width:22px !important;
+        height:22px !important;
+        min-height:22px !important;
+        padding:0 !important;
+        border:2px solid var(--muted);
+        border-radius:50%;
+        background:var(--surface);
+        cursor:pointer;
+      }
+      .circle-toggle:checked {
+        border-color:var(--accent);
+        background:radial-gradient(circle, var(--accent) 0 45%, var(--surface) 48% 63%, var(--accent) 66% 100%);
+      }
+      .circle-toggle:indeterminate {
+        border-color:var(--accent);
+        background:linear-gradient(var(--surface) 42%, var(--accent) 43% 57%, var(--surface) 58%);
+      }
+      .circle-toggle:focus-visible { box-shadow:var(--focus); outline:none; }
+      .import-safety { margin:0; padding:10px 12px; border-radius:12px; background:#eef7ff; color:var(--text); font-weight:750; }
+      .removed-import { display:grid; gap:8px; padding:12px; border:1px dashed var(--line); border-radius:14px; }
+      .export-panel { display:grid; gap:10px; padding-top:14px; border-top:1px solid var(--line); }
+      .import-destination { max-width:360px; }
+      .import-row-actions { display:flex; gap:6px; align-items:center; }
+      .import-row-select { min-width:125px; }
+      .review-badge { border-radius:999px; background:#fff5d6; color:#6e5200; font-size:.72rem; font-weight:800; padding:6px 9px; }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (min-width: 680px) {
+        .app {
+          padding: 32px 24px 44px;
+        }
+
+        .header {
+          grid-template-columns: 1fr auto;
+          align-items: end;
+          gap: 24px;
+        }
+
+        .header-actions { grid-template-columns: auto auto; }
+
+        .mapping-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        .controls {
+          grid-template-columns: minmax(260px, 1fr) auto;
+          align-items: center;
+          gap: 14px;
+        }
+
+        .details,
+        .form-grid,
+        .queue-meta {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .field-full {
+          grid-column: 1 / -1;
+        }
+
+        .email-composer {
+          grid-template-columns: minmax(0, 1fr) minmax(132px, 0.72fr);
+        }
+
+        .card-actions {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          justify-content: start;
+        }
+
+        .card-actions .button {
+          min-width: 0;
+        }
+
+        .card-actions .button-danger {
+          grid-column: 1 / -1;
+        }
+
+        .form-actions {
+          justify-content: start;
+          grid-template-columns: auto auto;
+        }
+
+        .prospect-card,
+        .empty-card,
+        .follow-up-queue,
+        .modal-card {
+          padding: 24px;
+        }
+
+        .button {
+          min-width: 148px;
+        }
+      }
+
+      @media (min-width: 980px) {
+        .card-actions {
+          grid-template-columns: repeat(3, auto);
+        }
+
+        .list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .empty-card {
+          grid-column: 1 / -1;
+        }
+
+        .queue-row {
+          grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.8fr);
+          align-items: start;
+        }
+
+        .queue-meta {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+
+      /* ---------- Fresh Pour break room ---------- */
+      .breakroom {
+        --espresso: #382418;
+        --espresso-soft: #6b4b34;
+        --champagne: #d5ad68;
+        --champagne-deep: #a9782e;
+        --cream: #fffaf0;
+        --ivory: #f7ecd8;
+        --terracotta: #a95732;
+        --sage: #66755a;
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        background: var(--ivory);
+        overflow-y: auto;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .breakroom[hidden] { display: none; }
+
+      .breakroom-media,
+      .breakroom-bg-video,
+      .breakroom-fallback,
+      .breakroom-wash {
+        position: fixed;
+        inset: 0;
+      }
+
+      .breakroom-media {
+        z-index: 0;
+        overflow: hidden;
+        background: var(--ivory);
+      }
+
+      .breakroom-bg-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 520ms ease;
+      }
+
+      .breakroom-bg-video.is-active { opacity: 1; }
+
+      .breakroom-media.has-active-video .breakroom-fallback { opacity: 0.2; }
+
+      .breakroom-fallback {
+        z-index: 0;
+        opacity: 1;
+        transition: opacity 520ms ease;
+        background: var(--ivory);
+      }
+
+      .breakroom-wash {
+        z-index: 2;
+        background:
+          linear-gradient(90deg, rgba(255, 250, 240, 0.34), rgba(255, 255, 255, 0.04) 55%, rgba(255, 248, 232, 0.16)),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 45%, rgba(35, 26, 20, 0.08));
+        pointer-events: none;
+      }
+
+      .breakroom-inner {
+        position: relative;
+        z-index: 2;
+        width: min(100%, 1080px);
+        min-height: 100%;
+        margin: 0 auto;
+        padding: 20px 18px 60px;
+        color: var(--espresso);
+      }
+
+      .breakroom-top {
+        position: sticky;
+        top: 14px;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .breakroom-back {
+        background: rgba(255, 250, 240, 0.86);
+        border: 1px solid rgba(80, 54, 35, 0.18);
+        color: var(--espresso);
+        box-shadow: 0 8px 28px rgba(52, 38, 28, 0.1);
+        backdrop-filter: blur(12px);
+      }
+
+      .breakroom-top-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .ambience-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(80, 54, 35, 0.18);
+        background: rgba(255, 250, 240, 0.86);
+        color: var(--espresso);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 28px rgba(52, 38, 28, 0.1);
+        backdrop-filter: blur(12px);
+      }
+
+      .ambience-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #9b8b79;
+        display: inline-block;
+      }
+
+      .ambience-toggle[aria-pressed="true"] .ambience-dot {
+        background: #7fbf6a;
+        box-shadow: 0 0 0 3px rgba(127, 191, 106, 0.25);
+      }
+
+      .ambience-toggle:disabled,
+      .player-play:disabled {
+        cursor: not-allowed;
+        opacity: 0.52;
+      }
+
+      .breakroom-panel {
+        width: min(100%, 880px);
+        margin: 5vh 0 0;
+        padding: clamp(24px, 4.5vw, 48px);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 30px;
+        background: rgba(255, 250, 240, 0.86);
+        box-shadow: 0 24px 80px rgba(40, 31, 23, 0.2);
+        backdrop-filter: blur(18px) saturate(112%);
+        transition: opacity 260ms ease, transform 260ms ease;
+      }
+
+      .breakroom-panel.is-hidden {
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+      }
+
+      .breakroom-panel.is-waiting {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .breakroom-sign {
+        max-width: 680px;
+        text-align: left;
+        margin: 0 0 28px;
+      }
+
+      .sign-eyebrow {
+        display: block;
+        color: var(--champagne-deep);
+        font-size: 0.85rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .sign-title {
+        font-family: "Caveat", "Segoe Script", cursive;
+        font-size: clamp(3.4rem, 11vw, 5.8rem);
+        line-height: 0.9;
+        color: var(--espresso);
+        margin: 0;
+      }
+
+      .sign-subtitle {
+        max-width: 620px;
+        color: var(--espresso-soft);
+        font-size: 1.02rem;
+        margin: 10px 0 0;
+      }
+
+      .pot-button {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        background: linear-gradient(135deg, rgba(213, 173, 104, 0.22), rgba(255, 255, 255, 0.58));
+        border: 1px solid rgba(169, 120, 46, 0.24);
+        border-radius: 18px;
+        padding: 16px 18px;
+        cursor: pointer;
+        margin-bottom: 6px;
+        text-align: left;
+      }
+
+      .pot-icon { font-size: 1.6rem; }
+
+      .pot-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        color: var(--espresso);
+      }
+
+      .pot-text strong { font-size: 1rem; }
+      .pot-text span { font-size: 0.85rem; color: var(--espresso-soft); }
+
+      .pot-line {
+        min-height: 1.4em;
+        color: var(--terracotta);
+        font-style: italic;
+        font-size: 0.95rem;
+        margin: 10px 4px 30px;
+      }
+
+      .table-floor {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 18px;
+      }
+
+      .table-card {
+        position: relative;
+        min-height: 154px;
+        border-radius: 20px;
+        border: 1px solid rgba(107, 75, 52, 0.18);
+        background:
+          radial-gradient(circle at 50% 18%, rgba(213, 173, 104, 0.28), transparent 54%),
+          rgba(255, 255, 255, 0.62);
+        color: var(--espresso);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-align: center;
+        padding: 16px;
+        box-shadow: 0 10px 26px rgba(62, 44, 31, 0.08);
+        transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+      }
+
+      .table-card:hover,
+      .table-card:focus-visible {
+        transform: translateY(-3px);
+        border-color: var(--champagne-deep);
+        box-shadow: 0 14px 34px rgba(62, 44, 31, 0.14);
+        outline: none;
+      }
+
+      .table-card .table-name {
+        font-weight: 800;
+        font-size: 1.05rem;
+      }
+
+      .table-card .table-tag {
+        font-size: 0.82rem;
+        color: var(--espresso-soft);
+      }
+
+      .table-card .table-seats {
+        margin-top: 6px;
+        font-size: 0.75rem;
+        color: var(--champagne-deep);
+        font-weight: 700;
+      }
+
+      .table-seat {
+        margin-top: 34px;
+        background: rgba(255, 255, 255, 0.62);
+        border: 1px solid rgba(107, 75, 52, 0.18);
+        border-radius: 22px;
+        padding: 22px;
+      }
+
+      .table-seat.hidden { display: none; }
+
+      .seat-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .seat-eyebrow {
+        margin: 0 0 2px;
+        font-size: 0.78rem;
+        color: var(--champagne-deep);
+        font-weight: 700;
+      }
+
+      .seat-title { margin: 0; font-size: 1.4rem; }
+
+      .seat-desc {
+        color: var(--espresso-soft);
+        line-height: 1.55;
+        margin: 14px 0 18px;
+      }
+
+      .seat-player {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(213, 173, 104, 0.14);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+
+      .player-play {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 0;
+        background: var(--terracotta);
+        color: var(--cream);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        flex: none;
+      }
+
+      .player-meta { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+      .player-title { font-size: 0.88rem; color: var(--espresso); }
+
+      .player-bar {
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(107, 75, 52, 0.16);
+        overflow: hidden;
+      }
+
+      .player-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--sage);
+        transition: width 200ms linear;
+      }
+
+      .seat-note {
+        font-size: 0.78rem;
+        color: var(--espresso-soft);
+        margin: 14px 0 0;
+      }
+
+      .seat-note code {
+        color: var(--champagne-deep);
+      }
+
+      .seat-resource {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(213, 173, 104, 0.14);
+      }
+
+      .seat-resource.hidden { display: none; }
+
+      .seat-resource-locked {
+        margin: 0;
+        font-size: 0.82rem;
+        color: var(--espresso-soft);
+      }
+
+      .seat-resource-locked.hidden { display: none; }
+
+      .seat-resource .button-primary {
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .seat-resource .button-primary.hidden { display: none; }
+
+      .seat-actions { margin-top: 18px; }
+
+      @media (max-width: 720px) {
+        .topbar { align-items:flex-start; flex-direction:column; gap:10px; }
+        .topbar .import-row-actions { width:100%; flex-wrap:wrap; }
+        .topbar .date { margin-left:auto; }
+        .training-grid { grid-template-columns:1fr; }
+        .script-quick-grid { grid-template-columns:1fr; }
+        .training-card-head { flex-direction:column; }
+        .breakroom-inner { padding: 12px 12px 42px; }
+        .breakroom-top { align-items: flex-start; top: 8px; }
+        .breakroom-top-actions { flex-direction: column; align-items: flex-end; }
+        .breakroom-panel { margin-top: 24px; border-radius: 24px; }
+        .table-floor { grid-template-columns: 1fr; }
+        .seat-head { flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="stylesheet" href="pilot.css" />
+    <main class="app">
+      <div class="topbar" aria-label="Workspace header">
+        <div class="brand" aria-label="Agent Rise">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span>Agent Rise</span>
+        </div>
+        <div class="import-row-actions">
+          <button class="button button-secondary" type="button" id="openTrainingButton">
+            <span aria-hidden="true">📅</span> Training
+          </button>
+          <button class="button button-secondary" type="button" id="openScriptsButton">
+            <span aria-hidden="true">📝</span> Scripts
+          </button>
+          <button class="button button-secondary breakroom-entry" type="button" id="openBreakroomButton">
+            <span aria-hidden="true">☕</span> Fresh Pour
+          </button>
+          <time class="date" id="todayDate"></time>
+          <button class="button button-quiet" type="button" id="settingsButton">Settings</button>
+        </div>
+      </div>
+
+      <header class="header">
+        <div class="title-block">
+          <h1>Client Journey</h1>
+          <p class="subtitle" id="workspaceGreeting">Welcome back, Agent.</p>
+        </div>
+        <div class="header-actions">
+          <button class="button button-primary" type="button" id="addProspectButton">+ Add Prospect</button>
+        </div>
+      </header>
+
+      <section class="controls" aria-label="Prospect controls">
+        <input
+          class="search"
+          id="searchInput"
+          type="search"
+          autocomplete="off"
+          placeholder="Search by name, phone, or email"
+          aria-label="Search by name, phone, or email"
+        />
+        <div class="filters" id="filters" aria-label="Filter prospects"></div>
+        <div class="internal-filters hidden" id="internalFilters" aria-label="Section statuses"></div>
+      </section>
+      <div class="settings-backdrop" id="settingsBackdrop">
+        <section class="settings-panel prospect-card" id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+          <div class="import-head"><div><h2 class="import-title" id="settingsTitle">Settings</h2><p class="import-help">Personalize this workspace without changing contact data.</p></div><button class="button button-quiet import-close" type="button" id="closeSettingsButton">Close</button></div>
+          <div class="settings-section"><strong>1. Profile</strong><div class="field"><label for="preferredAgentName">Preferred Agent Name</label><input id="preferredAgentName" type="text" placeholder="Agent" /><small class="import-help">This is the name shown throughout your Agent Rise workspace.</small></div></div>
+          <div class="settings-section"><strong>2. Appearance</strong><div class="theme-options">
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="default" /> Current Agent Rise</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="pink-mauve" /> Pink / Mauve</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="dark-charcoal" /> Dark Charcoal / Chocolate Brown</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="burgundy-champagne" /> Corporate Burgundy / Champagne</label>
+          </div></div>
+          <div class="settings-section"><strong>3. Workspace</strong><p class="import-help">More workspace preferences will be added here as the pilot grows.</p></div>
+          <div class="settings-section">
+            <strong>4. Data cleanup</strong>
+            <p class="import-help">Permanently remove every saved contact and Resource Group from this account. Your preferred name and appearance will remain.</p>
+            <button class="button button-danger" type="button" id="clearContactsAndGroupsButton">Erase All Contacts and Groups</button>
+          </div>
+          <div class="form-actions"><button class="button button-primary" type="button" id="saveSettingsButton">Save and Close</button><button class="button button-secondary" type="button" id="cancelSettingsButton">Cancel</button></div>
+        </section>
+      </div>
+
+      <div class="settings-backdrop" id="scriptsBackdrop">
+        <section class="settings-panel prospect-card" id="scriptsPanel" role="dialog" aria-modal="true" aria-labelledby="scriptsTitle">
+          <div class="import-head">
+            <div><h2 class="import-title" id="scriptsTitle">Quick Script Desk</h2><p class="import-help">Choose a product and situation. Your preloaded script appears immediately.</p></div>
+            <button class="button button-quiet import-close" type="button" id="closeScriptsButton">Close</button>
+          </div>
+          <div class="settings-section script-quick-grid">
+            <div class="field">
+              <label for="scriptProduct">Product</label>
+              <select id="scriptProduct">
+                <option value="Medicare Advantage" selected>Medicare Advantage</option>
+                <option value="Final Expense">Final Expense</option>
+                <option value="Medicare Supplement">Medicare Supplement</option>
+                <option value="Turning 65">Turning 65</option>
+                <option value="Long-Term Care">Long-Term Care</option>
+                <option value="Dental & Vision">Dental &amp; Vision</option>
+                <option value="Cancer Insurance">Cancer</option>
+                <option value="Heart / Critical Illness Insurance">Heart / Critical Illness</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="scriptFormat">Situation</label>
+              <select id="scriptFormat">
+                <option value="phone-call">Phone call</option>
+                <option value="introduction">Introduction</option>
+                <option value="in-field">In the field</option>
+                <option value="referral">Referral</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="button button-secondary" type="button" id="customizeScriptButton" aria-expanded="false">Customize</button>
+          </div>
+          <div class="settings-section script-customize-panel hidden" id="scriptCustomizePanel">
+            <strong>Optional customization</strong>
+            <div class="script-quick-grid">
+              <div class="field"><label for="scriptAgentName">Agent name</label><input id="scriptAgentName" type="text" placeholder="Uses your Agent Rise profile name" /></div>
+              <div class="field"><label for="scriptAgencyName">Agency</label><input id="scriptAgencyName" type="text" placeholder="Agency name" /></div>
+              <div class="field"><label for="scriptProspectName">Prospect</label><input id="scriptProspectName" type="text" placeholder="First name" /></div>
+              <div class="field"><label for="scriptReferrerName">Referral source</label><input id="scriptReferrerName" type="text" placeholder="Referrer's name" /></div>
+            </div>
+            <div class="field"><label for="scriptContext">Extra note</label><textarea id="scriptContext" rows="2" placeholder="A brief detail you want visible while speaking"></textarea></div>
+          </div>
+          <div class="settings-section" id="scriptOutputWrap">
+            <strong id="scriptOutputTitle">Script</strong>
+            <pre class="script-output" id="scriptOutput"></pre>
+            <p class="import-help">Use only for permitted contact. Follow current CMS, carrier, agency, consent, and Do Not Call requirements before discussing plan-specific benefits.</p>
+            <div class="form-actions">
+              <button class="button button-secondary" type="button" id="copyScriptButton">Copy</button>
+              <button class="button button-secondary" type="button" id="downloadScriptButton">Download .txt</button>
+            </div>
+          </div>
+          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelScriptsButton">Close</button></div>
+        </section>
+      </div>
+
+      <div class="settings-backdrop" id="trainingBackdrop">
+        <section class="settings-panel prospect-card" id="trainingPanel" role="dialog" aria-modal="true" aria-labelledby="trainingTitle">
+          <div class="import-head">
+            <div>
+              <h2 class="import-title" id="trainingTitle">Training Appointments</h2>
+              <p class="import-help">Keep insurance seminars, webinars, and continuing education together, then send each event to Yahoo Calendar.</p>
+            </div>
+            <button class="button button-quiet import-close" type="button" id="closeTrainingButton">Close</button>
+          </div>
+          <form class="training-form" id="trainingForm">
+            <div class="training-grid">
+              <div class="field"><label for="trainingType">Type</label><select id="trainingType"><option>Seminar</option><option>Webinar</option><option>Continuing Education</option><option>Carrier Training</option><option>Other</option></select></div>
+              <div class="field"><label for="trainingTitleInput">Title</label><input id="trainingTitleInput" type="text" required placeholder="2027 Medicare certification" /></div>
+              <div class="field"><label for="trainingDate">Date</label><input id="trainingDate" type="date" required /></div>
+              <div class="field"><label for="trainingTime">Start time</label><input id="trainingTime" type="time" required /></div>
+              <div class="field"><label for="trainingDuration">Duration</label><select id="trainingDuration"><option value="30">30 minutes</option><option value="60" selected>1 hour</option><option value="90">1.5 hours</option><option value="120">2 hours</option><option value="180">3 hours</option><option value="360">6 hours</option></select></div>
+              <div class="field"><label for="trainingLocation">Location or webinar link</label><input id="trainingLocation" type="text" placeholder="Office, venue, or https://…" /></div>
+            </div>
+            <div class="field"><label for="trainingNotes">Notes</label><textarea id="trainingNotes" rows="2" placeholder="Provider, CE credits, registration details…"></textarea></div>
+            <div class="form-actions">
+              <button class="button button-primary" type="submit">Save Appointment</button>
+              <button class="button button-secondary" type="button" id="openYahooCalendarButton">Open Yahoo Calendar</button>
+            </div>
+          </form>
+          <div class="settings-section">
+            <strong>Upcoming training</strong>
+            <div class="training-list" id="trainingList"></div>
+          </div>
+          <p class="import-help">Yahoo opens in a separate tab. Agent Rise stores no Yahoo password or account access.</p>
+          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelTrainingButton">Close</button></div>
+        </section>
+      </div>
+
+      <div class="settings-backdrop" id="removeImportBackdrop">
+        <section class="settings-panel prospect-card" role="dialog" aria-modal="true" aria-labelledby="removeImportTitle">
+          <div><h2 class="import-title" id="removeImportTitle">Remove from This Import?</h2><p class="import-help">This removes the contact only from this import session. It does not remove the contact from your phone.</p></div>
+          <label class="theme-option"><input id="skipRemoveImportWarning" type="checkbox" /> Don’t show this again</label>
+          <div class="form-actions"><button class="button button-primary" type="button" id="continueRemoveImportButton">Continue</button><button class="button button-secondary" type="button" id="cancelRemoveImportButton">Cancel</button></div>
+        </section>
+      </div>
+
+      <section class="import-panel prospect-card" id="importPanel" aria-label="Contact Import">
+        <div class="import-head">
+          <div>
+            <h2 class="import-title">Import Contacts — CSV or vCard</h2>
+            <p class="import-help">Preview and select contacts before placing them in the Contact Review Pool. Nothing enters sales follow-up automatically.</p>
+          </div>
+          <button class="button button-quiet import-close" type="button" id="closeImportButton">Close</button>
+        </div>
+        <input id="csvFileInput" type="file" accept=".csv,.vcf,text/csv,text/vcard,text/x-vcard" />
+        <div class="mapping-grid hidden" id="mappingGrid">
+          <div class="field"><label for="mapFirstName">First Name</label><select id="mapFirstName"></select></div>
+          <div class="field"><label for="mapLastName">Last Name</label><select id="mapLastName"></select></div>
+          <div class="field"><label for="mapPhone">Phone</label><select id="mapPhone"></select></div>
+          <div class="field"><label for="mapEmail">Email</label><select id="mapEmail"></select></div>
+        </div>
+        <p class="import-summary hidden" id="importSummary"></p>
+        <div class="import-counts hidden" id="importCounts" aria-live="polite"></div>
+        <div class="preview-wrap hidden" id="previewWrap">
+          <label class="master-select select-all-option hidden" id="masterSelectWrap"><input class="circle-toggle" id="masterImportSelection" type="checkbox" /> Select all names in this list</label>
+          <table class="preview-table"><thead id="previewHead"></thead><tbody id="previewBody"></tbody></table>
+        </div>
+        <div class="removed-import hidden" id="removedImportArea"><strong>Removed from This Import</strong><div id="removedImportList"></div><div class="form-actions"><button class="button button-primary" type="button" id="restoreSelectedRowsButton">Restore Selected</button><button class="button button-secondary" type="button" id="restoreAllRowsButton">Restore All</button></div></div>
+        <div class="form-actions hidden" id="importActions">
+          <button class="button button-danger" type="button" id="removeSelectedRowsButton">Remove from This Import <span title="This removes contacts only from this import session, not from your phone." aria-label="Removal help">ⓘ</span></button>
+          <div class="field import-destination">
+            <label for="importDestination">Destination</label>
+            <select id="importDestination"></select>
+          </div>
+          <div class="field import-destination hidden" id="importResourceGroupField">
+            <label for="importResourceGroup">Choose Resource Group</label>
+            <select id="importResourceGroup"></select>
+            <button class="button button-secondary" type="button" id="createImportResourceGroupButton">+ Create Resource Group</button>
+          </div>
+          <button class="button button-primary" type="button" id="importSelectedButton">Transfer Selected to Contact Review Pool</button>
+        </div>
+      </section>
+        <section class="export-panel prospect-card hidden" id="resourcePanel">
+          <strong>Resource Contacts</strong>
+          <p class="import-summary" id="resourceGroupCount">0 of 5 groups created.</p>
+          <p class="import-help hidden" id="resourceGroupLimit">Rename or remove an unused group before creating another.</p>
+          <div class="field import-destination"><label for="exportGroup">Resource group</label><select id="exportGroup"></select></div>
+          <div class="form-actions">
+            <button class="button button-primary" type="button" id="createResourceGroupButton">+ Create Resource Group</button>
+            <button class="button button-secondary" type="button" id="renameResourceGroupButton">Rename Group</button>
+            <button class="button button-danger" type="button" id="removeResourceGroupButton">Remove Group</button>
+          </div>
+          <div class="selection-list">
+            <label class="master-select select-all-option hidden" id="masterResourceSelectWrap"><input class="circle-toggle" id="masterResourceSelection" type="checkbox" /> Select all names in this list</label>
+            <div id="exportContactList"></div>
+          </div>
+          <p class="import-safety">Removing a contact from a group does not remove it from your phone or the master contact system.</p>
+          <div class="form-actions"><button class="button button-primary" type="button" id="addSelectedToGroupButton">Add Selected Contacts to Group</button><button class="button button-secondary" type="button" id="removeSelectedFromGroupButton">Remove Selected Contacts from Group</button></div>
+          <details>
+            <summary class="button button-secondary">Advanced export controls</summary>
+          <div class="field import-destination"><label for="resourceExportFormat">Export format</label><select id="resourceExportFormat"><option value="csv">CSV</option><option value="vcf">VCF</option></select></div>
+          <div class="form-actions">
+            <button class="button button-secondary" type="button" id="exportGroupButton">Export Group</button>
+            <button class="button button-secondary" type="button" id="exportSelectedButton">Export Selected Contacts</button>
+          </div>
+          </details>
+      </section>
+
+      <section class="follow-up-queue" id="followUpQueue" aria-label="Follow-Up Queue"></section>
+
+      <section class="list" id="prospectList" aria-label="Prospect list"></section>
+    </main>
+
+    <div class="breakroom" id="breakroomView" role="dialog" aria-modal="true" aria-label="Fresh Pour break room" hidden>
+      <div class="breakroom-media" aria-hidden="true">
+        <video class="breakroom-bg-video" id="breakroomEntryVideo" muted playsinline preload="metadata"></video>
+        <video class="breakroom-bg-video" id="breakroomLoopVideo" muted playsinline preload="metadata" loop></video>
+        <video class="breakroom-bg-video" id="breakroomExitVideo" muted playsinline preload="metadata"></video>
+        <div class="breakroom-fallback"></div>
+        <div class="breakroom-wash"></div>
+      </div>
+      <div class="breakroom-inner">
+        <div class="breakroom-top">
+          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton">← Back to the desk</button>
+          <div class="breakroom-top-actions">
+            <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
+              <span class="ambience-dot" aria-hidden="true"></span>
+              <span id="ambienceLabel">Room sound: not loaded</span>
+            </button>
+            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="true" aria-controls="breakroomPanel">Hide menu</button>
+          </div>
+        </div>
+
+        <div class="breakroom-panel" id="breakroomPanel">
+          <div class="breakroom-sign">
+            <span class="sign-eyebrow">Agent Rise presents</span>
+            <h1 class="sign-title">Fresh Pour</h1>
+            <p class="sign-subtitle">Pull up a chair. Choose a conversation—or hide this menu and simply enjoy the room.</p>
+          </div>
+
+          <button class="pot-button" type="button" id="potButton">
+            <span class="pot-icon" aria-hidden="true">☕</span>
+            <span class="pot-text">
+              <strong>Grab a quick pour</strong>
+              <span>A short, light sip — funny, honest, or just true</span>
+            </span>
+          </button>
+          <p class="pot-line" id="potLine" aria-live="polite"></p>
+
+          <div class="table-floor" id="tableFloor" aria-label="Conversation tables"></div>
+
+          <section class="table-seat hidden" id="tableSeat" aria-live="polite">
+            <div class="seat-head">
+              <div>
+                <p class="seat-eyebrow">Sitting in on</p>
+                <h2 class="seat-title" id="seatTitle"></h2>
+              </div>
+              <button class="button button-quiet" type="button" id="leaveTableButton">Get up</button>
+            </div>
+            <p class="seat-desc" id="seatDesc"></p>
+            <div class="seat-player">
+              <button class="player-play" type="button" id="seatPlayToggle" aria-label="Play conversation" disabled>
+                <span id="seatPlayIcon">▶</span>
+              </button>
+              <div class="player-meta">
+                <span class="player-title" id="seatTrackTitle">Two hosts, one topic — audio not loaded yet</span>
+                <div class="player-bar"><div class="player-bar-fill" id="seatPlayFill"></div></div>
+              </div>
+              <audio id="seatAudio" preload="metadata"></audio>
+            </div>
+            <p class="seat-note" id="seatNote">This conversation will become available when its audio is added.</p>
+            <div class="seat-resource hidden" id="seatResource">
+              <p class="seat-resource-locked" id="seatResourceLocked">🔒 Finish listening to unlock this table's download.</p>
+              <a class="button button-primary hidden" id="seatResourceLink" download>Download</a>
+            </div>
+            <div class="seat-actions">
+              <button class="button button-secondary" type="button" id="seatToDeskButton">Review calls on the app</button>
+            </div>
+          </section>
+        </div>
+        <audio id="ambienceAudio" preload="metadata" loop></audio>
+        <audio id="breakroomMusicAudio" preload="metadata" loop></audio>
+      </div>
+    </div>
+
+    <div class="modal" id="prospectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <section class="modal-card">
+        <div class="modal-head">
+          <h2 class="modal-title" id="modalTitle">New Prospect</h2>
+          <button class="button button-quiet" type="button" id="closeModalButton">Cancel</button>
+        </div>
+
+        <form id="prospectForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="firstName">First Name</label>
+              <input id="firstName" name="firstName" type="text" autocomplete="given-name" required />
+            </div>
+            <div class="field">
+              <label for="lastName">Last Name</label>
+              <input id="lastName" name="lastName" type="text" autocomplete="family-name" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" />
+              <a class="phone-link phone-modal-link hidden" id="phoneDisplayLink"></a>
+            </div>
+            <div class="field field-full">
+              <label for="emailUsername">Email</label>
+              <div class="email-composer">
+                <input
+                  id="emailUsername"
+                  name="emailUsername"
+                  type="text"
+                  inputmode="email"
+                  autocomplete="email"
+                  placeholder="username"
+                  aria-label="Email username"
+                />
+                <select id="emailDomain" name="emailDomain" aria-label="Email domain"></select>
+              </div>
+              <p class="email-preview" id="emailPreview" aria-live="polite">Add a username and choose a domain.</p>
+            </div>
+            <div class="field hidden" id="customEmailDomainField">
+              <label for="customEmailDomain">Other Email Domain</label>
+              <input id="customEmailDomain" name="customEmailDomain" type="text" placeholder="company.com" />
+            </div>
+            <div class="field">
+              <label for="product">Product</label>
+              <select id="product" name="product"></select>
+            </div>
+            <div class="field hidden" id="customProductField">
+              <label for="customProduct">Custom Product</label>
+              <input id="customProduct" name="customProduct" type="text" />
+            </div>
+            <div class="field">
+              <label for="nextFollowUp">Next Follow-up Date</label>
+              <input id="nextFollowUp" name="nextFollowUp" type="date" />
+            </div>
+            <div class="field">
+              <label for="contactOutcome">Contact Outcome</label>
+              <select id="contactOutcome" name="contactOutcome">
+                <option value="">Select outcome</option>
+                <option value="Called">Called</option>
+                <option value="Texted">Texted</option>
+                <option value="Emailed">Emailed</option>
+                <option value="Appointment Set">Appointment Set</option>
+                <option value="Quote Sent">Quote Sent</option>
+                <option value="Not Interested">Not Interested</option>
+              </select>
+            </div>
+            <div class="field field-full">
+              <label for="contactNote">Contact Note <span class="optional">(optional)</span></label>
+              <input id="contactNote" name="contactNote" type="text" />
+            </div>
+            <div class="field">
+              <label for="status">Status</label>
+              <select id="status" name="status"></select>
+            </div>
+            <div class="field">
+              <label for="leadPool">Lead Pool</label>
+              <select id="leadPool" name="leadPool"></select>
+            </div>
+            <div class="field">
+              <label for="qualificationStatus">Qualification Status</label>
+              <select id="qualificationStatus" name="qualificationStatus"></select>
+            </div>
+            <div class="field">
+              <label for="relationshipCategory">Relationship / Category</label>
+              <input id="relationshipCategory" name="relationshipCategory" type="text" />
+            </div>
+            <div class="field">
+              <label for="source">Source</label>
+              <select id="source" name="source"></select>
+            </div>
+            <div class="field">
+              <label for="marketingEligibility">Contact / Marketing Eligibility</label>
+              <select id="marketingEligibility" name="marketingEligibility"></select>
+            </div>
+            <div class="field">
+              <label for="clientStatus">Client Status</label>
+              <select id="clientStatus" name="clientStatus"></select>
+            </div>
+            <div class="field">
+              <label for="policyStatus">Policy Status</label>
+              <select id="policyStatus" name="policyStatus"></select>
+            </div>
+            <div class="field"><label for="carrierProvider">Carrier / Provider</label><input id="carrierProvider" name="carrierProvider" type="text" /></div>
+            <div class="field"><label for="effectiveDate">Effective Date</label><input id="effectiveDate" name="effectiveDate" type="date" /></div>
+            <div class="field"><label for="closingDate">Closing Date</label><input id="closingDate" name="closingDate" type="date" /></div>
+            <div class="field"><label for="reasonClosed">Reason Closed</label><input id="reasonClosed" name="reasonClosed" type="text" /></div>
+            <div class="field field-full"><label for="serviceHistory">Contact / Service History</label><textarea id="serviceHistory" name="serviceHistory"></textarea></div>
+            <div class="field field-full"><label for="futureOpportunity">Future Opportunity</label><textarea id="futureOpportunity" name="futureOpportunity"></textarea></div>
+            <div class="field field-full">
+              <label for="notes">Notes</label>
+              <textarea id="notes" name="notes"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions" id="formActions">
+            <button class="button button-primary" type="submit">Save</button>
+            <button class="button button-secondary" type="button" id="cancelFormButton">Cancel</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <script>
+      const STORAGE_KEY = "agentRiseProspectsV1";
+      const TRAINING_STORAGE_KEY = "agentRiseTrainingAppointmentsV1";
+      const SCHEMA_VERSION = 2;
+      const STATUSES = ["New Lead", "Contacted", "Quoted", "Application", "Pending", "Client", "Closed"];
+      const RESOURCE_POOL = "Resource Contacts";
+      const LEAD_POOLS = [
+        "Active Journey",
+        "New Lead Pool",
+        "Old Lead Pool",
+        "Needs Nurture",
+        "Not Ready Yet",
+        "Do Not Contact",
+        "Contact Review Pool",
+        "Client Service & Review",
+        RESOURCE_POOL,
+      ];
+      const EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "aol.com", "outlook.com", "icloud.com", "Other"];
+      const PRODUCTS = [
+        "Final Expense",
+        "Life Insurance",
+        "Medicare Supplement",
+        "Medicare Advantage",
+        "Dental / Vision",
+        "Annuity",
+        "IUL",
+        "Travel Insurance",
+        "Business Insurance",
+        "Digital Marketing",
+        "Other",
+      ];
+      const FILTERS = ["All Contacts", "New Leads", "Active Journey", "Clients", "Resource Contacts", "Do Not Contact", "Permission Lapsing"];
+      const MENU_ITEMS = [...FILTERS, "Import Contacts"];
+
+      const QUALIFICATION_STATUSES = ["Review Needed", "Potential Prospect", "Existing Client", "Personal Contact", "Business Contact", "Do Not Market", "Duplicate", "Ready for Journey"];
+      const SOURCES = ["Phone Contacts", "Phone Contacts CSV", "Beacons", "Facebook Ad", "Website", "Referral", "Event", "Purchased Lead", "Manual Entry", "Other"];
+      const MARKETING_ELIGIBILITY = ["Review Needed", "Educational Mailing Eligible", "Active Insurance Prospect", "Do Not Market"];
+      const CLIENT_STATUSES = ["Prospect", "Active Client", "Former Client", "Personal Contact", "Business Contact", "Not Interested", "Do Not Contact"];
+      const POLICY_STATUSES = ["None", "Submitted", "Pending", "Active", "Lapsed", "Replaced", "Cancelled", "Declined", "Withdrawn", "Unknown"];
+
+      const fields = [
+        "ptcSource", "ptcSignedDate", "ptcExpirationDate", "soaCompleted", "soaDate", "soaMethod", "appointmentDate",
+        "firstName",
+        "lastName",
+        "phone",
+        "emailUsername",
+        "emailDomain",
+        "customEmailDomain",
+        "product",
+        "customProduct",
+        "nextFollowUp",
+        "contactOutcome",
+        "contactNote",
+        "status",
+        "leadPool",
+        "qualificationStatus",
+        "relationshipCategory",
+        "source",
+        "marketingEligibility",
+        "clientStatus",
+        "policyStatus",
+        "carrierProvider",
+        "effectiveDate",
+        "closingDate",
+        "reasonClosed",
+        "serviceHistory",
+        "futureOpportunity",
+        "notes",
+      ];
+
+      const state = {
+        prospects: [],
+        activeFilter: "All Contacts",
+        internalFilter: "",
+        search: "",
+        editingId: null,
+        mode: "add",
+        csvHeaders: [],
+        csvRows: [],
+        importRows: [],
+        removedImportRows: [],
+        resourceGroups: [],
+        appearanceTheme: "default",
+        preferredAgentName: "",
+        settingsOriginalTheme: "default",
+        settingsOpener: null,
+        skipRemoveImportWarning: false,
+        pendingImportRemovalIds: [],
+        importSource: "Phone Contacts CSV",
+      };
+
+      const elements = {
+        date: document.querySelector("#todayDate"),
+        settingsButton: document.querySelector("#settingsButton"),
+        settingsPanel: document.querySelector("#settingsPanel"),
+        settingsBackdrop: document.querySelector("#settingsBackdrop"),
+        closeSettings: document.querySelector("#closeSettingsButton"),
+        saveSettings: document.querySelector("#saveSettingsButton"),
+        cancelSettings: document.querySelector("#cancelSettingsButton"),
+        clearContactsAndGroups: document.querySelector("#clearContactsAndGroupsButton"),
+        preferredAgentName: document.querySelector("#preferredAgentName"),
+        openTrainingButton: document.querySelector("#openTrainingButton"),
+        trainingBackdrop: document.querySelector("#trainingBackdrop"),
+        closeTrainingButton: document.querySelector("#closeTrainingButton"),
+        cancelTrainingButton: document.querySelector("#cancelTrainingButton"),
+        trainingForm: document.querySelector("#trainingForm"),
+        trainingType: document.querySelector("#trainingType"),
+        trainingTitleInput: document.querySelector("#trainingTitleInput"),
+        trainingDate: document.querySelector("#trainingDate"),
+        trainingTime: document.querySelector("#trainingTime"),
+        trainingDuration: document.querySelector("#trainingDuration"),
+        trainingLocation: document.querySelector("#trainingLocation"),
+        trainingNotes: document.querySelector("#trainingNotes"),
+        trainingList: document.querySelector("#trainingList"),
+        openYahooCalendarButton: document.querySelector("#openYahooCalendarButton"),
+        openScriptsButton: document.querySelector("#openScriptsButton"),
+        scriptsBackdrop: document.querySelector("#scriptsBackdrop"),
+        closeScriptsButton: document.querySelector("#closeScriptsButton"),
+        cancelScriptsButton: document.querySelector("#cancelScriptsButton"),
+        scriptProduct: document.querySelector("#scriptProduct"),
+        scriptFormat: document.querySelector("#scriptFormat"),
+        scriptContext: document.querySelector("#scriptContext"),
+        customizeScriptButton: document.querySelector("#customizeScriptButton"),
+        scriptCustomizePanel: document.querySelector("#scriptCustomizePanel"),
+        scriptAgentName: document.querySelector("#scriptAgentName"),
+        scriptAgencyName: document.querySelector("#scriptAgencyName"),
+        scriptProspectName: document.querySelector("#scriptProspectName"),
+        scriptReferrerName: document.querySelector("#scriptReferrerName"),
+        scriptOutputWrap: document.querySelector("#scriptOutputWrap"),
+        scriptOutputTitle: document.querySelector("#scriptOutputTitle"),
+        scriptOutput: document.querySelector("#scriptOutput"),
+        copyScriptButton: document.querySelector("#copyScriptButton"),
+        downloadScriptButton: document.querySelector("#downloadScriptButton"),
+        workspaceGreeting: document.querySelector("#workspaceGreeting"),
+        addButton: document.querySelector("#addProspectButton"),
+        importPanel: document.querySelector("#importPanel"),
+        closeImport: document.querySelector("#closeImportButton"),
+        csvFileInput: document.querySelector("#csvFileInput"),
+        mappingGrid: document.querySelector("#mappingGrid"),
+        mapFirstName: document.querySelector("#mapFirstName"),
+        mapLastName: document.querySelector("#mapLastName"),
+        mapPhone: document.querySelector("#mapPhone"),
+        mapEmail: document.querySelector("#mapEmail"),
+        importSummary: document.querySelector("#importSummary"),
+        importCounts: document.querySelector("#importCounts"),
+        previewWrap: document.querySelector("#previewWrap"),
+        previewHead: document.querySelector("#previewHead"),
+        previewBody: document.querySelector("#previewBody"),
+        importActions: document.querySelector("#importActions"),
+        importSelected: document.querySelector("#importSelectedButton"),
+        masterSelectWrap: document.querySelector("#masterSelectWrap"),
+        masterImportSelection: document.querySelector("#masterImportSelection"),
+        masterResourceSelectWrap: document.querySelector("#masterResourceSelectWrap"),
+        masterResourceSelection: document.querySelector("#masterResourceSelection"),
+        removeSelectedRows: document.querySelector("#removeSelectedRowsButton"),
+        removedImportArea: document.querySelector("#removedImportArea"),
+        removedImportList: document.querySelector("#removedImportList"),
+        restoreAllRows: document.querySelector("#restoreAllRowsButton"),
+        restoreSelectedRows: document.querySelector("#restoreSelectedRowsButton"),
+        removeImportBackdrop: document.querySelector("#removeImportBackdrop"),
+        skipRemoveImportWarning: document.querySelector("#skipRemoveImportWarning"),
+        continueRemoveImport: document.querySelector("#continueRemoveImportButton"),
+        cancelRemoveImport: document.querySelector("#cancelRemoveImportButton"),
+        importDestination: document.querySelector("#importDestination"),
+        importResourceGroupField: document.querySelector("#importResourceGroupField"),
+        importResourceGroup: document.querySelector("#importResourceGroup"),
+        createImportResourceGroup: document.querySelector("#createImportResourceGroupButton"),
+        exportGroup: document.querySelector("#exportGroup"),
+        resourcePanel: document.querySelector("#resourcePanel"),
+        exportContactList: document.querySelector("#exportContactList"),
+        resourceGroupCount: document.querySelector("#resourceGroupCount"),
+        resourceGroupLimit: document.querySelector("#resourceGroupLimit"),
+        createResourceGroup: document.querySelector("#createResourceGroupButton"),
+        renameResourceGroup: document.querySelector("#renameResourceGroupButton"),
+        removeResourceGroup: document.querySelector("#removeResourceGroupButton"),
+        addSelectedToGroup: document.querySelector("#addSelectedToGroupButton"),
+        removeSelectedFromGroup: document.querySelector("#removeSelectedFromGroupButton"),
+        exportGroupButton: document.querySelector("#exportGroupButton"),
+        exportSelectedButton: document.querySelector("#exportSelectedButton"),
+        resourceExportFormat: document.querySelector("#resourceExportFormat"),
+        list: document.querySelector("#prospectList"),
+        followUpQueue: document.querySelector("#followUpQueue"),
+        filters: document.querySelector("#filters"),
+        internalFilters: document.querySelector("#internalFilters"),
+        search: document.querySelector("#searchInput"),
+        modal: document.querySelector("#prospectModal"),
+        modalTitle: document.querySelector("#modalTitle"),
+        form: document.querySelector("#prospectForm"),
+        formActions: document.querySelector("#formActions"),
+        closeModal: document.querySelector("#closeModalButton"),
+        cancelForm: document.querySelector("#cancelFormButton"),
+        status: document.querySelector("#status"),
+        leadPool: document.querySelector("#leadPool"),
+        product: document.querySelector("#product"),
+        emailDomain: document.querySelector("#emailDomain"),
+        emailUsername: document.querySelector("#emailUsername"),
+        customEmailDomain: document.querySelector("#customEmailDomain"),
+        emailPreview: document.querySelector("#emailPreview"),
+        customEmailDomainField: document.querySelector("#customEmailDomainField"),
+        customProductField: document.querySelector("#customProductField"),
+        contactOutcome: document.querySelector("#contactOutcome"),
+        contactNote: document.querySelector("#contactNote"),
+        phone: document.querySelector("#phone"),
+        phoneDisplayLink: document.querySelector("#phoneDisplayLink"),
+        qualificationStatus: document.querySelector("#qualificationStatus"),
+        source: document.querySelector("#source"),
+        marketingEligibility: document.querySelector("#marketingEligibility"),
+        clientStatus: document.querySelector("#clientStatus"),
+        policyStatus: document.querySelector("#policyStatus"),
+      };
+
+      function eraseAllContactsAndGroups() {
+        if (window.prompt("Type ERASE to erase all contacts and groups from this account.") !== "ERASE") return;
+
+        state.prospects = [];
+        state.resourceGroups = [];
+        state.csvHeaders = [];
+        state.csvRows = [];
+        state.importRows = [];
+        state.removedImportRows = [];
+        state.activeFilter = "All Contacts";
+        state.internalFilter = "";
+        state.search = "";
+        elements.search.value = "";
+        saveProspects();
+
+        renderResourceGroups();
+        renderFilters();
+        renderFollowUpQueue();
+        renderList();
+        renderImportSession("All temporary import rows have been cleared.");
+        elements.mappingGrid.classList.add("hidden");
+        elements.previewWrap.classList.add("hidden");
+        elements.masterSelectWrap.classList.add("hidden");
+        elements.importActions.classList.add("hidden");
+        elements.importCounts.classList.add("hidden");
+        closeSettings(false);
+        window.alert("Contact removal queued. Check the save indicator for confirmation.");
+      }
+
+      function loadProspects() { /* Loaded through the account data layer. */ }
+
+      function normalizeStatus(status) {
+        if (status === "Lead") return "New Lead";
+        return STATUSES.includes(status) ? status : "New Lead";
+      }
+
+      function normalizeProspect(prospect) {
+        return {
+          ...prospect,
+          ptcSource: prospect.ptcSource || "Not on File",
+          ptcSignedDate: prospect.ptcSignedDate || "",
+          ptcExpirationDate: permissionExpiry(prospect.ptcSignedDate),
+          soaCompleted: prospect.soaCompleted || "No",
+          soaDate: prospect.soaDate || "",
+          soaMethod: prospect.soaMethod || "Not Applicable",
+          status: normalizeStatus(prospect.status),
+          leadPool: prospect.archived ? "Old Lead Pool" : prospect.leadPool || "Contact Review Pool",
+          archived: false,
+          qualificationStatus: prospect.qualificationStatus || (prospect.leadPool === "Contact Review Pool" ? "Review Needed" : ""),
+          relationshipCategory: prospect.relationshipCategory || "",
+          source: prospect.source || "",
+          marketingEligibility: prospect.marketingEligibility || "Review Needed",
+          clientStatus: prospect.clientStatus || (prospect.status === "Client" ? "Active Client" : "Prospect"),
+          policyStatus: prospect.policyStatus || "None",
+          resourceGroupIds: Array.isArray(prospect.resourceGroupIds) ? prospect.resourceGroupIds : [],
+        };
+      }
+
+      function saveProspects() { return persistWorkspace(); }
+      function applyTheme(theme) {
+        state.appearanceTheme=["pink-mauve","dark-charcoal","burgundy-champagne"].includes(theme)?theme:"default";
+        if(state.appearanceTheme==="default") document.body.removeAttribute("data-theme"); else document.body.dataset.theme=state.appearanceTheme;
+        document.querySelectorAll('input[name="appearanceTheme"]').forEach(input=>input.checked=input.value===state.appearanceTheme);
+      }
+      function agentDisplayName() { return state.preferredAgentName.trim()||"Agent"; }
+      function updateAgentLabels() {
+        const hour=new Date().getHours(); const greeting=hour<12?"Good morning":hour<18?"Good afternoon":"Welcome back";
+        elements.workspaceGreeting.textContent=`${greeting}, ${agentDisplayName()}.`;
+      }
+      function openSettings() {
+        state.settingsOpener=document.activeElement;
+        state.settingsOriginalTheme=state.appearanceTheme;
+        elements.preferredAgentName.value=state.preferredAgentName;
+        applyTheme(state.appearanceTheme);
+        elements.settingsBackdrop.classList.add("is-visible");
+        document.body.style.overflow="hidden";
+        elements.preferredAgentName.focus();
+      }
+      function closeSettings(save=false) {
+        if(save) {
+          state.preferredAgentName=elements.preferredAgentName.value.trim();
+          saveProspects(); updateAgentLabels(); renderFollowUpQueue();
+        } else applyTheme(state.settingsOriginalTheme);
+        elements.settingsBackdrop.classList.remove("is-visible");
+        document.body.style.overflow="";
+        const opener=state.settingsOpener; state.settingsOpener=null;
+        if(opener&&typeof opener.focus==="function") opener.focus();
+      }
+
+      let scriptsOpener = null;
+
+      const SCRIPT_SITUATION_LABELS = {
+        "phone-call": "Phone Call",
+        introduction: "Introduction",
+        "in-field": "In the Field",
+        referral: "Referral",
+      };
+
+      const MEDICARE_ADVANTAGE_SCRIPTS = {
+        "phone-call": `Hello, may I speak with {prospect}?
+
+Hi {prospect}, this is {agent}, a licensed insurance agent with {agency}. You asked to receive information about Medicare plan options. Is now still a good time for a brief conversation?
+
+I help people compare Medicare Advantage choices available in their service area. I’m not calling from Medicare, and I won’t assume one plan fits everyone.
+
+Before we look at any plan, what matters most to you right now—keeping your doctors, checking prescriptions, understanding costs, or simply knowing what choices are available?
+
+Thank you. The next step is a short review using current approved plan information. Would you prefer to do that now, or schedule a specific time?`,
+        introduction: `Hello, I’m {agent}, a licensed insurance agent with {agency}. I help people understand Medicare Advantage and Medicare Supplement choices available where they live.
+
+I’m not affiliated with Medicare. My job is to slow the information down, check the details that matter to you, and explain the differences clearly.
+
+If you have Medicare questions, I can help you review your priorities and decide whether a full plan comparison would be useful.`,
+        "in-field": `Hello, I’m {agent}, a licensed insurance agent with {agency}. I’m available today to answer general Medicare questions and arrange private plan reviews for people who request one.
+
+I’m not with Medicare, and I don’t begin by assuming Medicare Advantage is right for everyone.
+
+Would it be alright if I ask two quick questions: are you mainly trying to understand your current coverage, or are you preparing for an upcoming enrollment decision? And would you prefer information now or a scheduled appointment?
+
+If you choose a review, we’ll use current approved plan information for your service area before discussing any specific option.`,
+        referral: `Hello, may I speak with {prospect}?
+
+Hi {prospect}, this is {agent}, a licensed insurance agent with {agency}. {referrer} suggested that you may have questions about Medicare coverage.
+
+A referral is only an introduction, so before I continue: is it alright to speak for a minute?
+
+I help people compare Medicare Advantage choices using current approved information for their service area. I’m not calling from Medicare, and there is no obligation to make a change.
+
+Would you like to ask a quick question now, or schedule a short review at a better time?`,
+      };
+
+      function genericPreloadedScript(product, situation) {
+        const scripts = {
+          "phone-call": `Hello, may I speak with {prospect}?\n\nHi {prospect}, this is {agent}, a licensed insurance agent with {agency}. You asked to receive information about {product}. Is now a good time for a brief conversation?\n\nI’d like to understand what prompted your interest, answer your immediate questions, and decide whether a fuller review would be useful. What is the main concern you would like help with?\n\nThank you. Would you prefer to continue now or schedule a specific time?`,
+          introduction: `Hello, I’m {agent}, a licensed insurance agent with {agency}. I help people understand {product} and compare appropriate choices without rushing the decision.\n\nIf you have questions, I can help you identify what matters most and decide whether a full review would be useful.`,
+          "in-field": `Hello, I’m {agent}, a licensed insurance agent with {agency}. I’m available today to answer general questions about {product} and arrange a private review when requested.\n\nWould it be alright if I ask what brought you here and whether you prefer information now or a scheduled appointment?`,
+          referral: `Hello, may I speak with {prospect}?\n\nHi {prospect}, this is {agent}, a licensed insurance agent with {agency}. {referrer} suggested that you may have questions about {product}.\n\nA referral is only an introduction, so is it alright to speak for a minute? I can answer a quick question now or schedule a short review at a better time.`,
+        };
+        return scripts[situation] || scripts["phone-call"];
+      }
+
+      function scriptPersonalization() {
+        return {
+          agent: elements.scriptAgentName.value.trim() || agentDisplayName() || "[Agent Name]",
+          agency: elements.scriptAgencyName.value.trim() || "[Agency]",
+          prospect: elements.scriptProspectName.value.trim() || "[First Name]",
+          referrer: elements.scriptReferrerName.value.trim() || "[Referral Source]",
+          product: elements.scriptProduct.value,
+        };
+      }
+
+      function fillPreloadedScript(template) {
+        const values = scriptPersonalization();
+        let script = template;
+        Object.entries(values).forEach(([key, value]) => {
+          script = script.replaceAll(`{${key}}`, value);
+        });
+        const note = elements.scriptContext.value.trim();
+        return note ? `${script}\n\nQUICK NOTE\n${note}` : script;
+      }
+
+      function renderPreloadedScript() {
+        const product = elements.scriptProduct.value;
+        const situation = elements.scriptFormat.value;
+        const template = product === "Medicare Advantage"
+          ? MEDICARE_ADVANTAGE_SCRIPTS[situation]
+          : genericPreloadedScript(product, situation);
+        elements.scriptOutputTitle.textContent = `${product} — ${SCRIPT_SITUATION_LABELS[situation] || "Script"}`;
+        elements.scriptOutput.textContent = fillPreloadedScript(template) + tpmoDisclaimer();
+      }
+
+      function toggleScriptCustomization() {
+        const willOpen = elements.scriptCustomizePanel.classList.contains("hidden");
+        elements.scriptCustomizePanel.classList.toggle("hidden", !willOpen);
+        elements.customizeScriptButton.setAttribute("aria-expanded", String(willOpen));
+        elements.customizeScriptButton.textContent = willOpen ? "Hide Customization" : "Customize";
+        if (willOpen) elements.scriptAgentName.focus();
+      }
+
+      function openScripts() {
+        scriptsOpener = document.activeElement;
+        renderPreloadedScript();
+        elements.scriptsBackdrop.classList.add("is-visible");
+        document.body.style.overflow = "hidden";
+        elements.scriptProduct.focus();
+      }
+
+      function closeScripts() {
+        elements.scriptsBackdrop.classList.remove("is-visible");
+        document.body.style.overflow = "";
+        const opener = scriptsOpener; scriptsOpener = null;
+        if (opener && typeof opener.focus === "function") opener.focus();
+      }
+
+      async function copyScriptToClipboard() {
+        const text = elements.scriptOutput.textContent;
+        if (!text) return;
+        let copied = false;
+        if (navigator.clipboard && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          } catch {}
+        }
+        if (!copied) {
+          const helper = document.createElement("textarea");
+          helper.value = text;
+          helper.setAttribute("readonly", "");
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+          document.body.appendChild(helper);
+          helper.select();
+          try { copied = document.execCommand("copy"); } catch {}
+          helper.remove();
+        }
+        if (copied) {
+          const original = elements.copyScriptButton.textContent;
+          elements.copyScriptButton.textContent = "Copied!";
+          setTimeout(() => { elements.copyScriptButton.textContent = original; }, 1500);
+        } else {
+          window.alert("Copy was blocked by the browser. Select the script text and copy it manually.");
+        }
+      }
+
+      function downloadScriptAsText() {
+        const text = elements.scriptOutput.textContent;
+        if (!text) return;
+        const product = elements.scriptProduct.value.replace(/[^a-z0-9]+/gi, "-");
+        const format = elements.scriptFormat.value;
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${product}-${format}-script.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
+      let trainingAppointments = [];
+      let trainingOpener = null;
+
+      function localDateValue(date = new Date()) {
+        const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        return offsetDate.toISOString().slice(0, 10);
+      }
+
+      function loadTrainingAppointments() { renderTrainingAppointments(); }
+      function saveTrainingAppointments() { return persistWorkspace(); }
+
+      function openTraining() {
+        trainingOpener = document.activeElement;
+        if (!elements.trainingDate.value) elements.trainingDate.value = localDateValue();
+        if (!elements.trainingTime.value) elements.trainingTime.value = "09:00";
+        renderTrainingAppointments();
+        elements.trainingBackdrop.classList.add("is-visible");
+        document.body.style.overflow = "hidden";
+        elements.trainingTitleInput.focus();
+      }
+
+      function closeTraining() {
+        elements.trainingBackdrop.classList.remove("is-visible");
+        document.body.style.overflow = "";
+        const opener = trainingOpener;
+        trainingOpener = null;
+        if (opener && typeof opener.focus === "function") opener.focus();
+      }
+
+      function trainingStart(appointment) {
+        return new Date(`${appointment.date}T${(appointment.time || "09:00").slice(0,5)}:00`);
+      }
+
+      function trainingEnd(appointment) {
+        return new Date(trainingStart(appointment).getTime() + Number(appointment.duration || 60) * 60000);
+      }
+
+      function compactCalendarDate(date) {
+        const pad = (value) => String(value).padStart(2, "0");
+        return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}00`;
+      }
+
+      function yahooCalendarUrl(appointment) {
+        const params = new URLSearchParams({
+          v: "60",
+          view: "d",
+          type: "20",
+          title: appointment.title,
+          st: compactCalendarDate(trainingStart(appointment)),
+          et: compactCalendarDate(trainingEnd(appointment)),
+          desc: [appointment.type, appointment.notes].filter(Boolean).join(" — "),
+          in_loc: appointment.location || "",
+        });
+        return `https://calendar.yahoo.com/?${params.toString()}`;
+      }
+
+      function openAppointmentInYahoo(appointment) {
+        window.open(yahooCalendarUrl(appointment), "_blank", "noopener,noreferrer");
+      }
+
+      function escapeIcs(value) {
+        return String(value || "")
+          .replaceAll("\\", "\\\\")
+          .replaceAll(";", "\\;")
+          .replaceAll(",", "\\,")
+          .replace(/\r?\n/g, "\\n");
+      }
+
+      function downloadAppointmentIcs(appointment) {
+        const now = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+        const ics = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Agent Rise//Training Appointments//EN",
+          "CALSCALE:GREGORIAN",
+          "BEGIN:VEVENT",
+          `UID:${escapeIcs(appointment.id)}@agent-rise.local`,
+          `DTSTAMP:${now}`,
+          `DTSTART:${compactCalendarDate(trainingStart(appointment))}`,
+          `DTEND:${compactCalendarDate(trainingEnd(appointment))}`,
+          `SUMMARY:${escapeIcs(appointment.title)}`,
+          `DESCRIPTION:${escapeIcs([appointment.type, appointment.notes].filter(Boolean).join(" — "))}`,
+          `LOCATION:${escapeIcs(appointment.location)}`,
+          "END:VEVENT",
+          "END:VCALENDAR",
+          "",
+        ].join("\r\n");
+        const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${appointment.title.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "training"}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function renderTrainingAppointments() {
+        if (!elements.trainingList) return;
+        const upcoming = [...trainingAppointments].sort((a, b) => trainingStart(a) - trainingStart(b));
+        if (!upcoming.length) {
+          elements.trainingList.innerHTML = '<p class="training-empty">No training appointments saved yet.</p>';
+          return;
+        }
+        elements.trainingList.innerHTML = upcoming.map((appointment) => {
+          const when = trainingStart(appointment).toLocaleString([], { weekday:"short", month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit" });
+          const details = [appointment.type, when, appointment.location].filter(Boolean).map(escapeHtml).join(" · ");
+          return `<article class="training-card" data-training-id="${escapeHtml(appointment.id)}">
+            <div class="training-card-head"><div><h3 class="training-card-title">${escapeHtml(appointment.title)}</h3><p class="training-meta">${details}</p></div></div>
+            <div class="training-actions">
+              <button class="button button-primary training-yahoo" type="button">Add to Yahoo</button>
+              <button class="button button-secondary training-ics" type="button">Download .ics</button>
+              <button class="button button-danger training-delete" type="button">Delete</button>
+            </div>
+          </article>`;
+        }).join("");
+      }
+
+      function saveTrainingAppointment(event) {
+        event.preventDefault();
+        const appointment = {
+          id: createId(),
+          createdAt: new Date().toISOString(),
+          type: elements.trainingType.value,
+          title: elements.trainingTitleInput.value.trim(),
+          date: elements.trainingDate.value,
+          time: elements.trainingTime.value,
+          duration: Number(elements.trainingDuration.value),
+          location: elements.trainingLocation.value.trim(),
+          notes: elements.trainingNotes.value.trim(),
+        };
+        if (!appointment.title || !appointment.date || !appointment.time) return;
+        trainingAppointments.push(appointment);
+        saveTrainingAppointments();
+        renderTrainingAppointments();
+        elements.trainingForm.reset();
+        elements.trainingDate.value = localDateValue();
+        elements.trainingTime.value = "09:00";
+        elements.trainingDuration.value = "60";
+        elements.trainingTitleInput.focus();
+      }
+
+      function handleTrainingListClick(event) {
+        const card = event.target.closest("[data-training-id]");
+        if (!card) return;
+        const appointment = trainingAppointments.find((item) => item.id === card.dataset.trainingId);
+        if (!appointment) return;
+        if (event.target.closest(".training-yahoo")) openAppointmentInYahoo(appointment);
+        if (event.target.closest(".training-ics")) downloadAppointmentIcs(appointment);
+        if (event.target.closest(".training-delete")) {
+          if (!window.confirm(`Delete the training appointment “${appointment.title}”?`)) return;
+          trainingAppointments = trainingAppointments.filter((item) => item.id !== appointment.id);
+          saveTrainingAppointments();
+          renderTrainingAppointments();
+        }
+      }
+
+      function createId() {
+        return crypto.randomUUID();
+      }
+
+      function formatDate(value) {
+        if (!value) return "-";
+        const [year, month, day] = value.split("-");
+        if (!year || !month || !day) return value;
+        return `${month}/${day}/${year}`;
+      }
+
+      function todayIsoDate() {
+        const now = new Date();
+        const offset = now.getTimezoneOffset() * 60000;
+        return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+      }
+
+      function todayLabel() {
+        return new Intl.DateTimeFormat("en", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        }).format(new Date());
+      }
+
+      function fullName(prospect) {
+        return `${prospect.firstName || ""} ${prospect.lastName || ""}`.trim() || "Unnamed Prospect";
+      }
+
+      function splitEmail(email = "") {
+        email = String(email ?? "").trim();
+        const atIndex = email.indexOf("@");
+        if (atIndex < 1) {
+          return { username: email, domain: "gmail.com", customDomain: "" };
+        }
+
+        const username = email.slice(0, atIndex);
+        const domain = email.slice(atIndex + 1).toLowerCase();
+        const savedDomain = EMAIL_DOMAINS.includes(domain) ? domain : "Other";
+        return {
+          username,
+          domain: savedDomain,
+          customDomain: savedDomain === "Other" ? domain : "",
+        };
+      }
+
+      function finalEmail(values) {
+        const username = values.emailUsername.trim().replace(/^@+/, "").replace(/\s+/g, "");
+        if (!username) return "";
+
+        const rawDomain =
+          values.emailDomain === "Other"
+            ? values.customEmailDomain.trim()
+            : values.emailDomain.trim();
+        const domain = rawDomain.replace(/^@+/, "").replace(/\s+/g, "");
+        if (!domain) return username;
+        return `${username}@${domain}`;
+      }
+
+      function syncEmailPreview() {
+        const email = finalEmail({
+          emailUsername: elements.emailUsername.value,
+          emailDomain: elements.emailDomain.value,
+          customEmailDomain: elements.customEmailDomain.value,
+        });
+        elements.emailPreview.textContent = email || "Add a username and choose a domain.";
+      }
+
+      function finalProduct(values) {
+        return values.product === "Other" ? values.customProduct.trim() : values.product;
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function visibleProspects() {
+        const term = state.search.trim().toLowerCase();
+        return state.prospects.filter((prospect) => {
+          const protectedContact=prospect.leadPool==="Do Not Contact"||prospect.clientStatus==="Do Not Contact"||prospect.marketingEligibility==="Do Not Market";
+          const mainMatches={
+            "All Contacts":true,
+            "New Leads":["New Lead Pool","Contact Review Pool","Needs Nurture","Not Ready Yet","Old Lead Pool"].includes(prospect.leadPool),
+            "Active Journey":prospect.leadPool==="Active Journey"||["Contacted","Quoted","Application","Pending"].includes(prospect.status),
+            "Clients":prospect.status==="Client"||prospect.status==="Closed"||prospect.leadPool==="Client Service & Review",
+            "Resource Contacts":prospect.leadPool===RESOURCE_POOL,
+            "Do Not Contact":protectedContact,
+            "Permission Lapsing":permissionDays(prospect) !== null && permissionDays(prospect)>=0 && permissionDays(prospect)<=30,
+          };
+          if(!mainMatches[state.activeFilter]) return false;
+          if(state.internalFilter){
+            const internalMatches={
+              "Unreviewed":prospect.leadPool==="Contact Review Pool"||prospect.qualificationStatus==="Review Needed",
+              "Nurture":["Needs Nurture","Not Ready Yet"].includes(prospect.leadPool),
+              "Ready to Contact":prospect.leadPool==="New Lead Pool",
+              "Contacted":prospect.status==="Contacted","Quoted":prospect.status==="Quoted","Application":prospect.status==="Application","Pending":prospect.status==="Pending",
+              "Active Client":prospect.clientStatus==="Active Client"||prospect.status==="Client",
+              "Service Needed":prospect.leadPool==="Client Service & Review",
+              "Review Due":prospect.clientStatus==="Active Client"&&Boolean(prospect.nextFollowUp),
+              "Closed Client":prospect.status==="Closed"||prospect.clientStatus==="Former Client",
+              "Review Before Use":prospect.leadPool===RESOURCE_POOL&&!prospect.resourceGroupIds?.length,
+              "Do Not Market":prospect.marketingEligibility==="Do Not Market",
+              "Do Not Call":prospect.leadPool==="Do Not Contact"||prospect.clientStatus==="Do Not Contact",
+              "Personal Only":prospect.clientStatus==="Personal Contact"||prospect.relationshipCategory==="Personal Only",
+            };
+            const groupId=state.internalFilter.startsWith("group:")?state.internalFilter.slice(6):"";
+            if(groupId?!prospect.resourceGroupIds?.includes(groupId):!internalMatches[state.internalFilter]) return false;
+          }
+          if (!term) return true;
+          return [fullName(prospect), prospect.phone, prospect.email, prospect.product, prospect.carrierProvider, prospect.notes, prospect.contactHistory]
+            .join(" ")
+            .toLowerCase()
+            .includes(term);
+        });
+      }
+
+      function renderFilters() {
+        elements.filters.innerHTML = MENU_ITEMS.map(
+          (filter) => `
+            <button
+              class="filter ${filter === state.activeFilter ? "is-active" : ""}"
+              type="button"
+              ${filter==="Import Contacts"?'data-menu-import="true"':`data-filter="${filter}"`}
+            >
+              ${filter==="Import Contacts"?"⇧ Import Contacts":filter}
+            </button>
+          `,
+        ).join("");
+        const internalBySection={
+          "New Leads":["Unreviewed","Nurture","Ready to Contact"],
+          "Active Journey":["Contacted","Quoted","Application","Pending"],
+          "Clients":["Active Client","Service Needed","Review Due","Closed Client"],
+          "Resource Contacts":["Review Before Use",...state.resourceGroups.map(group=>({label:group.name,value:`group:${group.id}`}))],
+          "Do Not Contact":["Do Not Market","Do Not Call","Personal Only"],
+        };
+        const choices=internalBySection[state.activeFilter]||[];
+        elements.internalFilters.innerHTML=choices.map(choice=>{const value=typeof choice==="string"?choice:choice.value;const label=typeof choice==="string"?choice:choice.label;return `<button class="filter ${value===state.internalFilter?"is-active":""}" type="button" data-internal-filter="${escapeHtml(value)}">${escapeHtml(label)}</button>`;}).join("");
+        elements.internalFilters.classList.toggle("hidden",!choices.length);
+        elements.resourcePanel.classList.toggle("hidden",state.activeFilter!=="Resource Contacts");
+      }
+
+      function phoneDisplay(value) {
+        const original = String(value || "").trim();
+        if (!original) return { text: "-", dial: "" };
+
+        const digits = original.replace(/\D/g, "");
+        if (digits.length === 10) {
+          return {
+            text: `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`,
+            dial: digits,
+          };
+        }
+
+        const dial = original.replace(/[^0-9+*#,;pPwWxX.-]/g, "");
+        return { text: original, dial: /\d/.test(dial) ? dial : "" };
+      }
+
+      function phoneLink(value) {
+        const phone = phoneDisplay(value);
+        return phone.dial
+          ? `<a class="phone-link" href="tel:${escapeHtml(phone.dial)}">${escapeHtml(phone.text)}</a>`
+          : escapeHtml(phone.text);
+      }
+
+      function detail(label, value, displayType = "text") {
+        return `
+          <div class="detail">
+            <p class="label">${label}</p>
+            <p class="value">${displayType === "phone" ? phoneLink(value) : escapeHtml(value || "-")}</p>
+          </div>
+        `;
+      }
+
+      function nextAction(status) {
+        const actions = {
+          "New Lead": "Make first contact",
+          Contacted: "Follow up",
+          Quoted: "Review quote",
+          Application: "Check application",
+          Pending: "Check status",
+          Client: "Client check-in",
+        };
+        return actions[normalizeStatus(status)] || "Follow up";
+      }
+
+      function contactMethod(prospect) {
+        const hasPhone = Boolean(prospect.phone);
+        const hasEmail = Boolean(prospect.email);
+        if (hasPhone && hasEmail) return "Phone / Email";
+        if (hasPhone) return "Phone";
+        if (hasEmail) return "Email";
+        return "Not set";
+      }
+
+      function queueItem(label, value) {
+        return `
+          <div class="queue-item">
+            <p class="queue-label">${label}</p>
+            <p class="queue-value">${escapeHtml(value || "-")}</p>
+          </div>
+        `;
+      }
+
+      function followUpProspects() {
+        return state.prospects
+          .filter((prospect) => prospect.nextFollowUp && normalizeStatus(prospect.status) !== "Closed" && prospect.leadPool !== "Contact Review Pool" && prospect.leadPool !== "Do Not Contact" && prospect.leadPool !== RESOURCE_POOL)
+          .sort((firstProspect, secondProspect) =>
+            firstProspect.nextFollowUp.localeCompare(secondProspect.nextFollowUp),
+          );
+      }
+
+      function followUpPriorityCounts(queue, today) {
+        return queue.reduce(
+          (counts, prospect) => {
+            if (prospect.nextFollowUp < today) counts.overdue += 1;
+            if (prospect.nextFollowUp === today) counts.dueToday += 1;
+            if (prospect.nextFollowUp > today) counts.upcoming += 1;
+            return counts;
+          },
+          { overdue: 0, dueToday: 0, upcoming: 0 },
+        );
+      }
+
+      function renderFollowUpQueue() {
+        const queue = followUpProspects();
+        if (!queue.length) {
+          elements.followUpQueue.classList.remove("is-visible");
+          elements.followUpQueue.innerHTML = "";
+          return;
+        }
+
+        const today = todayIsoDate();
+        const priorityCounts = followUpPriorityCounts(queue, today);
+        elements.followUpQueue.classList.add("is-visible");
+        elements.followUpQueue.innerHTML = `
+          <div class="queue-head">
+            <h2 class="queue-title">${escapeHtml(agentDisplayName())}’s Follow-Up Queue</h2>
+            <span class="queue-count">${queue.length} ${queue.length === 1 ? "lead" : "leads"}</span>
+          </div>
+          <div class="queue-summary" aria-label="Follow-up priority summary">
+            <div class="queue-summary-item">
+              <p class="queue-summary-label">Overdue</p>
+              <p class="queue-summary-value">${priorityCounts.overdue}</p>
+            </div>
+            <div class="queue-summary-item">
+              <p class="queue-summary-label">Due Today</p>
+              <p class="queue-summary-value">${priorityCounts.dueToday}</p>
+            </div>
+            <div class="queue-summary-item">
+              <p class="queue-summary-label">Upcoming</p>
+              <p class="queue-summary-value">${priorityCounts.upcoming}</p>
+            </div>
+          </div>
+          <div class="queue-list">
+            ${queue
+              .map(
+                (prospect) => `
+                  <article class="queue-row" data-prospect-id="${escapeHtml(prospect.id)}">
+                    <div class="queue-main">
+                      <h3 class="queue-name">${escapeHtml(fullName(prospect))}</h3>${permissionBadge(prospect)}
+                      ${
+                        prospect.nextFollowUp === today
+                          ? `<span class="due-badge">Due Today</span>`
+                          : ""
+                      }
+                    </div>
+                    <div class="queue-meta">
+                      ${queueItem("Product", prospect.product)}
+                      ${queueItem("Status", prospect.status)}
+                      ${queueItem("Next Action", nextAction(prospect.status))}
+                      ${queueItem("Follow-up Date", formatDate(prospect.nextFollowUp))}
+                      ${queueItem("Contact Method", contactMethod(prospect))}
+                    </div>
+                    <button
+                      class="button button-secondary queue-action"
+                      type="button"
+                      data-action="edit"
+                      data-id="${prospect.id}"
+                    >
+                      Open
+                    </button>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        `;
+      }
+
+      function renderList() {
+        const prospects = visibleProspects();
+
+        if (!prospects.length) {
+          elements.list.innerHTML = `
+            <article class="empty-card">
+              <h2>${state.prospects.length ? "No contacts match these filters." : "No prospects yet."}</h2>
+              <button class="button button-primary" type="button" data-action="${state.prospects.length ? 'clear-filters' : 'add-first'}">
+                ${state.prospects.length ? "Clear filters" : "Add Your First Prospect"}
+              </button>
+            </article>
+          `;
+          return;
+        }
+
+        elements.list.innerHTML = prospects
+          .map(
+            (prospect) => `
+              <article class="prospect-card" data-prospect-id="${escapeHtml(prospect.id)}">
+                <div class="card-head">
+                  <h2 class="name">${escapeHtml(fullName(prospect))}</h2>
+                  <span class="status">${escapeHtml(prospect.status || "Lead")}</span>
+                </div>
+                <div class="details">
+                  ${detail("Phone", prospect.phone, "phone")}
+                  ${detail("Email", prospect.email)}
+                  ${detail("Product", prospect.product)}
+                  ${detail("Status", prospect.status)}
+                  ${detail("Lead Pool", prospect.leadPool)}
+                  ${detail("Qualification", prospect.qualificationStatus)}
+                  ${detail("Source", prospect.source)}
+                  ${detail("Next Follow-up Date", formatDate(prospect.nextFollowUp))}
+                  ${detail("Last Contact", formatDate(prospect.lastContact))}
+                  ${normalizeStatus(prospect.status)==="Closed"?`${detail("Carrier / Provider",prospect.carrierProvider)}${detail("Effective Date",formatDate(prospect.effectiveDate))}${detail("Closing Date",formatDate(prospect.closingDate))}${detail("Reason Closed",prospect.reasonClosed)}${detail("Future Opportunity",prospect.futureOpportunity)}`:""}
+                </div>
+                <div class="card-actions">
+                  ${prospectActions(prospect)}
+                  <button class="button button-secondary" type="button" data-action="view" data-id="${prospect.id}">
+                    View
+                  </button>
+                  <button class="button button-secondary" type="button" data-action="edit" data-id="${prospect.id}">
+                    Edit
+                  </button>
+                  ${prospect.leadPool === "Contact Review Pool"
+                    ? `<button class="button button-primary" type="button" data-action="move-new" data-id="${prospect.id}">Move to New Lead Pool</button><button class="button button-secondary" type="button" data-action="do-not-market" data-id="${prospect.id}">Mark Do Not Market</button><button class="button button-danger" type="button" data-action="delete-imported" data-id="${prospect.id}">Delete Imported Contact</button>`
+                    : ["Active Journey", "New Lead Pool", "Needs Nurture", "Not Ready Yet"].includes(prospect.leadPool)
+                      ? `<button class="button button-quiet" type="button" data-action="move-old" data-id="${prospect.id}">Move to Old Lead Pool</button>`
+                      : ""}
+                  ${
+                    state.activeFilter === "Clients" && state.internalFilter === "Closed Client" && normalizeStatus(prospect.status) === "Closed"
+                      ? `<button class="button button-danger" type="button" data-action="delete-permanently" data-id="${prospect.id}">
+                          Delete Permanently
+                        </button>`
+                      : ""
+                  }
+                </div>
+              </article>
+            `,
+          )
+          .join("");
+      }
+
+      function populateStatusOptions() {
+        elements.status.innerHTML = STATUSES.map(
+          (status) => `<option value="${status}">${status}</option>`,
+        ).join("");
+      }
+
+      function populateLeadPoolOptions() {
+        elements.leadPool.innerHTML = LEAD_POOLS.map(
+          (leadPool) => `<option value="${leadPool}">${leadPool}</option>`,
+        ).join("");
+      }
+
+      function populateEmailDomainOptions() {
+        elements.emailDomain.innerHTML = EMAIL_DOMAINS.map(
+          (domain) => `<option value="${domain}">${domain}</option>`,
+        ).join("");
+      }
+
+      function populateProductOptions() {
+        elements.product.innerHTML = [
+          '<option value="">Select product</option>',
+          ...PRODUCTS.map((product) => `<option value="${product}">${product}</option>`),
+        ].join("");
+      }
+
+      function populateSourceOptions() {
+        elements.source.innerHTML = [
+          '<option value="">Select source</option>',
+          ...SOURCES.map((source) => `<option value="${source}">${source}</option>`),
+        ].join("");
+      }
+
+      function populateSimpleOptions(element, values) {
+        element.innerHTML = values.map((value) => `<option value="${value}">${value}</option>`).join("");
+      }
+
+      function syncConditionalFields() {
+        elements.customEmailDomainField.classList.toggle(
+          "hidden",
+          elements.emailDomain.value !== "Other",
+        );
+        elements.customProductField.classList.toggle("hidden", elements.product.value !== "Other");
+        syncEmailPreview();
+      }
+
+      function setFormReadonly(isReadonly) {
+        fields.forEach((field) => {
+          const element = document.querySelector(`#${field}`);
+          if (element.tagName === "SELECT") {
+            element.disabled = isReadonly;
+          } else {
+            element.readOnly = isReadonly;
+          }
+        });
+        document.getElementById("ptcExpirationDate").readOnly=true;
+        elements.formActions.classList.toggle("hidden", isReadonly);
+        elements.closeModal.textContent = isReadonly ? "Close" : "Cancel";
+      }
+
+      function fillForm(prospect = {}) {
+        const isNewProspect = state.mode === "add";
+        fields.forEach((field) => {
+          document.querySelector(`#${field}`).value = "";
+        });
+        const emailParts = splitEmail(prospect.email);
+        document.querySelector("#firstName").value = prospect.firstName || "";
+        document.querySelector("#lastName").value = prospect.lastName || "";
+        elements.phone.value = prospect.phone || "";
+        const phone = phoneDisplay(prospect.phone);
+        elements.phoneDisplayLink.textContent = phone.text;
+        if (phone.dial) {
+          elements.phoneDisplayLink.href = `tel:${phone.dial}`;
+        } else {
+          elements.phoneDisplayLink.removeAttribute("href");
+        }
+        elements.phone.classList.toggle("hidden", state.mode === "view");
+        elements.phoneDisplayLink.classList.toggle("hidden", state.mode !== "view");
+        document.querySelector("#emailUsername").value = emailParts.username;
+        elements.emailDomain.value = emailParts.domain;
+        document.querySelector("#customEmailDomain").value = emailParts.customDomain;
+        elements.product.value = prospect.product
+          ? PRODUCTS.includes(prospect.product)
+            ? prospect.product
+            : "Other"
+          : "";
+        document.querySelector("#customProduct").value =
+          elements.product.value === "Other" ? prospect.product || "" : "";
+        document.querySelector("#nextFollowUp").value = prospect.nextFollowUp || "";
+        elements.contactOutcome.value = prospect.contactOutcome || "";
+        elements.contactNote.value = "";
+        elements.status.value = prospect.status ? normalizeStatus(prospect.status) : "New Lead";
+        elements.leadPool.value = prospect.leadPool || (isNewProspect ? "Contact Review Pool" : "Contact Review Pool");
+        elements.qualificationStatus.value = prospect.qualificationStatus || (prospect.leadPool === "Contact Review Pool" ? "Review Needed" : "Review Needed");
+        document.querySelector("#relationshipCategory").value = prospect.relationshipCategory || "";
+        elements.source.value = prospect.source ? (SOURCES.includes(prospect.source) ? prospect.source : "Other") : "";
+        elements.marketingEligibility.value = prospect.marketingEligibility || "Review Needed";
+        elements.clientStatus.value = prospect.clientStatus || (prospect.status === "Client" ? "Active Client" : "Prospect");
+        elements.policyStatus.value = prospect.policyStatus || "None";
+        ["carrierProvider","effectiveDate","closingDate","reasonClosed","serviceHistory","futureOpportunity"].forEach(field=>document.querySelector(`#${field}`).value=prospect[field]||"");
+        document.querySelector("#notes").value = prospect.notes || "";
+        ["ptcSource","ptcSignedDate","soaCompleted","soaDate","soaMethod","appointmentDate"].forEach(k=>document.getElementById(k).value=prospect[k]||({ptcSource:"Not on File",soaCompleted:"No",soaMethod:"Not Applicable"}[k]||""));
+        document.getElementById("ptcExpirationDate").value=permissionExpiry(prospect.ptcSignedDate);
+        syncConditionalFields();
+      }
+
+      function openModal(mode, prospectId = null) {
+        const prospect = state.prospects.find((item) => item.id === prospectId);
+        state.mode = mode;
+        state.editingId = prospectId;
+        elements.modalTitle.textContent =
+          mode === "view" ? fullName(prospect || {}) : mode === "edit" ? "Edit Prospect" : "New Prospect";
+        setFormReadonly(mode === "view");
+        fillForm(prospect);
+        elements.modal.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        document.querySelector(mode === "view" ? "#closeModalButton" : "#firstName").focus();
+      }
+
+      function closeModal() {
+        elements.modal.classList.remove("is-open");
+        document.body.style.overflow = "";
+        elements.form.reset();
+        setFormReadonly(false);
+        state.editingId = null;
+        state.mode = "add";
+      }
+
+      function formValues() {
+        const values = fields.reduce((currentValues, field) => {
+          currentValues[field] = document.querySelector(`#${field}`).value.trim();
+          return currentValues;
+        }, {});
+        return {
+          ...Object.fromEntries(["ptcSource","ptcSignedDate","soaCompleted","soaDate","soaMethod","appointmentDate"].map(k=>[k,values[k]])),
+          ptcExpirationDate: permissionExpiry(values.ptcSignedDate),
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone,
+          email: finalEmail(values),
+          product: finalProduct(values),
+          nextFollowUp: values.nextFollowUp,
+          contactOutcome: values.contactOutcome,
+          contactNote: values.contactNote,
+          status: values.status || "New Lead",
+          leadPool: values.leadPool || "Active Journey",
+          qualificationStatus: values.qualificationStatus,
+          relationshipCategory: values.relationshipCategory,
+          source: values.source,
+          marketingEligibility: values.marketingEligibility,
+          clientStatus: values.clientStatus,
+          policyStatus: values.policyStatus,
+          carrierProvider: values.carrierProvider,
+          effectiveDate: values.effectiveDate,
+          closingDate: values.closingDate,
+          reasonClosed: values.reasonClosed,
+          serviceHistory: values.serviceHistory,
+          futureOpportunity: values.futureOpportunity,
+          notes: values.notes,
+        };
+      }
+
+      function saveForm(event) {
+        event.preventDefault();
+        const values = formValues();
+        if (values.leadPool === "New Lead Pool" && !allowContact(values)) return;
+        const now = todayIsoDate();
+        const { contactNote, contactOutcome, ...leadValues } = values;
+
+        if (state.mode === "edit" && state.editingId) {
+          state.prospects = state.prospects.map((prospect) => {
+            if (prospect.id !== state.editingId) return prospect;
+
+            const existingOutcome = prospect.contactOutcome || "";
+            const outcomeRecorded = Boolean(contactOutcome && contactOutcome !== existingOutcome);
+            const noteEntered = Boolean(contactNote);
+            const noteLabel = contactOutcome || "Contact note";
+            const appendedNote = noteEntered ? `[${now}] ${noteLabel} — ${contactNote}` : "";
+            const updatedProspect = {
+              ...prospect,
+              ...leadValues,
+              notes: [leadValues.notes, appendedNote].filter(Boolean).join("\n"),
+            };
+
+            if (contactOutcome) updatedProspect.contactOutcome = contactOutcome;
+            if (outcomeRecorded || noteEntered) updatedProspect.lastContact = now;
+            return updatedProspect;
+          });
+        } else {
+          const newProspect = {
+            id: createId(),
+            createdAt: new Date().toISOString(),
+            ...leadValues,
+            notes: [leadValues.notes, contactNote ? `[${now}] ${contactOutcome || "Contact note"} — ${contactNote}` : ""]
+              .filter(Boolean)
+              .join("\n"),
+            status: leadValues.status || "New Lead",
+            leadPool: leadValues.leadPool || "Contact Review Pool",
+            lastContact: contactOutcome || contactNote ? now : "",
+            archived: false,
+          };
+          if (contactOutcome) newProspect.contactOutcome = contactOutcome;
+          state.prospects.unshift(newProspect);
+        }
+
+        saveProspects();
+        closeModal();
+        renderFollowUpQueue();
+        renderList();
+      }
+
+      function moveToOldLeadPool(id) {
+        const current = state.prospects.find((prospect) => prospect.id === id);
+        if (!current || String(current.leadPool ?? "") === "Old Lead Pool") return false;
+        state.prospects = state.prospects.map((prospect) =>
+          prospect.id === id ? { ...prospect, leadPool: "Old Lead Pool", archived: false } : prospect,
+        );
+        saveProspects();
+        renderFollowUpQueue();
+        renderList();
+        return true;
+      }
+
+      function deleteClosedProspect(id) {
+        const prospect = state.prospects.find((item) => item.id === id);
+        if (!prospect || normalizeStatus(prospect.status) !== "Closed") return;
+        if (!window.confirm(`Permanently delete ${fullName(prospect)}? This cannot be undone.`)) return;
+
+        state.prospects = state.prospects.filter((item) => item.id !== id);
+        saveProspects();
+        renderFilters();
+        renderFollowUpQueue();
+        renderList();
+      }
+
+      function leadNameParts(name = "") {
+        const parts = String(name).trim().split(/\s+/).filter(Boolean);
+        return { firstName: parts.shift() || "", lastName: parts.join(" ") };
+      }
+
+      function captureLead(lead = {}) {
+        const name = leadNameParts(lead.name || "");
+        const email = String(lead.email || "").trim().toLowerCase();
+        const phone = String(lead.phone || "").trim();
+        if (!email && !phone) return { saved: false, reason: "An email address or phone number is required." };
+
+        const existing = state.prospects.find(
+          (prospect) =>
+            (email && prospect.email?.toLowerCase() === email) ||
+            (phone && prospect.phone === phone),
+        );
+        const sourceNote = lead.source ? `Lead source: ${lead.source}` : "";
+        const leadValues = {
+          firstName: lead.firstName || name.firstName,
+          lastName: lead.lastName || name.lastName,
+          phone,
+          email,
+          product: lead.product || "Not selected",
+          nextFollowUp: lead.nextFollowUp || "",
+          status: "New Lead",
+          leadPool: "Contact Review Pool",
+          notes: [sourceNote, lead.notes].filter(Boolean).join("\n"),
+          lastContact: "",
+          createdAt: new Date().toISOString(),
+          archived: false,
+        };
+
+        if (existing) {
+          Object.assign(existing, {
+            ...leadValues,
+            firstName: leadValues.firstName || existing.firstName,
+            lastName: leadValues.lastName || existing.lastName,
+            phone: leadValues.phone || existing.phone,
+            email: leadValues.email || existing.email,
+            notes: [existing.notes, leadValues.notes].filter(Boolean).join("\n"),
+          });
+        } else {
+          state.prospects.unshift({ id: createId(), ...leadValues });
+        }
+
+        saveProspects();
+        renderFollowUpQueue();
+        renderList();
+        return { saved: true, updated: Boolean(existing) };
+      }
+
+      // Integration hook for a future download or quote form on the same Agent Rise site.
+      // Example: window.AgentRise.captureLead({ name, email, phone, product, source: "Free Download" })
+      window.AgentRise = { captureLead };
+
+      function handleListClick(event) {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+
+        const { action, id } = button.dataset;
+        if (action === "add-first") openModal("add");
+        if (action === "clear-filters") { state.activeFilter="All Contacts"; state.internalFilter=""; state.search=""; elements.search.value=""; renderFilters(); renderList(); }
+        if (action === "log-call") openCallLog(id);
+        if (action === "call-e") startAutomatedCall(id, button.dataset.task);
+        if (action === "ringcentral") dialRingCentral(id);
+        if (action === "view") openModal("view", id);
+        if (action === "edit") openModal("edit", id);
+        if (action === "move-old") moveToOldLeadPool(id);
+        if (action === "delete-permanently") deleteClosedProspect(id);
+        if (action === "move-new") moveToNewLeadPool(id);
+        if (action === "do-not-market") markDoNotMarket(id);
+        if (action === "delete-imported") deleteImportedContact(id);
+      }
+
+
+      function normalizePhoneForMatch(value) { return String(value || "").replace(/\D/g, "").slice(-10); }
+      function findDuplicateContact(phone, email) {
+        const p = normalizePhoneForMatch(phone); const e = String(email || "").trim().toLowerCase();
+        return state.prospects.find((prospect) => (p && normalizePhoneForMatch(prospect.phone) === p) || (e && String(prospect.email || "").trim().toLowerCase() === e));
+      }
+      function parseCsv(text) {
+        const rows=[]; let row=[], cell="", quoted=false;
+        for (let i=0;i<text.length;i++) { const c=text[i], n=text[i+1];
+          if (c==='"' && quoted && n==='"') { cell+='"'; i++; }
+          else if (c==='"') quoted=!quoted;
+          else if (c===',' && !quoted) { row.push(cell); cell=""; }
+          else if ((c==='\n' || c==='\r') && !quoted) { if (c==='\r' && n==='\n') i++; row.push(cell); if (row.some(v=>String(v).trim())) rows.push(row); row=[]; cell=""; }
+          else cell+=c;
+        }
+        row.push(cell); if (row.some(v=>String(v).trim())) rows.push(row); return rows;
+      }
+      function decodeVcardValue(value='') {
+        return String(value)
+          .replace(/\\n/gi, ' ')
+          .replace(/\\,/g, ',')
+          .replace(/\\;/g, ';')
+          .replace(/\\\\/g, '\\')
+          .trim();
+      }
+      function parseVcard(text) {
+        const unfolded=String(text).replace(/\r?\n[ \t]/g, '');
+        const blocks=unfolded.split(/BEGIN:VCARD/i).slice(1).map(block=>block.split(/END:VCARD/i)[0]);
+        const rows=[];
+        blocks.forEach(block=>{
+          const lines=block.split(/\r?\n/).filter(Boolean);
+          let firstName='', lastName='', fullName=''; const phones=[], emails=[];
+          lines.forEach(line=>{
+            const colon=line.indexOf(':'); if(colon<0) return;
+            const key=line.slice(0,colon).toUpperCase();
+            const value=decodeVcardValue(line.slice(colon+1));
+            if(key==='FN' || key.startsWith('FN;')) fullName=value;
+            if(key==='N' || key.startsWith('N;')) {
+              const parts=value.split(';'); lastName=decodeVcardValue(parts[0]||''); firstName=decodeVcardValue(parts[1]||'');
+            }
+            if(key.startsWith('TEL') && value && !phones.includes(value)) phones.push(value);
+            if(key.startsWith('EMAIL') && value && !emails.includes(value.toLowerCase())) emails.push(value.toLowerCase());
+          });
+          if((!firstName && !lastName) && fullName) {
+            const parts=fullName.trim().split(/\s+/); firstName=parts.shift()||''; lastName=parts.join(' ');
+          }
+          if(firstName||lastName||phones.length||emails.length) rows.push([firstName,lastName,phones[0]||'',emails[0]||'',phones,emails]);
+        });
+        return [['First Name','Last Name','Phone','Email'], ...rows];
+      }
+      function guessHeader(headers, terms) { const lower=headers.map(h=>h.toLowerCase().replace(/[^a-z0-9]/g,'')); const i=lower.findIndex(h=>terms.some(t=>h.includes(t))); return i>=0?String(i):""; }
+      function renderMapping() {
+        const options=['<option value="">Not mapped</option>',...state.csvHeaders.map((h,i)=>`<option value="${i}">${escapeHtml(h || `Column ${i+1}`)}</option>`)].join('');
+        [elements.mapFirstName,elements.mapLastName,elements.mapPhone,elements.mapEmail].forEach(el=>el.innerHTML=options);
+        elements.mapFirstName.value=guessHeader(state.csvHeaders,['firstname','givenname','first']);
+        elements.mapLastName.value=guessHeader(state.csvHeaders,['lastname','surname','familyname','last']);
+        elements.mapPhone.value=guessHeader(state.csvHeaders,['phone','mobile','telephone','cell']);
+        elements.mapEmail.value=guessHeader(state.csvHeaders,['email','emailaddress']);
+        elements.mappingGrid.classList.remove('hidden'); buildImportSession();
+      }
+      function mappedValue(row, select) { const i=select.value; return i===''?'':String(row[Number(i)] || '').trim(); }
+      function buildImportSession() {
+        state.removedImportRows=[];
+        state.importRows=state.csvRows.map((row,index)=>{
+          const phones=Array.isArray(row[4]) ? row[4] : [mappedValue(row,elements.mapPhone)].filter(Boolean);
+          const emails=Array.isArray(row[5]) ? row[5] : [mappedValue(row,elements.mapEmail).toLowerCase()].filter(Boolean);
+          const item={id:`import-${index}-${Date.now()}`,firstName:mappedValue(row,elements.mapFirstName),lastName:mappedValue(row,elements.mapLastName),phones,emails,primaryPhone:phones[0]||'',primaryEmail:emails[0]||'',selected:true,duplicateAction:'keep'};
+          item.duplicate=findDuplicateContact(item.primaryPhone,item.primaryEmail);
+          return item;
+        }).filter(item=>item.firstName||item.lastName||item.primaryPhone||item.primaryEmail);
+        state.importRows.forEach((item,index)=>{
+          if(item.duplicate) return;
+          item.duplicate=state.importRows.slice(0,index).find(previous=>{
+            const samePhone=item.primaryPhone && normalizePhoneForMatch(previous.primaryPhone)===normalizePhoneForMatch(item.primaryPhone);
+            const sameEmail=item.primaryEmail && previous.primaryEmail.toLowerCase()===item.primaryEmail.toLowerCase();
+            return samePhone||sameEmail;
+          });
+        });
+        renderImportSession();
+      }
+      function optionList(values,current) { return values.map(value=>`<option value="${escapeHtml(value)}" ${value===current?'selected':''}>${escapeHtml(value)}</option>`).join(''); }
+      function updateImportCounts(message='') {
+        const selected=state.importRows.filter(row=>row.selected).length;
+        const duplicates=state.importRows.filter(row=>row.duplicate).length;
+        elements.importCounts.innerHTML=`<span class="import-count">Total loaded: ${state.importRows.length+state.removedImportRows.length}</span><span class="import-count">Selected: ${selected}</span><span class="import-count">Unselected: ${state.importRows.length-selected}</span><span class="import-count">Removed from this import: ${state.removedImportRows.length}</span><span class="import-count">Possible duplicates: ${duplicates}</span>`;
+        elements.importCounts.classList.remove('hidden');
+        if(message) elements.importSummary.textContent=message;
+        const destination=elements.importDestination.value;
+        const resourceGroup=state.resourceGroups.find(group=>group.id===elements.importResourceGroup.value);
+        const destinationLabels={"New Lead Pool":"New Leads","Client Service & Review":"Clients"};
+        const target=destination===RESOURCE_POOL?(resourceGroup?.name||'Review Before Use'):(destinationLabels[destination]||destination);
+        elements.importSelected.textContent=destination?`Transfer ${selected} Selected to ${target}`:`Choose a Destination`;
+        elements.importSelected.disabled=!destination||!selected;
+        elements.masterImportSelection.checked=Boolean(state.importRows.length)&&selected===state.importRows.length;
+        elements.masterImportSelection.indeterminate=selected>0&&selected<state.importRows.length;
+      }
+      function renderImportSession(message='') {
+        const hasDuplicates=state.importRows.some(item=>item.duplicate);
+        elements.previewHead.innerHTML=`<tr><th>Select</th><th>Name</th><th>Primary phone</th><th>Primary email</th>${hasDuplicates?'<th>Duplicate Review</th>':''}<th>Remove</th></tr>`;
+        elements.previewBody.innerHTML=state.importRows.map(item=>`<tr data-import-id="${item.id}"><td><input type="checkbox" class="import-row circle-toggle" ${item.selected?'checked':''} aria-label="Select ${escapeHtml(`${item.firstName} ${item.lastName}`.trim()||'contact')}"></td><td>${escapeHtml(`${item.firstName} ${item.lastName}`.trim()||'Unnamed')}</td><td>${item.phones.length>1?`<select class="import-primary-phone import-row-select">${optionList(item.phones,item.primaryPhone)}</select>`:escapeHtml(item.primaryPhone||'-')} ${item.phones.length>1?`<small>${item.phones.length} numbers</small>`:''}</td><td>${item.emails.length>1?`<select class="import-primary-email import-row-select">${optionList(item.emails,item.primaryEmail)}</select>`:escapeHtml(item.primaryEmail||'-')} ${item.emails.length>1?`<small>${item.emails.length} addresses</small>`:''}</td>${hasDuplicates?`<td class="${item.duplicate?'duplicate-warning':''}">${item.duplicate?`Matches ${escapeHtml(fullName(item.duplicate))}<br><select class="duplicate-action import-row-select"><option value="keep" ${item.duplicateAction==='keep'?'selected':''}>Keep Existing</option><option value="incoming" ${item.duplicateAction==='incoming'?'selected':''}>Use Incoming</option><option value="merge" ${item.duplicateAction==='merge'?'selected':''}>Merge</option></select>`:'No match found'}</td>`:''}<td><button class="button button-danger remove-import-row" type="button">Remove from This Import</button></td></tr>`).join('');
+        elements.importSummary.textContent=message||'Review this temporary list. Nothing is saved until you transfer selected contacts.';
+        elements.removedImportList.innerHTML=state.removedImportRows.map(item=>`<div class="import-row-actions"><input class="restore-import-check" type="checkbox" value="${item.id}" /><span>${escapeHtml(`${item.firstName} ${item.lastName}`.trim()||'Unnamed')}</span><button class="button button-secondary restore-import-row" type="button" data-import-id="${item.id}">Restore</button></div>`).join('');
+        elements.removedImportArea.classList.toggle('hidden',!state.removedImportRows.length);
+        elements.masterSelectWrap.classList.remove('hidden');
+        elements.importSummary.classList.remove('hidden'); elements.previewWrap.classList.remove('hidden'); elements.importActions.classList.remove('hidden');
+        updateImportCounts();
+      }
+      function removeImportRows(ids) {
+        state.removedImportRows.push(...state.importRows.filter(row=>ids.includes(row.id)));
+        state.importRows=state.importRows.filter(row=>!ids.includes(row.id));
+        renderImportSession();
+      }
+      function requestImportRemoval(ids) {
+        if(!ids.length) return;
+        if(state.skipRemoveImportWarning){ removeImportRows(ids); return; }
+        state.pendingImportRemovalIds=ids;
+        elements.skipRemoveImportWarning.checked=false;
+        elements.removeImportBackdrop.classList.add("is-visible");
+        document.body.style.overflow="hidden";
+        elements.continueRemoveImport.focus();
+      }
+      function closeImportRemoval(continueRemoval=false) {
+        if(continueRemoval){
+          if(elements.skipRemoveImportWarning.checked){ state.skipRemoveImportWarning=true; saveProspects(); }
+          removeImportRows(state.pendingImportRemovalIds);
+        }
+        state.pendingImportRemovalIds=[];
+        elements.removeImportBackdrop.classList.remove("is-visible");
+        document.body.style.overflow="";
+      }
+      function restoreImportRows(ids) {
+        const restored=state.removedImportRows.filter(row=>ids.includes(row.id)).map(row=>({...row,selected:true}));
+        state.importRows.push(...restored);
+        state.removedImportRows=state.removedImportRows.filter(row=>!ids.includes(row.id));
+        renderImportSession();
+      }
+      function mergeSources(existingSource,incomingSource) {
+        return [...new Set([existingSource,incomingSource].flatMap(value=>String(value||'').split(' + ')).filter(Boolean))].join(' + ');
+      }
+      function protections(record) {
+        return record.leadPool==='Do Not Contact'||record.clientStatus==='Do Not Contact'||record.marketingEligibility==='Do Not Market';
+      }
+      function incomingRecord(item,destination,resourceGroupId='') {
+        const doNotContact=destination==='Do Not Contact';
+        return {id:createId(),firstName:item.firstName,lastName:item.lastName,phone:item.primaryPhone,email:item.primaryEmail,alternatePhones:item.phones.filter(value=>value!==item.primaryPhone),alternateEmails:item.emails.filter(value=>value!==item.primaryEmail),product:'Not selected',nextFollowUp:'',status:'New Lead',leadPool:destination,resourceGroupIds:resourceGroupId?[resourceGroupId]:[],qualificationStatus:doNotContact?'Do Not Market':destination==='Contact Review Pool'?'Review Needed':'',relationshipCategory:'',source:state.importSource,marketingEligibility:doNotContact?'Do Not Market':'Review Needed',clientStatus:doNotContact?'Do Not Contact':'Prospect',policyStatus:'None',notes:destination==='Contact Review Pool'?'Imported for review. Not approved for marketing or sales follow-up.':'Imported contact.',lastContact:'',archived:false};
+      }
+      function transferSelectedContacts() {
+        const chosen=state.importRows.filter(row=>row.selected); if(!chosen.length){alert('Select at least one contact to transfer.');return;}
+        const destination=elements.importDestination.value; if(!destination){alert('Choose a destination before transferring.');return;}
+        const resourceGroupId=destination===RESOURCE_POOL?elements.importResourceGroup.value:'';
+        if(destination===RESOURCE_POOL&&resourceGroupId&&!state.resourceGroups.some(group=>group.id===resourceGroupId)){alert('Choose a valid Resource Group before transferring.');return;}
+        let count=0; const transferred=[];
+        chosen.forEach(item=>{
+          const incoming=incomingRecord(item,destination,resourceGroupId); const existing=findDuplicateContact(item.primaryPhone,item.primaryEmail)||(state.prospects.includes(item.duplicate)?item.duplicate:null);
+          if(existing && item.duplicateAction==='keep') {
+            if(destination!==RESOURCE_POOL) return;
+            existing.resourceGroupIds=resourceGroupId?[...new Set([...(existing.resourceGroupIds||[]),resourceGroupId])]:(existing.resourceGroupIds||[]);
+            if(!protections(existing)) { existing.leadPool=RESOURCE_POOL; existing.nextFollowUp=''; }
+          }
+          if(existing && item.duplicateAction==='merge') {
+            const protectedRecord=protections(existing);
+            Object.keys(incoming).forEach(key=>{ if(!['id','notes','policyStatus','source','leadPool','clientStatus','marketingEligibility','qualificationStatus'].includes(key) && !existing[key]) existing[key]=incoming[key]; });
+            existing.source=mergeSources(existing.source,incoming.source);
+            existing.resourceGroupIds=[...new Set([...(existing.resourceGroupIds||[]),...(incoming.resourceGroupIds||[])])];
+            if(!protectedRecord && destination==='Do Not Contact') Object.assign(existing,{leadPool:'Do Not Contact',clientStatus:'Do Not Contact',marketingEligibility:'Do Not Market',qualificationStatus:'Do Not Market',nextFollowUp:''});
+          } else if(existing && item.duplicateAction==='incoming') {
+            const index=state.prospects.findIndex(record=>record.id===existing.id);
+            const protectedRecord=protections(existing);
+            state.prospects[index]={...existing,...incoming,id:existing.id,resourceGroupIds:[...new Set([...(existing.resourceGroupIds||[]),...(incoming.resourceGroupIds||[])])],notes:existing.notes||incoming.notes,policyStatus:existing.policyStatus||incoming.policyStatus,source:mergeSources(existing.source,incoming.source)};
+            if(protectedRecord) Object.assign(state.prospects[index],{leadPool:existing.leadPool,clientStatus:existing.clientStatus,marketingEligibility:existing.marketingEligibility,qualificationStatus:existing.qualificationStatus,nextFollowUp:existing.nextFollowUp});
+          } else if(!existing) state.prospects.unshift(incoming);
+          count++; transferred.push(item.id);
+        });
+        if(!count){ updateImportCounts('No contacts transferred. Duplicate rows set to Keep Existing remain in the temporary list.'); return; }
+        saveProspects(); state.importRows=state.importRows.filter(row=>!transferred.includes(row.id));
+        state.activeFilter=destination===RESOURCE_POOL?"Resource Contacts":destination==="Do Not Contact"?"Do Not Contact":destination==="Client Service & Review"?"Clients":destination==="Active Journey"?"Active Journey":"New Leads";
+        state.internalFilter=destination===RESOURCE_POOL&&resourceGroupId?`group:${resourceGroupId}`:"";
+        renderFilters(); renderFollowUpQueue(); renderList(); renderImportSession(`Transferred ${count} contact${count===1?'':'s'} to ${destination}.`); renderExportContacts();
+      }
+      function renderResourceGroups(selectedId='') {
+        const options=state.resourceGroups.map(group=>`<option value="${group.id}">${escapeHtml(group.name)}</option>`).join('');
+        elements.exportGroup.innerHTML=options||'<option value="">No groups created</option>';
+        elements.importResourceGroup.innerHTML=`<option value="">Review Before Use</option>${options}`;
+        if(selectedId&&state.resourceGroups.some(group=>group.id===selectedId)){ elements.exportGroup.value=selectedId; elements.importResourceGroup.value=selectedId; }
+        elements.resourceGroupCount.textContent=`${state.resourceGroups.length} of 5 groups created.`;
+        const atLimit=state.resourceGroups.length>=5;
+        elements.createResourceGroup.disabled=atLimit; elements.createImportResourceGroup.disabled=atLimit;
+        elements.resourceGroupLimit.classList.toggle('hidden',!atLimit);
+        renderExportContacts(); updateImportCounts(); renderFilters();
+      }
+      function createResourceGroup() {
+        if(state.resourceGroups.length>=5){alert('Rename or remove an unused group before creating another.');return;}
+        const name=prompt('Name this Resource Group:')?.trim(); if(!name) return;
+        if(state.resourceGroups.some(group=>group.name.toLowerCase()===name.toLowerCase())){alert('A Resource Group already uses that name.');return;}
+        const group={id:createId(),name,createdAt:new Date().toISOString()}; state.resourceGroups.push(group); saveProspects(); renderResourceGroups(group.id);
+      }
+      function renameResourceGroup() {
+        const group=state.resourceGroups.find(item=>item.id===elements.exportGroup.value); if(!group) return;
+        const name=prompt('Rename this Resource Group:',group.name)?.trim(); if(!name) return;
+        if(state.resourceGroups.some(item=>item.id!==group.id&&item.name.toLowerCase()===name.toLowerCase())){alert('A Resource Group already uses that name.');return;}
+        group.name=name; saveProspects(); renderResourceGroups(group.id);
+      }
+      function removeResourceGroup() {
+        const id=elements.exportGroup.value; const group=state.resourceGroups.find(item=>item.id===id); if(!group) return;
+        if(!confirm(`Remove the group "${group.name}"? Its contacts will remain in the master contact system.`)) return;
+        state.resourceGroups=state.resourceGroups.filter(item=>item.id!==id);
+        state.prospects.forEach(record=>record.resourceGroupIds=(record.resourceGroupIds||[]).filter(groupId=>groupId!==id));
+        saveProspects(); renderResourceGroups();
+      }
+      function resourceMasterContacts() { return state.prospects; }
+      function renderExportContacts() {
+        const groupId=elements.exportGroup.value;
+        const contacts=resourceMasterContacts();
+        elements.exportContactList.innerHTML=contacts.length?contacts.map(record=>`<label class="master-select"><input class="export-contact circle-toggle" type="checkbox" value="${record.id}" ${record.resourceGroupIds?.includes(groupId)?'checked':''} /> ${escapeHtml(fullName(record))}${record.resourceGroupIds?.includes(groupId)?' — in group':''}</label>`).join(''):'<span class="import-help">No Resource Contacts saved yet.</span>';
+        elements.masterResourceSelectWrap.classList.toggle('hidden',!contacts.length);
+        updateResourceMasterSelection();
+      }
+      function updateResourceMasterSelection() {
+        const checkboxes=[...document.querySelectorAll('.export-contact')];
+        const checked=checkboxes.filter(input=>input.checked).length;
+        elements.masterResourceSelection.checked=Boolean(checkboxes.length)&&checked===checkboxes.length;
+        elements.masterResourceSelection.indeterminate=checked>0&&checked<checkboxes.length;
+      }
+      function updateSelectedGroupMembership(remove=false) {
+        const groupId=elements.exportGroup.value; if(!groupId) return;
+        const ids=[...document.querySelectorAll('.export-contact:checked')].map(input=>input.value);
+        state.prospects.forEach(record=>{ if(!ids.includes(record.id)) return; const groups=record.resourceGroupIds||[]; record.resourceGroupIds=remove?groups.filter(id=>id!==groupId):[...new Set([...groups,groupId])]; });
+        saveProspects(); renderExportContacts();
+      }
+      function csvCell(value) { return `"${String(value||'').replaceAll('"','""')}"`; }
+      function exportSelectedContacts(format,wholeGroup=false) {
+        const groupId=elements.exportGroup.value; const ids=[...document.querySelectorAll('.export-contact:checked')].map(input=>input.value);
+        const contacts=resourceMasterContacts().filter(record=>wholeGroup?record.resourceGroupIds?.includes(groupId):ids.includes(record.id));
+        if(!contacts.length){alert('Select at least one saved resource contact to export.');return;}
+        let content,mime,extension;
+        const group=state.resourceGroups.find(item=>item.id===groupId);
+        if(format==='csv'){ content=['First Name,Last Name,Phone,Email,Group,Source',...contacts.map(record=>[record.firstName,record.lastName,record.phone,record.email,group?.name||'',record.source].map(csvCell).join(','))].join('\r\n'); mime='text/csv'; extension='csv'; }
+        else { content=contacts.map(record=>`BEGIN:VCARD\r\nVERSION:3.0\r\nN:${record.lastName||''};${record.firstName||''};;;\r\nFN:${fullName(record)}\r\n${record.phone?`TEL:${record.phone}\r\n`:''}${record.email?`EMAIL:${record.email}\r\n`:''}CATEGORIES:${group?.name||'Resource Contacts'}\r\nNOTE:Source: ${record.source||''}\r\nEND:VCARD`).join('\r\n'); mime='text/vcard'; extension='vcf'; }
+        const url=URL.createObjectURL(new Blob([content],{type:mime})); const link=document.createElement('a'); link.href=url; link.download=`agent-rise-${(group?.name||'resource-contacts').toLowerCase().replace(/[^a-z0-9]+/g,'-')}.${extension}`; link.click(); URL.revokeObjectURL(url);
+      }
+      function moveToNewLeadPool(id) {
+        const prospect=state.prospects.find(p=>p.id===id); if(!prospect) return false;
+        if(String(prospect.leadPool ?? '') === 'New Lead Pool') return false;
+        if(prospect.clientStatus==='Active Client' || prospect.policyStatus==='Active'){ alert('This record appears to be an existing client or active policy. Move it to Client Service & Review instead of New Lead Pool.'); return false; }
+        state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'New Lead Pool',qualificationStatus:'Ready for Journey',marketingEligibility:'Active Insurance Prospect',status:'New Lead'}:p); saveProspects(); renderFollowUpQueue(); renderList(); return true;
+      }
+      function markDoNotMarket(id) {
+        const prospect=state.prospects.find(p=>p.id===id); if(!prospect || String(prospect.leadPool ?? '') === 'Do Not Contact') return false;
+        state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'Do Not Contact',qualificationStatus:'Do Not Market',marketingEligibility:'Do Not Market',clientStatus:'Do Not Contact',nextFollowUp:''}:p); saveProspects(); renderFollowUpQueue(); renderList(); return true;
+      }
+      function deleteImportedContact(id) { const p=state.prospects.find(x=>x.id===id); if(!p||p.leadPool!=='Contact Review Pool') return; if(!confirm(`Delete imported contact ${fullName(p)}?`)) return; state.prospects=state.prospects.filter(x=>x.id!==id); saveProspects(); renderList(); }
+
+      function bindEvents() {
+        elements.openTrainingButton.addEventListener("click", openTraining);
+        elements.closeTrainingButton.addEventListener("click", closeTraining);
+        elements.cancelTrainingButton.addEventListener("click", closeTraining);
+        elements.trainingForm.addEventListener("submit", saveTrainingAppointment);
+        elements.trainingList.addEventListener("click", handleTrainingListClick);
+        elements.openYahooCalendarButton.addEventListener("click", () => window.open("https://calendar.yahoo.com/", "_blank", "noopener,noreferrer"));
+        elements.trainingBackdrop.addEventListener("click", event => { if (event.target === elements.trainingBackdrop) closeTraining(); });
+        elements.settingsButton.addEventListener("click",openSettings);
+        elements.closeSettings.addEventListener("click",()=>closeSettings(false));
+        elements.cancelSettings.addEventListener("click",()=>closeSettings(false));
+        elements.saveSettings.addEventListener("click",()=>closeSettings(true));
+        elements.clearContactsAndGroups.addEventListener("click",eraseAllContactsAndGroups);
+        elements.settingsBackdrop.addEventListener("click",event=>{if(event.target===elements.settingsBackdrop) closeSettings(false);});
+        elements.openScriptsButton.addEventListener("click", openScripts);
+        elements.closeScriptsButton.addEventListener("click", closeScripts);
+        elements.cancelScriptsButton.addEventListener("click", closeScripts);
+        elements.customizeScriptButton.addEventListener("click", toggleScriptCustomization);
+        elements.scriptProduct.addEventListener("change", renderPreloadedScript);
+        elements.scriptFormat.addEventListener("change", renderPreloadedScript);
+        [elements.scriptAgentName,elements.scriptAgencyName,elements.scriptProspectName,elements.scriptReferrerName,elements.scriptContext]
+          .forEach(input=>input.addEventListener("input",renderPreloadedScript));
+        elements.copyScriptButton.addEventListener("click", copyScriptToClipboard);
+        elements.downloadScriptButton.addEventListener("click", downloadScriptAsText);
+        elements.scriptsBackdrop.addEventListener("click", event => { if (event.target === elements.scriptsBackdrop) closeScripts(); });
+        document.addEventListener("keydown",event=>{
+          if(event.key!=="Escape") return;
+          if(elements.removeImportBackdrop.classList.contains("is-visible")) closeImportRemoval(false);
+          else if(elements.trainingBackdrop.classList.contains("is-visible")) closeTraining();
+          else if(elements.settingsBackdrop.classList.contains("is-visible")) closeSettings(false);
+          else if(elements.scriptsBackdrop.classList.contains("is-visible")) closeScripts();
+          else if(elements.modal.classList.contains("is-open")) closeModal();
+        });
+        document.querySelectorAll('input[name="appearanceTheme"]').forEach(input=>input.addEventListener("change",event=>applyTheme(event.target.value)));
+        elements.addButton.addEventListener("click", () => openModal("add"));
+        elements.closeImport.addEventListener("click", () => elements.importPanel.classList.remove("is-visible"));
+        elements.continueRemoveImport.addEventListener("click",()=>closeImportRemoval(true));
+        elements.cancelRemoveImport.addEventListener("click",()=>closeImportRemoval(false));
+        elements.removeImportBackdrop.addEventListener("click",event=>{if(event.target===elements.removeImportBackdrop) closeImportRemoval(false);});
+        elements.csvFileInput.addEventListener("change", async (event) => {
+          const file=event.target.files[0]; if(!file) return;
+          const name=file.name.toLowerCase();
+          if(!name.endsWith('.csv') && !name.endsWith('.vcf')) { alert('Please choose a .csv or .vcf file.'); event.target.value=''; return; }
+          const text=await file.text();
+          const rows=name.endsWith('.vcf') ? parseVcard(text) : parseCsv(text);
+          if(rows.length<2){ alert(name.endsWith('.vcf') ? 'This vCard file does not contain readable contacts.' : 'This CSV does not contain data rows.'); return; }
+          state.importSource=name.endsWith('.vcf') ? 'Phone Contacts' : 'Phone Contacts CSV';
+          state.csvHeaders=rows[0].map(v=>String(v).trim()); state.csvRows=rows.slice(1); renderMapping();
+        });
+        [elements.mapFirstName,elements.mapLastName,elements.mapPhone,elements.mapEmail].forEach(el=>el.addEventListener('change',buildImportSession));
+        elements.masterImportSelection.addEventListener('change',event=>{ state.importRows.forEach(row=>row.selected=event.target.checked); renderImportSession(); });
+        elements.removeSelectedRows.addEventListener('click',()=>requestImportRemoval(state.importRows.filter(row=>row.selected).map(row=>row.id)));
+        elements.importDestination.addEventListener('change',()=>{
+          elements.importResourceGroupField.classList.toggle('hidden',elements.importDestination.value!==RESOURCE_POOL);
+          updateImportCounts();
+        });
+        elements.importResourceGroup.addEventListener('change',updateImportCounts);
+        elements.importSelected.addEventListener('click',transferSelectedContacts);
+        elements.restoreAllRows.addEventListener('click',()=>restoreImportRows(state.removedImportRows.map(row=>row.id)));
+        elements.restoreSelectedRows.addEventListener('click',()=>restoreImportRows([...document.querySelectorAll(".restore-import-check:checked")].map(input=>input.value)));
+        elements.removedImportList.addEventListener('click',event=>{ const button=event.target.closest('.restore-import-row'); if(button) restoreImportRows([button.dataset.importId]); });
+        elements.exportGroup.addEventListener('change',renderExportContacts);
+        elements.masterResourceSelection.addEventListener('change',event=>{
+          document.querySelectorAll('.export-contact').forEach(input=>input.checked=event.target.checked);
+          updateResourceMasterSelection();
+        });
+        elements.exportContactList.addEventListener('change',event=>{
+          if(event.target.classList.contains('export-contact')) updateResourceMasterSelection();
+        });
+        elements.createResourceGroup.addEventListener('click',createResourceGroup);
+        elements.createImportResourceGroup.addEventListener('click',createResourceGroup);
+        elements.renameResourceGroup.addEventListener('click',renameResourceGroup);
+        elements.removeResourceGroup.addEventListener('click',removeResourceGroup);
+        elements.addSelectedToGroup.addEventListener('click',()=>updateSelectedGroupMembership(false));
+        elements.removeSelectedFromGroup.addEventListener('click',()=>updateSelectedGroupMembership(true));
+        elements.exportGroupButton.addEventListener('click',()=>exportSelectedContacts(elements.resourceExportFormat.value,true));
+        elements.exportSelectedButton.addEventListener('click',()=>exportSelectedContacts(elements.resourceExportFormat.value,false));
+        elements.previewBody.addEventListener('change',(event)=>{
+          const tableRow=event.target.closest('tr[data-import-id]'); if(!tableRow) return;
+          const item=state.importRows.find(row=>row.id===tableRow.dataset.importId); if(!item) return;
+          if(event.target.classList.contains('import-row')) item.selected=event.target.checked;
+          if(event.target.classList.contains('import-primary-phone')) { item.primaryPhone=event.target.value; item.duplicate=findDuplicateContact(item.primaryPhone,item.primaryEmail); }
+          if(event.target.classList.contains('import-primary-email')) { item.primaryEmail=event.target.value; item.duplicate=findDuplicateContact(item.primaryPhone,item.primaryEmail); }
+          if(event.target.classList.contains('duplicate-action')) item.duplicateAction=event.target.value;
+          renderImportSession();
+        });
+        elements.previewBody.addEventListener('click',(event)=>{
+          const button=event.target.closest('.remove-import-row'); if(!button) return;
+          const tableRow=button.closest('tr[data-import-id]'); requestImportRemoval([tableRow.dataset.importId]);
+        });
+        elements.closeModal.addEventListener("click", closeModal);
+        elements.cancelForm.addEventListener("click", closeModal);
+        elements.form.addEventListener("submit", saveForm);
+        elements.list.addEventListener("click", handleListClick);
+        elements.followUpQueue.addEventListener("click", handleListClick);
+        elements.emailDomain.addEventListener("change", syncConditionalFields);
+        elements.emailUsername.addEventListener("input", syncEmailPreview);
+        elements.customEmailDomain.addEventListener("input", syncEmailPreview);
+        elements.product.addEventListener("change", syncConditionalFields);
+        elements.search.addEventListener("input", (event) => {
+          state.search = event.target.value;
+          renderFollowUpQueue();
+          renderList();
+        });
+        elements.filters.addEventListener("click", (event) => {
+          const importButton=event.target.closest("button[data-menu-import]");
+          if(importButton){ elements.importPanel.classList.add("is-visible"); elements.closeImport.focus(); return; }
+          const button = event.target.closest("button[data-filter]");
+          if (!button) return;
+          state.activeFilter = button.dataset.filter;
+          state.internalFilter = "";
+          renderFilters();
+          renderFollowUpQueue();
+          renderList();
+        });
+        elements.internalFilters.addEventListener("click",(event)=>{
+          const button=event.target.closest("button[data-internal-filter]"); if(!button) return;
+          state.internalFilter=state.internalFilter===button.dataset.internalFilter?"":button.dataset.internalFilter;
+          renderFilters(); renderList();
+        });
+        elements.modal.addEventListener("click", (event) => {
+          if (event.target === elements.modal) closeModal();
+        });
+      }
+
+      function init() {
+        // Non-destructive migrations run after account loading.
+        elements.date.textContent = todayLabel();
+        populateStatusOptions();
+        populateLeadPoolOptions();
+        populateEmailDomainOptions();
+        populateProductOptions();
+        populateSimpleOptions(elements.qualificationStatus, QUALIFICATION_STATUSES);
+        populateSourceOptions();
+        populateSimpleOptions(elements.marketingEligibility, MARKETING_ELIGIBILITY);
+        populateSimpleOptions(elements.clientStatus, CLIENT_STATUSES);
+        populateSimpleOptions(elements.policyStatus, POLICY_STATUSES);
+        elements.importDestination.innerHTML=`<option value="Contact Review Pool">Contact Review Pool</option><option value="Client Service & Review">Clients</option><option value="${RESOURCE_POOL}">Resource Contacts</option><option value="Do Not Contact">Do Not Contact</option>`;
+        elements.importDestination.value='Contact Review Pool';
+        elements.importResourceGroupField.classList.remove("hidden");
+        loadProspects();
+        loadTrainingAppointments();
+        applyTheme(state.appearanceTheme);
+        updateAgentLabels();
+        renderResourceGroups();
+        renderFilters();
+        renderFollowUpQueue();
+        renderList();
+        renderExportContacts();
+        bindEvents();
+      }
+
+      // Initialization is deferred until pilot extensions are installed.
+
+      /* ---------- Fresh Pour break room ---------- */
+      // Fresh Pour media is packaged beside the app for dependable browser playback.
+      // The audio layers stay separate so room sound can be gently lowered during a conversation.
+      const BREAKROOM_MEDIA = {
+        entryVideo: "",
+        loopVideo: "media/fresh-pour-room-loop.mp4",
+        loopVideoMobile: "media/fresh-pour-room-loop-mobile.mp4",
+        exitVideo: "media/fresh-pour-exit.mp4",
+        ambience: "",
+        music: "media/fresh-pour-music.mp3"
+      };
+      // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
+      // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
+      const BREAKROOM_TRANSITION_SPEED = 1.4;
+      const BREAKROOM_TABLES = [
+        {
+          id: "final-expense",
+          name: "Final Expense",
+          tag: "JIT contracting + daily pay",
+          desc: "A short seminar on just-in-time contracting and daily-pay shortcuts for Final Expense agents.",
+          audioSrc: "assets/final-expense-jit-contracting.m4a",
+          resource: {
+            url: "assets/final-expense-career-launchpad.svg",
+            label: "Download: Final Expense Cheat Code Infograph",
+            filename: "Final-Expense-Cheat-Code-Infograph.svg"
+          }
+        },
+        {
+          id: "iul",
+          name: "IUL",
+          tag: "The upside, the caps, the catch",
+          desc: "An honest walk through indexed universal life — where it shines, where the caps and fees actually bite.",
+          audioSrc: ""
+        },
+        {
+          id: "tsa",
+          name: "TSA / 403(b)",
+          tag: "Tax-sheltered, not headache-sheltered",
+          desc: "What a tax-sheltered annuity in a 403(b) arrangement may be doing for a client, plus the paperwork realities agents wish someone had explained sooner.",
+          audioSrc: ""
+        },
+        {
+          id: "spia",
+          name: "Single Premium Immediate Annuity",
+          tag: "One check, one promise",
+          desc: "When a single premium immediate annuity is the right fit — and the trade-off of giving up access to that lump sum.",
+          audioSrc: ""
+        },
+        {
+          id: "medicare-advantage",
+          name: "Medicare Advantage",
+          tag: "JIT contracting + daily pay",
+          desc: "A short seminar on just-in-time contracting and daily-pay opportunities for Medicare Advantage agents.",
+          audioSrc: "assets/medicare-advantage-jit-contracting.m4a",
+          resource: {
+            url: "assets/Medicare_Advantage_Agent_Launch_Blueprint.png",
+            label: "Download: Medicare Advantage Agent Launch Blueprint",
+            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
+          }
+        }
+      ];
+
+      const POT_LINES = [
+        "First rule of the pot: nobody remembers who made it, everybody remembers if it was empty.",
+        "Twenty-five years in and the coffee still lies to you about how awake you are.",
+        "Fun fact: 'quick question' has never once been quick.",
+        "The client didn't ask a trick question. You just haven't had your first sip yet.",
+        "Every agent who's ever said 'I'll just do one more call' is still doing calls.",
+        "Nobody warns you that the hardest part of this job is the hold music."
+      ];
+
+      const breakroomElements = {
+        view: document.querySelector("#breakroomView"),
+        openButton: document.querySelector("#openBreakroomButton"),
+        closeButton: document.querySelector("#closeBreakroomButton"),
+        panel: document.querySelector("#breakroomPanel"),
+        media: document.querySelector(".breakroom-media"),
+        toggleMenuButton: document.querySelector("#toggleBreakroomMenuButton"),
+        entryVideo: document.querySelector("#breakroomEntryVideo"),
+        loopVideo: document.querySelector("#breakroomLoopVideo"),
+        exitVideo: document.querySelector("#breakroomExitVideo"),
+        floor: document.querySelector("#tableFloor"),
+        seat: document.querySelector("#tableSeat"),
+        seatTitle: document.querySelector("#seatTitle"),
+        seatDesc: document.querySelector("#seatDesc"),
+        seatTrackTitle: document.querySelector("#seatTrackTitle"),
+        leaveTableButton: document.querySelector("#leaveTableButton"),
+        seatToDeskButton: document.querySelector("#seatToDeskButton"),
+        playToggle: document.querySelector("#seatPlayToggle"),
+        playIcon: document.querySelector("#seatPlayIcon"),
+        playFill: document.querySelector("#seatPlayFill"),
+        seatAudio: document.querySelector("#seatAudio"),
+        seatNote: document.querySelector("#seatNote"),
+        seatResource: document.querySelector("#seatResource"),
+        seatResourceLocked: document.querySelector("#seatResourceLocked"),
+        seatResourceLink: document.querySelector("#seatResourceLink"),
+        potButton: document.querySelector("#potButton"),
+        potLine: document.querySelector("#potLine"),
+        ambienceToggle: document.querySelector("#ambienceToggle"),
+        ambienceLabel: document.querySelector("#ambienceLabel"),
+        ambienceAudio: document.querySelector("#ambienceAudio"),
+        musicAudio: document.querySelector("#breakroomMusicAudio")
+      };
+
+      let breakroomOpener = null;
+      let breakroomIsClosing = false;
+      let breakroomMediaInitialized = false;
+      let currentBreakroomTable = null;
+      const reduceBreakroomMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const mobileBreakroomMedia = window.matchMedia && window.matchMedia("(max-width: 720px)");
+
+      function selectedBreakroomLoop() {
+        return mobileBreakroomMedia?.matches && BREAKROOM_MEDIA.loopVideoMobile
+          ? BREAKROOM_MEDIA.loopVideoMobile
+          : BREAKROOM_MEDIA.loopVideo;
+      }
+
+      function renderBreakroomTables() {
+        breakroomElements.floor.innerHTML = BREAKROOM_TABLES.map(
+          (table) => `
+            <button class="table-card" type="button" data-table-id="${table.id}">
+              <span class="table-name">${table.name}</span>
+              <span class="table-tag">${table.tag}</span>
+              <span class="table-seats">Tap to sit in</span>
+            </button>
+          `
+        ).join("");
+      }
+
+      function sitAtTable(tableId) {
+        const table = BREAKROOM_TABLES.find((t) => t.id === tableId);
+        if (!table) return;
+        stopConversationAudio(true);
+        currentBreakroomTable = table;
+        breakroomElements.seatTitle.textContent = table.name;
+        breakroomElements.seatDesc.textContent = table.desc;
+        if (table.audioSrc) {
+          breakroomElements.seatAudio.src = table.audioSrc;
+          breakroomElements.playToggle.disabled = false;
+          breakroomElements.playToggle.setAttribute("aria-label", `Play ${table.name} conversation`);
+          breakroomElements.seatTrackTitle.textContent = `Ready to play — ${table.name}`;
+          breakroomElements.seatNote.hidden = true;
+        } else {
+          breakroomElements.seatAudio.removeAttribute("src");
+          breakroomElements.seatAudio.load();
+          breakroomElements.playToggle.disabled = true;
+          breakroomElements.playToggle.setAttribute("aria-label", `${table.name} conversation not loaded`);
+          breakroomElements.seatTrackTitle.textContent = `Conversation coming soon — ${table.name}`;
+          breakroomElements.seatNote.hidden = false;
+          breakroomElements.seatNote.textContent = "This conversation is not included in the pilot. Choose Final Expense or Medicare Advantage for a playable seminar, or return to your desk.";
+        }
+        setupSeatResource(table);
+        breakroomElements.seat.classList.remove("hidden");
+        breakroomElements.playFill.style.width = "0%";
+        breakroomElements.playIcon.textContent = "▶";
+        breakroomElements.seat.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function setupSeatResource(table) {
+        const { seatResource, seatResourceLocked, seatResourceLink } = breakroomElements;
+        if (!table.resource) {
+          seatResource.classList.add("hidden");
+          return;
+        }
+        seatResource.classList.remove("hidden");
+        seatResourceLocked.classList.remove("hidden");
+        seatResourceLink.href = table.resource.url;
+        if (table.resource.filename) {
+          seatResourceLink.setAttribute("download", table.resource.filename);
+        }
+        seatResourceLink.textContent = table.resource.label;
+        seatResourceLink.classList.add("hidden");
+      }
+
+      function stopConversationAudio(reset = false) {
+        breakroomElements.seatAudio.pause();
+        if (reset) {
+          try { breakroomElements.seatAudio.currentTime = 0; } catch {}
+          breakroomElements.playFill.style.width = "0%";
+        }
+        breakroomElements.playIcon.textContent = "▶";
+        restoreRoomMix();
+      }
+
+      async function toggleSeatPlayback() {
+        if (!breakroomElements.seatAudio.getAttribute("src")) return;
+        if (!breakroomElements.seatAudio.paused) {
+          stopConversationAudio(false);
+          return;
+        }
+        try {
+          await breakroomElements.seatAudio.play();
+          breakroomElements.playIcon.textContent = "❚❚";
+        } catch {
+          breakroomElements.playIcon.textContent = "▶";
+          breakroomElements.seatTrackTitle.textContent = "This audio could not be played. Check the file path and format.";
+        }
+      }
+
+      function showPotLine() {
+        const line = POT_LINES[Math.floor(Math.random() * POT_LINES.length)];
+        breakroomElements.potLine.textContent = line;
+      }
+
+      function roomAudioTracks() {
+        return [breakroomElements.ambienceAudio, breakroomElements.musicAudio]
+          .filter((track) => track.getAttribute("src"));
+      }
+
+      function restoreRoomMix() {
+        const conversationIsPlaying = !breakroomElements.seatAudio.paused;
+        breakroomElements.ambienceAudio.volume = conversationIsPlaying ? 0.18 : 0.55;
+        breakroomElements.musicAudio.volume = conversationIsPlaying ? 0.025 : 0.11;
+      }
+
+      function pauseRoomSound() {
+        roomAudioTracks().forEach((track) => track.pause());
+        breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
+        breakroomElements.ambienceLabel.textContent = roomAudioTracks().length ? "Room sound: off" : "Room sound: not loaded";
+      }
+
+      async function toggleAmbience() {
+        const tracks = roomAudioTracks();
+        if (!tracks.length) return;
+        if (breakroomElements.ambienceToggle.getAttribute("aria-pressed") === "true") {
+          pauseRoomSound();
+          return;
+        }
+        restoreRoomMix();
+        const results = await Promise.allSettled(tracks.map((track) => track.play()));
+        if (results.some((result) => result.status === "fulfilled")) {
+          breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
+          breakroomElements.ambienceLabel.textContent = "Room sound: on";
+        } else {
+          breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
+          breakroomElements.ambienceLabel.textContent = "Room sound: unavailable";
+        }
+      }
+
+      function allBreakroomVideos() {
+        return [breakroomElements.entryVideo, breakroomElements.loopVideo, breakroomElements.exitVideo];
+      }
+
+      function resetBreakroomVideo(video) {
+        video.pause();
+        try { video.currentTime = 0; } catch {}
+      }
+
+      function showBreakroomVideo(activeVideo = null) {
+        allBreakroomVideos().forEach((video) => video.classList.toggle("is-active", video === activeVideo));
+        breakroomElements.media.classList.toggle("has-active-video", Boolean(activeVideo));
+      }
+
+      function revealBreakroomMenu() {
+        breakroomElements.panel.classList.remove("is-waiting");
+      }
+
+      async function startBreakroomLoop() {
+        revealBreakroomMenu();
+        if (!breakroomElements.loopVideo.getAttribute("src")) {
+          showBreakroomVideo();
+          return;
+        }
+        showBreakroomVideo(breakroomElements.loopVideo);
+        try {
+          await breakroomElements.loopVideo.play();
+        } catch {
+          showBreakroomVideo();
+        }
+      }
+
+      async function startBreakroomVisuals() {
+        allBreakroomVideos().forEach(resetBreakroomVideo);
+        if (BREAKROOM_MEDIA.entryVideo && !reduceBreakroomMotion) {
+          breakroomElements.panel.classList.add("is-waiting");
+          showBreakroomVideo(breakroomElements.entryVideo);
+          breakroomElements.entryVideo.playbackRate = BREAKROOM_TRANSITION_SPEED;
+          try {
+            await breakroomElements.entryVideo.play();
+            return;
+          } catch {}
+        }
+        await startBreakroomLoop();
+      }
+
+      function toggleBreakroomMenu() {
+        const menuWillBeHidden = !breakroomElements.panel.classList.contains("is-hidden");
+        breakroomElements.panel.classList.toggle("is-hidden", menuWillBeHidden);
+        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Show menu" : "Hide menu";
+        breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
+      }
+
+      function openBreakroom() {
+        breakroomOpener = document.activeElement;
+        breakroomIsClosing = false;
+        initializeBreakroomMedia();
+        if (breakroomElements.ambienceToggle.getAttribute("aria-pressed") !== "true") {
+          toggleAmbience();
+        }
+        breakroomElements.view.hidden = false;
+        breakroomElements.seat.classList.add("hidden");
+        breakroomElements.panel.classList.remove("is-hidden", "is-waiting");
+        breakroomElements.toggleMenuButton.textContent = "Hide menu";
+        breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
+        startBreakroomVisuals();
+        breakroomElements.closeButton.focus();
+      }
+
+      function finishClosingBreakroom() {
+        allBreakroomVideos().forEach(resetBreakroomVideo);
+        showBreakroomVideo();
+        breakroomElements.view.hidden = true;
+        breakroomIsClosing = false;
+        document.body.style.overflow = "";
+        if (breakroomOpener && typeof breakroomOpener.focus === "function") breakroomOpener.focus();
+        breakroomOpener = null;
+      }
+
+      async function closeBreakroom() {
+        if (breakroomElements.view.hidden || breakroomIsClosing) return;
+        stopConversationAudio(true);
+        pauseRoomSound();
+        if (BREAKROOM_MEDIA.exitVideo && !reduceBreakroomMotion) {
+          breakroomIsClosing = true;
+          breakroomElements.panel.classList.add("is-waiting");
+          allBreakroomVideos().forEach(resetBreakroomVideo);
+          showBreakroomVideo(breakroomElements.exitVideo);
+          breakroomElements.exitVideo.playbackRate = BREAKROOM_TRANSITION_SPEED;
+          try {
+            await breakroomElements.exitVideo.play();
+            return;
+          } catch {}
+        }
+        finishClosingBreakroom();
+      }
+
+      function resolvePackagedMediaUrl(source) {
+        return typeof source === "string" ? source : "";
+      }
+
+      function setMediaSource(element, mediaPath) {
+        const source = resolvePackagedMediaUrl(mediaPath);
+        if (!source) {
+          element.removeAttribute("src");
+          return;
+        }
+        element.src = source;
+      }
+
+      function initializeBreakroomMedia() {
+        if (breakroomMediaInitialized) return;
+        setMediaSource(breakroomElements.entryVideo, BREAKROOM_MEDIA.entryVideo);
+        setMediaSource(breakroomElements.loopVideo, selectedBreakroomLoop());
+        setMediaSource(breakroomElements.exitVideo, BREAKROOM_MEDIA.exitVideo);
+        setMediaSource(breakroomElements.ambienceAudio, BREAKROOM_MEDIA.ambience);
+        setMediaSource(breakroomElements.musicAudio, BREAKROOM_MEDIA.music);
+        restoreRoomMix();
+        const hasRoomSound = Boolean(BREAKROOM_MEDIA.ambience || BREAKROOM_MEDIA.music);
+        breakroomElements.ambienceToggle.disabled = !hasRoomSound;
+        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "Room sound: off" : "Room sound: not loaded";
+        breakroomMediaInitialized = true;
+      }
+
+      function bindBreakroomEvents() {
+        breakroomElements.openButton.addEventListener("click", openBreakroom);
+        breakroomElements.closeButton.addEventListener("click", closeBreakroom);
+        breakroomElements.toggleMenuButton.addEventListener("click", toggleBreakroomMenu);
+        breakroomElements.leaveTableButton.addEventListener("click", () => {
+          breakroomElements.seat.classList.add("hidden");
+          stopConversationAudio(true);
+          currentBreakroomTable = null;
+        });
+        breakroomElements.seatToDeskButton.addEventListener("click", closeBreakroom);
+        breakroomElements.floor.addEventListener("click", (event) => {
+          const card = event.target.closest(".table-card");
+          if (!card) return;
+          sitAtTable(card.dataset.tableId);
+        });
+        breakroomElements.playToggle.addEventListener("click", toggleSeatPlayback);
+        breakroomElements.seatAudio.addEventListener("play", () => {
+          breakroomElements.playIcon.textContent = "❚❚";
+          restoreRoomMix();
+        });
+        breakroomElements.seatAudio.addEventListener("pause", () => {
+          breakroomElements.playIcon.textContent = "▶";
+          restoreRoomMix();
+        });
+        breakroomElements.seatAudio.addEventListener("timeupdate", () => {
+          const { currentTime, duration } = breakroomElements.seatAudio;
+          const progress = Number.isFinite(duration) && duration > 0 ? (currentTime / duration) * 100 : 0;
+          breakroomElements.playFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        });
+        breakroomElements.seatAudio.addEventListener("ended", () => {
+          if(currentBreakroomTable?.resource){breakroomElements.seatResourceLocked.classList.add("hidden");breakroomElements.seatResourceLink.classList.remove("hidden");}
+          stopConversationAudio(true);
+        });
+        breakroomElements.potButton.addEventListener("click", showPotLine);
+        breakroomElements.ambienceToggle.addEventListener("click", toggleAmbience);
+        breakroomElements.entryVideo.addEventListener("ended", () => {
+          if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
+        });
+        breakroomElements.entryVideo.addEventListener("error", () => {
+          if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
+        });
+        breakroomElements.loopVideo.addEventListener("error", () => showBreakroomVideo());
+        breakroomElements.exitVideo.addEventListener("ended", () => {
+          if (breakroomIsClosing) finishClosingBreakroom();
+        });
+        breakroomElements.exitVideo.addEventListener("error", () => {
+          if (breakroomIsClosing) finishClosingBreakroom();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !breakroomElements.view.hidden) closeBreakroom();
+        });
+      }
+
+      renderBreakroomTables();
+      bindBreakroomEvents();
+      mobileBreakroomMedia?.addEventListener?.("change", () => {
+        if (!breakroomMediaInitialized) return;
+        const roomIsOpen = !breakroomElements.view.hidden && !breakroomIsClosing;
+        resetBreakroomVideo(breakroomElements.loopVideo);
+        setMediaSource(breakroomElements.loopVideo, selectedBreakroomLoop());
+        breakroomElements.loopVideo.load();
+        if (roomIsOpen) startBreakroomLoop();
+      });
+
+      // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
+    </script>
+    <script src="config.js"></script>
+    <script src="pilot.js" defer></script>
+    <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
+      <div class="ar-error-card">
+        <div class="ar-error-head">
+          <strong>⚠ Agent Rise encountered an error</strong>
+          <button id="ar-error-close" type="button" aria-label="Dismiss error">×</button>
+        </div>
+        <p>Copy this report when requesting technical support. Secrets are automatically redacted.</p>
+        <pre id="ar-error-text"></pre>
+        <button id="ar-error-copy" class="button" type="button">📋 Copy error report</button>
+      </div>
+    </aside>
+    <script>
+      // Guard tracker: records the origin of the pending-change account guard.
+      // It deliberately leaves the browser's native Error constructor intact.
+      (function () {
+        const marker = "Save or export pending changes";
+        const NativeError = window.Error;
+        function captureGuard(how, message) {
+          const stack = new NativeError().stack || "(no stack available)";
+          const detail = "How: " + how + "\nMessage: " + message + "\nStack trace:\n" + stack;
+          if (typeof window.arReportError === "function") window.arReportError("Account change guard", detail);
+          else {
+            const tray = document.getElementById("ar-error-tray");
+            const text = document.getElementById("ar-error-text");
+            if (tray && text) {
+              text.textContent = detail;
+              tray.hidden = false;
+            }
+          }
+        }
+        window.arTrackGuard = captureGuard;
+        const nativeAlert = window.alert;
+        window.alert = function (message) {
+          if (typeof message === "string" && message.includes(marker)) captureGuard("alert()", message);
+          return nativeAlert.apply(window, arguments);
+        };
+        ["error", "warn"].forEach(function (level) {
+          const nativeLog = console[level];
+          console[level] = function () {
+            const joined = Array.from(arguments).join(" ");
+            if (joined.includes(marker)) captureGuard("console." + level + "()", joined);
+            return nativeLog.apply(console, arguments);
+          };
+        });
+      })();
+    </script>
+  </body>
+</html>
