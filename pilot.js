@@ -379,6 +379,14 @@ closeBreakroom=async function(){
   pauseRoomSound();
   finishClosingBreakroom();
 };
+[breakroomElements.closeButton,breakroomElements.seatToDeskButton].forEach(button=>{
+  if(!button)return;
+  button.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeBreakroom();
+  },true);
+});
 try{injectUI();document.body.dataset.pilotStep='injected';$('modalCallActions').addEventListener('click',handleListClick);init();document.body.dataset.pilotStep='initialized';bindPilot();installEditActions();document.body.dataset.pilotStep='ready';}catch(e){document.body.dataset.pilotStep='failed: '+e.message;setTimeout(()=>reportError('Agent Rise startup failed',e),0);}
 try{Object.assign(config,JSON.parse(localStorage.getItem('agentRisePublicConfig')||'{}'));}catch{}
 if($('adminSupabaseUrl')){$('adminSupabaseUrl').value=config.supabaseUrl||'';$('adminSupabaseAnonKey').value=config.supabaseAnonKey||'';$('adminRcClientId').value=config.ringCentralClientId||'';$('adminRcRedirect').value=config.ringCentralRedirectUri||'';$('adminCallEUrl').value=config.callEEndpoint||'';}
