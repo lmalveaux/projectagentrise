@@ -370,23 +370,6 @@ window.AgentRise.captureLead=async function(lead={}){
  else state.prospects.unshift(normalizeProspect({id:uid(),firstName:clean('firstName')||name.firstName,lastName:clean('lastName')||name.lastName,phone,email,product:clean('product'),source:clean('source'),notes:clean('notes'),leadPool:'Contact Review Pool',qualificationStatus:'Review Needed',marketingEligibility:'Review Needed',status:'New Lead',createdAt:iso()}));
  const saved=await persistWorkspace();redraw();return {saved,updated:!!existing,preview:pilot.demo};
 };
-const originalCloseBreakroom=closeBreakroom;
-closeBreakroom=async function(){
-  // Kill switch: leaving Fresh Pour must always release the page immediately.
-  // The exit video previously kept body scrolling locked until playback ended.
-  if(breakroomElements.view.hidden)return;
-  stopConversationAudio(true);
-  pauseRoomSound();
-  finishClosingBreakroom();
-};
-[breakroomElements.closeButton,breakroomElements.seatToDeskButton].forEach(button=>{
-  if(!button)return;
-  button.addEventListener('click',event=>{
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    closeBreakroom();
-  },true);
-});
 try{injectUI();document.body.dataset.pilotStep='injected';$('modalCallActions').addEventListener('click',handleListClick);init();document.body.dataset.pilotStep='initialized';bindPilot();installEditActions();document.body.dataset.pilotStep='ready';}catch(e){document.body.dataset.pilotStep='failed: '+e.message;setTimeout(()=>reportError('Agent Rise startup failed',e),0);}
 try{Object.assign(config,JSON.parse(localStorage.getItem('agentRisePublicConfig')||'{}'));}catch{}
 if($('adminSupabaseUrl')){$('adminSupabaseUrl').value=config.supabaseUrl||'';$('adminSupabaseAnonKey').value=config.supabaseAnonKey||'';$('adminRcClientId').value=config.ringCentralClientId||'';$('adminRcRedirect').value=config.ringCentralRedirectUri||'';$('adminCallEUrl').value=config.callEEndpoint||'';}
