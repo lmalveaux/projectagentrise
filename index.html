@@ -1388,7 +1388,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <section class="agent-dash-strip" aria-label="Agent's Dash">
         <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education <small>TODO: add original license date</small></li><li>Conventions</li><li>Vacations</li></ul></div></div>
         <button type="button" id="dashAddProspect">Add Prospects</button>
-        <button type="button" id="openBreakroomButton" disabled title="Fresh Pour is temporarily paused while media is serviced">Fresh Pour · Paused</button>
+        <button type="button" id="openBreakroomButton">Fresh Pour</button>
         <div class="phone-apps"><button type="button" data-coming-soon="RingCentral">☎ RingCentral</button></div>
       </section>
 
@@ -1613,7 +1613,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       </div>
       <div class="breakroom-inner">
         <div class="breakroom-top">
-          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton" onclick="document.getElementById('breakroomView').hidden=true;document.body.style.overflow=''">← Back to the desk</button>
+          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton">← Back to the desk</button>
           <div class="breakroom-top-actions">
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
@@ -1678,7 +1678,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <a class="button button-primary hidden" id="seatResourceLink" download>Download</a>
             </div>
             <div class="seat-actions">
-              <button class="button button-secondary" type="button" id="seatToDeskButton" onclick="document.getElementById('breakroomView').hidden=true;document.body.style.overflow=''">Review calls on the app</button>
+              <button class="button button-secondary" type="button" id="seatToDeskButton">Review calls on the app</button>
             </div>
           </section>
         </div>
@@ -3501,12 +3501,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Fresh Pour media is packaged beside the app for dependable browser playback.
       // The audio layers stay separate so room sound can be gently lowered during a conversation.
       const BREAKROOM_MEDIA = {
-        entryVideo: "",
-        loopVideo: "",
-        loopVideoMobile: "",
-        exitVideo: "",
+        entryVideo: "assets/video/fresh-pour-entry.mp4",
+        loopVideo: "assets/video/freshpour-loop.mp4",
+        loopVideoMobile: "assets/video/fresh-pour-room-loop-mobile.mp4",
+        exitVideo: "assets/video/fresh-pour-exit.mp4",
         ambience: "",
-        music: ""
+        music: "assets/audio/freshpour-music.mp3"
       };
       // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
       // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
@@ -3810,13 +3810,11 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       }
 
       function finishClosingBreakroom() {
+        allBreakroomVideos().forEach(resetBreakroomVideo);
+        showBreakroomVideo();
         breakroomElements.view.hidden = true;
         breakroomIsClosing = false;
         document.body.style.overflow = "";
-        try {
-          allBreakroomVideos().forEach(resetBreakroomVideo);
-          showBreakroomVideo();
-        } catch {}
         if (breakroomOpener && typeof breakroomOpener.focus === "function") breakroomOpener.focus();
         breakroomOpener = null;
       }
@@ -3825,6 +3823,17 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         if (breakroomElements.view.hidden || breakroomIsClosing) return;
         stopConversationAudio(true);
         pauseRoomSound();
+        if (BREAKROOM_MEDIA.exitVideo && !reduceBreakroomMotion) {
+          breakroomIsClosing = true;
+          breakroomElements.panel.classList.add("is-waiting");
+          allBreakroomVideos().forEach(resetBreakroomVideo);
+          showBreakroomVideo(breakroomElements.exitVideo);
+          breakroomElements.exitVideo.playbackRate = BREAKROOM_TRANSITION_SPEED;
+          try {
+            await breakroomElements.exitVideo.play();
+            return;
+          } catch {}
+        }
         finishClosingBreakroom();
       }
 
@@ -3922,7 +3931,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=screen-lock-fix-3" defer></script>
+    <script src="pilot.js?v=layout3" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
