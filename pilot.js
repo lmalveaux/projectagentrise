@@ -371,7 +371,14 @@ window.AgentRise.captureLead=async function(lead={}){
  const saved=await persistWorkspace();redraw();return {saved,updated:!!existing,preview:pilot.demo};
 };
 const originalCloseBreakroom=closeBreakroom;
-closeBreakroom=async function(){const timer=setTimeout(()=>{if(breakroomIsClosing)finishClosingBreakroom();},6000);await originalCloseBreakroom();if(!breakroomIsClosing)clearTimeout(timer);};
+closeBreakroom=async function(){
+  // Kill switch: leaving Fresh Pour must always release the page immediately.
+  // The exit video previously kept body scrolling locked until playback ended.
+  if(breakroomElements.view.hidden)return;
+  stopConversationAudio(true);
+  pauseRoomSound();
+  finishClosingBreakroom();
+};
 try{injectUI();document.body.dataset.pilotStep='injected';$('modalCallActions').addEventListener('click',handleListClick);init();document.body.dataset.pilotStep='initialized';bindPilot();installEditActions();document.body.dataset.pilotStep='ready';}catch(e){document.body.dataset.pilotStep='failed: '+e.message;setTimeout(()=>reportError('Agent Rise startup failed',e),0);}
 try{Object.assign(config,JSON.parse(localStorage.getItem('agentRisePublicConfig')||'{}'));}catch{}
 if($('adminSupabaseUrl')){$('adminSupabaseUrl').value=config.supabaseUrl||'';$('adminSupabaseAnonKey').value=config.supabaseAnonKey||'';$('adminRcClientId').value=config.ringCentralClientId||'';$('adminRcRedirect').value=config.ringCentralRedirectUri||'';$('adminCallEUrl').value=config.callEEndpoint||'';}
