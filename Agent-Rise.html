@@ -3823,17 +3823,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         if (breakroomElements.view.hidden || breakroomIsClosing) return;
         stopConversationAudio(true);
         pauseRoomSound();
-        if (BREAKROOM_MEDIA.exitVideo && !reduceBreakroomMotion) {
-          breakroomIsClosing = true;
-          breakroomElements.panel.classList.add("is-waiting");
-          allBreakroomVideos().forEach(resetBreakroomVideo);
-          showBreakroomVideo(breakroomElements.exitVideo);
-          breakroomElements.exitVideo.playbackRate = BREAKROOM_TRANSITION_SPEED;
-          try {
-            await breakroomElements.exitVideo.play();
-            return;
-          } catch {}
-        }
         finishClosingBreakroom();
       }
 
