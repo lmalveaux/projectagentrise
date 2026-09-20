@@ -3810,11 +3810,13 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       }
 
       function finishClosingBreakroom() {
-        allBreakroomVideos().forEach(resetBreakroomVideo);
-        showBreakroomVideo();
         breakroomElements.view.hidden = true;
         breakroomIsClosing = false;
         document.body.style.overflow = "";
+        try {
+          allBreakroomVideos().forEach(resetBreakroomVideo);
+          showBreakroomVideo();
+        } catch {}
         if (breakroomOpener && typeof breakroomOpener.focus === "function") breakroomOpener.focus();
         breakroomOpener = null;
       }
