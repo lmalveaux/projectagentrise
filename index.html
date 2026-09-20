@@ -1613,7 +1613,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       </div>
       <div class="breakroom-inner">
         <div class="breakroom-top">
-          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton">← Back to the desk</button>
+          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton" onclick="document.getElementById('breakroomView').hidden=true;document.body.style.overflow=''">← Back to the desk</button>
           <div class="breakroom-top-actions">
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
@@ -1678,7 +1678,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <a class="button button-primary hidden" id="seatResourceLink" download>Download</a>
             </div>
             <div class="seat-actions">
-              <button class="button button-secondary" type="button" id="seatToDeskButton">Review calls on the app</button>
+              <button class="button button-secondary" type="button" id="seatToDeskButton" onclick="document.getElementById('breakroomView').hidden=true;document.body.style.overflow=''">Review calls on the app</button>
             </div>
           </section>
         </div>
