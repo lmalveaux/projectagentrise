@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css" />
+    <link rel="stylesheet" href="pilot.css?v=brief3a" />
     <main class="app">
       <div class="topbar" aria-label="Workspace header">
         <div class="agent-identity">
@@ -1597,9 +1597,9 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
 
     <div class="breakroom" id="breakroomView" role="dialog" aria-modal="true" aria-label="Fresh Pour break room" hidden>
       <div class="breakroom-media" aria-hidden="true">
-        <video class="breakroom-bg-video" id="breakroomEntryVideo" muted playsinline preload="metadata"></video>
-        <video class="breakroom-bg-video" id="breakroomLoopVideo" muted playsinline preload="metadata" loop></video>
-        <video class="breakroom-bg-video" id="breakroomExitVideo" muted playsinline preload="metadata"></video>
+        <video class="breakroom-bg-video" id="breakroomEntryVideo" muted playsinline preload="metadata" data-replaceable="true"></video>
+        <video class="breakroom-bg-video" id="breakroomLoopVideo" autoplay muted playsinline preload="metadata" loop data-replaceable="true"></video>
+        <video class="breakroom-bg-video" id="breakroomExitVideo" muted playsinline preload="metadata" data-replaceable="true"></video>
         <div class="breakroom-fallback"></div>
         <div class="breakroom-wash"></div>
       </div>
@@ -1650,7 +1650,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
                 <span class="player-title" id="seatTrackTitle">Two hosts, one topic — audio not loaded yet</span>
                 <div class="player-bar"><div class="player-bar-fill" id="seatPlayFill"></div></div>
               </div>
-              <audio id="seatAudio" preload="metadata"></audio>
+              <audio id="seatAudio" preload="metadata" data-replaceable="true"></audio>
             </div>
             <p class="seat-note" id="seatNote">This conversation will become available when its audio is added.</p>
             <div class="seat-resource hidden" id="seatResource">
@@ -1662,8 +1662,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
             </div>
           </section>
         </div>
-        <audio id="ambienceAudio" preload="metadata" loop></audio>
-        <audio id="breakroomMusicAudio" preload="metadata" loop></audio>
+        <audio id="ambienceAudio" preload="metadata" loop data-replaceable="true"></audio>
+        <audio id="breakroomMusicAudio" preload="metadata" loop data-replaceable="true"></audio>
       </div>
     </div>
 
@@ -1923,7 +1923,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
         copyScriptButton: document.querySelector("#copyScriptButton"),
         downloadScriptButton: document.querySelector("#downloadScriptButton"),
         workspaceGreeting: document.querySelector("#workspaceGreeting"),
-        addButton: document.querySelector("#F8F5EFProspectButton"),
+        addButton: document.querySelector("#addProspectButton"),
         importPanel: document.querySelector("#importPanel"),
         closeImport: document.querySelector("#closeImportButton"),
         csvFileInput: document.querySelector("#csvFileInput"),
@@ -1964,7 +1964,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2B2B2B; color:#C9A227
         createResourceGroup: document.querySelector("#createResourceGroupButton"),
         renameResourceGroup: document.querySelector("#renameResourceGroupButton"),
         removeResourceGroup: document.querySelector("#removeResourceGroupButton"),
-        addSelectedToGroup: document.querySelector("#F8F5EFSelectedToGroupButton"),
+        addSelectedToGroup: document.querySelector("#addSelectedToGroupButton"),
         removeSelectedFromGroup: document.querySelector("#removeSelectedFromGroupButton"),
         exportGroupButton: document.querySelector("#exportGroupButton"),
         exportSelectedButton: document.querySelector("#exportSelectedButton"),
@@ -2475,7 +2475,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           .replaceAll("<", "&lt;")
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#1F3D2B;");
+          .replaceAll("'", "&#039;");
       }
 
       function visibleProspects() {
@@ -3472,11 +3472,11 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // The audio layers stay separate so room sound can be gently lowered during a conversation.
       const BREAKROOM_MEDIA = {
         entryVideo: "",
-        loopVideo: "media/fresh-pour-room-loop.mp4",
-        loopVideoMobile: "media/fresh-pour-room-loop-mobile.mp4",
+        loopVideo: "assets/video/freshpour-loop.mp4",
+        loopVideoMobile: "assets/video/freshpour-loop.mp4",
         exitVideo: "media/fresh-pour-exit.mp4",
         ambience: "",
-        music: "media/fresh-pour-music.mp3"
+        music: "assets/audio/freshpour-music.mp3"
       };
       // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
       // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
@@ -3898,7 +3898,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js" defer></script>
+    <script src="pilot.js?v=brief3a" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -3947,5 +3947,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
+
 
 
