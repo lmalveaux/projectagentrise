@@ -1367,41 +1367,39 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout2" />
+    <link rel="stylesheet" href="pilot.css?v=layout3" />
     <main class="app">
       <div class="topbar" aria-label="Workspace header">
         <div class="agent-identity">
           <div class="agent-avatar-choice" id="agentAvatarChoice" aria-label="Agent monogram">AR</div>
           <div><p class="welcome-line" id="workspaceGreeting">Agent</p><p class="agent-credentials"><span id="headerNpn">NPN not added</span> · <span id="headerStates">States not added</span></p><time class="date" id="todayDate" hidden></time></div>
         </div>
-        <div class="journey-title">ARPS Client Journey</div>
+        <div class="journey-title">Client Journey</div>
         <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">ARP</button>
         <nav class="theater-tabs header-tools" aria-label="Workspace tools">
           <button type="button" id="openScriptsButton">Scripts</button>
           <button type="button" id="carriersButton">Carriers</button>
-          <button type="button" id="learningLibraryButton">Library</button>
-          <button type="button" id="contactSliderButton">Contacts</button>
-          <button type="button" id="lettersMarketingButton">Marketing <small>Upgrade tier</small></button>
-          <button type="button" data-coming-soon="RingCentral">☎ Phone</button>
+          <button type="button" id="campaignsButton">Campaigns</button>
+          <button type="button" data-coming-soon="Contracts">Contracts <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
+          <button type="button" data-coming-soon="Call-E">Call-E <span class="tier-star gold-star" title="Pro Plus Gold">★</span></button>
         </nav>
       </div>
 
       <section class="agent-dash-strip" aria-label="Agent's Dash">
         <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education <small>TODO: add original license date</small></li><li>Conventions</li><li>Vacations</li></ul></div></div>
         <button type="button" id="dashAddProspect">Add Prospects</button>
-        <div class="goal-placeholder" aria-label="Goal tracker placeholder"><strong id="dashGoalPercent">—</strong><span>Goal tracker</span></div>
-        <div class="phone-apps"><button type="button" data-coming-soon="RingCentral">☎ RingCentral</button><button type="button" data-coming-soon="Call-E">◉ Call-E</button></div>
+        <button type="button" id="openBreakroomButton">Fresh Pour</button>
+        <div class="phone-apps"><button type="button" data-coming-soon="RingCentral">☎ RingCentral</button></div>
       </section>
 
       <nav class="pbx-platform" aria-label="Agent Rise workspaces">
-        <button type="button" id="openBreakroomButton">Fresh Pour</button>
         <button type="button" id="leadDeskButton">Lead Desk <span class="badge-count" id="leadDeskBadge">0</span></button>
         <button type="button" id="clientJourneyButton" class="is-active">Client Journey</button>
-        <button type="button" id="openTrainingButton">Training</button>
-        <button type="button" id="statsButton">Stats</button>
-        <button type="button" class="locked-control" aria-label="Locked workspace">🔒</button>
+        <button type="button" id="goalTrackerButton">Goal Tracker</button>
+        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
+        <button type="button" class="locked-control" aria-label="Agency workspace, Pro Plus Gold">Agency <span class="tier-star gold-star" title="Pro Plus Gold Agency">★</span></button>
       </nav>
-      <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider"></section>
+      <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
       <header class="header">
         <div class="title-block">
           <h1 id="agentTitle">Agent Dashboard</h1>
@@ -1640,6 +1638,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             </span>
           </button>
           <p class="pot-line" id="potLine" aria-live="polite"></p>
+
+          <nav class="fresh-office-tools" aria-label="Fresh Pour back office">
+            <button class="button button-secondary" type="button" id="freshCampaignsButton">Campaign Review</button>
+            <button class="button button-secondary" type="button" id="learningLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
+            <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
+          </nav>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle">
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Trip Incentives — Active</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
@@ -2434,8 +2439,11 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       function todayLabel() {
         const now=new Date();
-        const weekday=new Intl.DateTimeFormat("en",{weekday:"long"}).format(now);
-        return `It’s ${weekday}, ${now.getMonth()+1}/${now.getDate()}`;
+        const timeZone=localStorage.getItem("agentRiseTimeZone")||Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return new Intl.DateTimeFormat("en-US",{
+          timeZone,month:"2-digit",day:"2-digit",year:"numeric",
+          hour:"numeric",minute:"2-digit",timeZoneName:"short"
+        }).format(now);
       }
 
       function fullName(prospect) {
@@ -3461,6 +3469,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function init() {
         // Non-destructive migrations run after account loading.
         elements.date.textContent = todayLabel();
+        elements.date.hidden = false;
+        setInterval(()=>{ elements.date.textContent=todayLabel(); },60000);
         populateStatusOptions();
         populateLeadPoolOptions();
         populateEmailDomainOptions();
@@ -3503,50 +3513,53 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       const BREAKROOM_TRANSITION_SPEED = 1.4;
       const BREAKROOM_TABLES = [
         {
+          id: "medicare-advantage",
+          name: "Medicare Advantage",
+          tag: "Plans, field guidance + JIT",
+          desc: "Medicare Advantage training, field guidance, and just-in-time contracting resources.",
+          audioSrc: "assets/audio/medicare-advantage-jit-contracting.m4a",
+          resource: {
+            url: "assets/images/Medicare_Advantage_Agent_Launch_Blueprint.png",
+            label: "Download: Medicare Advantage Agent Launch Blueprint",
+            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
+          }
+        },
+        {
+          id: "pdp",
+          name: "PDP",
+          tag: "Prescription drug plans",
+          desc: "A quiet work area for PDP training, plan-year changes, and approved carrier resources.",
+          audioSrc: ""
+        },
+        {
+          id: "turning-65",
+          name: "Turning 65",
+          tag: "New-to-Medicare preparation",
+          desc: "Resources and training for clients approaching Medicare eligibility.",
+          audioSrc: "",
+          resource: {
+            url: "assets/md/Medicare_Field_Guide_Agent_Notebook.md",
+            label: "Download: Medicare Field Guide",
+            filename: "Medicare-Field-Guide-Agent-Notebook.md"
+          }
+        },
+        {
           id: "final-expense",
           name: "Final Expense",
           tag: "JIT contracting + daily pay",
           desc: "A short seminar on just-in-time contracting and daily-pay shortcuts for Final Expense agents.",
           audioSrc: "assets/audio/final-expense-jit-contracting.m4a",
           resource: {
-            url: "assets/final-expense-career-launchpad.svg",
+            url: "assets/svg/final-expense-career-launchpad.svg",
             label: "Download: Final Expense Cheat Code Infograph",
             filename: "Final-Expense-Cheat-Code-Infograph.svg"
           }
         },
-        {
-          id: "iul",
-          name: "IUL",
-          tag: "The upside, the caps, the catch",
-          desc: "An honest walk through indexed universal life — where it shines, where the caps and fees actually bite.",
-          audioSrc: ""
-        },
-        {
-          id: "tsa",
-          name: "TSA / 403(b)",
-          tag: "Tax-sheltered, not headache-sheltered",
-          desc: "What a tax-sheltered annuity in a 403(b) arrangement may be doing for a client, plus the paperwork realities agents wish someone had explained sooner.",
-          audioSrc: ""
-        },
-        {
-          id: "spia",
-          name: "Single Premium Immediate Annuity",
-          tag: "One check, one promise",
-          desc: "When a single premium immediate annuity is the right fit — and the trade-off of giving up access to that lump sum.",
-          audioSrc: ""
-        },
-        {
-          id: "medicare-advantage",
-          name: "Medicare Advantage",
-          tag: "JIT contracting + daily pay",
-          desc: "A short seminar on just-in-time contracting and daily-pay opportunities for Medicare Advantage agents.",
-          audioSrc: "assets/audio/medicare-advantage-jit-contracting.m4a",
-          resource: {
-            url: "assets/Medicare_Advantage_Agent_Launch_Blueprint.png",
-            label: "Download: Medicare Advantage Agent Launch Blueprint",
-            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
-          }
-        }
+        { id:"dvh", name:"DVH", tag:"Dental, vision + hearing", desc:"Training and approved resources for dental, vision, and hearing conversations.", audioSrc:"" },
+        { id:"ce-training", name:"CE Training", tag:"Licensing + continuing education", desc:"A back-office home for continuing education dates, requirements, and training.", audioSrc:"" },
+        { id:"marketing", name:"Marketing", tag:"Campaign production room", desc:"Build and organize approved marketing work away from the daily dashboard.", audioSrc:"" },
+        { id:"stats", name:"Stats", tag:"Performance review", desc:"Review production, activity, appointments, closes, and progress toward goals.", audioSrc:"" },
+        { id:"carrier-resources", name:"Carrier-Approved Marketing Resources", tag:"Approved materials by carrier", desc:"Keep carrier-approved marketing resources and state-specific materials organized here.", audioSrc:"" }
       ];
 
       const POT_LINES = [
@@ -3636,7 +3649,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           breakroomElements.playToggle.setAttribute("aria-label", `${table.name} conversation not loaded`);
           breakroomElements.seatTrackTitle.textContent = `Conversation coming soon — ${table.name}`;
           breakroomElements.seatNote.hidden = false;
-          breakroomElements.seatNote.textContent = "This conversation is not included in the pilot. Choose Final Expense or Medicare Advantage for a playable seminar, or return to your desk.";
+          breakroomElements.seatNote.textContent = "This Fresh Pour workspace is ready for its approved training, media, or state-specific resources.";
         }
         setupSeatResource(table);
         breakroomElements.seat.classList.remove("hidden");
@@ -3918,7 +3931,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout2" defer></script>
+    <script src="pilot.js?v=layout3" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">

@@ -253,3 +253,45 @@ body[data-theme="dark"] .pbx-platform .locked-control{
   .header-tools{grid-row:3}
 }
 
+/* Calm burgundy and gold dashboard hierarchy */
+:root{--wine:#744657;--wine-deep:#603747;--soft-gold:#C7A84B}
+.topbar{border-color:var(--soft-gold)!important}
+.header-tools{grid-template-columns:repeat(5,minmax(0,1fr))!important;border-top-color:var(--soft-gold)!important}
+.header-tools button{
+  background:var(--wine)!important;
+  color:#FFFFFF!important;
+  border:1px solid var(--soft-gold)!important;
+  box-shadow:0 2px 7px rgba(96,55,71,.22)!important;
+}
+.header-tools button:hover{background:var(--wine-deep)!important}
+.journey-title:before{background:var(--soft-gold)!important}
+.tier-star{display:inline-block;margin-left:5px;font-size:.9em}
+.silver-star{color:#D5D7DC;text-shadow:0 1px 1px #4A4D55}
+.gold-star{color:#F1D26B;text-shadow:0 1px 1px #6B5510}
+.demo-banner{background:var(--wine)!important;color:#FFFFFF!important}
+#openBreakroomButton{background:var(--wine)!important;border-color:var(--soft-gold)!important}
+.pbx-platform{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.contact-ribbon[hidden]{display:none!important}
+.fresh-office-tools{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:18px 0 24px;
+}
+.fresh-office-tools .button{margin:0!important}
+.table-floor{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+.table-card{
+  min-height:138px!important;
+  background:linear-gradient(145deg,#FFFFFF,#F5F1EA)!important;
+  border-color:var(--soft-gold)!important;
+  box-shadow:0 8px 22px rgba(96,55,71,.15)!important;
+}
+.table-card:hover,.table-card:focus-visible{border-color:var(--wine)!important;box-shadow:0 12px 28px rgba(96,55,71,.22)!important}
+.pot-button{background:linear-gradient(135deg,#F3E8EC,#F8F1D9)!important;border-color:var(--soft-gold)!important}
+@media(max-width:768px){
+  .header-tools{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .fresh-office-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .table-floor{grid-template-columns:1fr!important}
+  .pbx-platform{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
