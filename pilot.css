@@ -275,23 +275,29 @@ body[data-theme="dark"] .pbx-platform .locked-control{
 .ar-header{display:grid!important;grid-template-columns:44px 1fr auto!important;align-items:center!important;gap:18px!important;min-height:68px!important}
 .arp-logo-block{width:44px;height:44px;border:1px solid var(--navy);border-radius:9px;display:grid;place-items:center;overflow:hidden}
 .arp-logo-block img{width:100%;height:100%;object-fit:contain}
-.header-breathing-space{min-width:20px}
+.header-breathing-space{min-width:20px;display:flex;justify-content:center}
+.premium-phone-orb{position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--soft-gold);background:transparent;color:var(--cream);font-size:1.15rem;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.premium-phone-orb .tier-star{right:-2px;top:-5px}
 .header-account-zone{display:flex;align-items:center;justify-content:flex-end;gap:12px}
 .header-greeting{text-align:right}.header-greeting p,.header-greeting time{display:block;margin:0}.header-greeting .date{font-size:.82rem}
 .agent-avatar-choice[hidden]{display:none!important}
 #settingsButton{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;padding:0!important}
-.dashboard-main-actions,.dashboard-secondary-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}
+.dashboard-main-actions{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;margin:12px 0}.dashboard-secondary-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}
 .dashboard-main-actions>button,.dashboard-main-actions>.dash-notification-wrap>button{width:100%;min-height:48px;position:relative}
 .dashboard-secondary-actions>button{min-height:40px;position:relative;background:transparent!important;border:1px solid var(--navy)!important;color:var(--navy)!important}
 .dashboard-secondary-actions>button:hover,.dashboard-secondary-actions>button:focus,.dashboard-secondary-actions>button.is-active{background:var(--navy)!important;color:var(--cream)!important}
 .tier-star{position:absolute;right:6px;top:3px;color:#C9A227}
 .prospects-toggle{width:100%;min-height:46px;margin:8px 0 12px}
+.gold-dashboard-divider{height:8px;width:50%;margin:13px auto;background:var(--soft-gold);border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.14)}
+.agent-dashboard-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border:1px solid var(--navy);border-radius:12px;background:var(--surface)}.agent-dashboard-bar>div{display:flex;gap:10px;flex-wrap:wrap}.agent-dashboard-bar button{min-height:44px}
 .prospects-workspace{display:block}.prospects-workspace[hidden]{display:none!important}
 .prospects-workspace.scripts-overlay-only>:not(#scriptsBackdrop){display:none!important}
 .prospects-actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0}
 .prospects-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:10px 0}
 .prospects-tabs button{min-height:40px}
-@media(max-width:768px){.dashboard-main-actions,.dashboard-secondary-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.prospects-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.ar-header{grid-template-columns:44px 1fr auto!important;gap:9px!important}.header-greeting{font-size:.82rem}}
+@media(max-width:768px){.dashboard-main-actions,.dashboard-secondary-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.agent-dashboard-bar{align-items:flex-start;flex-direction:column}.prospects-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.ar-header{grid-template-columns:44px 1fr auto!important;gap:9px!important}.header-greeting{font-size:.82rem}}
+.goal-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.goal-summary>div{text-align:center;padding:12px;border:1px solid var(--navy);border-radius:10px}.goal-summary strong{display:block;font-size:1.6rem}.goal-carrier-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.goal-carrier-slots fieldset{display:grid;gap:7px}.goal-carrier-slots label{font-size:.78rem}.goal-carrier-slots input{width:100%}@media(max-width:800px){.goal-carrier-slots{grid-template-columns:1fr}}
+.fresh-office-tools button,.table-card{background:rgba(255,255,255,.12)!important;backdrop-filter:blur(7px);border-color:var(--soft-gold)!important}.fresh-office-tools button,.table-card{position:relative}.fresh-office-tools button:after,.table-card:after{content:'★';position:absolute;right:7px;top:4px;color:#C9A227;font-size:.75rem}
 .pbx-platform{grid-template-columns:repeat(5,minmax(0,1fr))!important}
 .contact-ribbon[hidden]{display:none!important}
 .fresh-office-tools{

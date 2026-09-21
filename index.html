@@ -1367,11 +1367,11 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout3" />
+    <link rel="stylesheet" href="pilot.css?v=layout6" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
-        <div class="header-breathing-space" aria-hidden="true"></div>
+        <div class="header-breathing-space"><button class="premium-phone-orb" type="button" id="premiumPhoneButton" aria-label="Premium phone" title="Premium phone">☎<span class="tier-star gold-star" aria-hidden="true">★</span></button></div>
         <div class="header-account-zone">
           <div class="header-greeting"><p class="welcome-line" id="workspaceGreeting">Welcome back, Agent!</p><time class="date" id="todayDate"></time><span class="agent-credentials" hidden><span id="headerNpn">NPN not added</span><span id="headerStates">States not added</span></span></div>
           <div class="agent-avatar-choice" id="agentAvatarChoice" aria-hidden="true" hidden>AR</div>
@@ -1379,27 +1379,28 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         </div>
       </div>
 
-      <section class="dashboard-main-actions" aria-label="Primary dashboard actions">
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education</li><li>Conventions</li><li>Vacations</li></ul></div></div>
-        <button type="button" id="openBreakroomButton">Fresh Pour</button>
+      <section class="dashboard-main-actions" aria-label="First line of business">
         <button type="button" id="openScriptsButton">Scripts</button>
-        <button type="button" id="contractsButton">Contracts</button>
+        <button type="button" id="carriersButton">Carriers</button>
+        <button type="button" id="prospectsButton">Prospects</button>
+        <button type="button" id="goalTrackerButton">Goal Tracker</button>
         <button type="button" id="leadsButton">Leads</button>
-        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star gold-star" title="Premium">★</span></button>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education</li><li>Conventions</li><li>Vacations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
+        <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
-      <nav class="dashboard-secondary-actions" aria-label="Dashboard tools">
-        <button type="button" id="goalTrackerButton">Goal Tracker</button>
-        <button type="button" id="carriersButton">Carriers</button>
+      <nav class="dashboard-secondary-actions premium-actions" aria-label="Premium workspace tools">
         <button type="button" id="marketingButton">Marketing <span class="tier-star gold-star" title="Premium">★</span></button>
-        <button type="button" id="statsButton">Stats <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="bookBusinessButton">Book of Business <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star gold-star" title="Premium">★</span></button>
         <button type="button" id="agencyButton" class="locked-control">Agency <span class="tier-star gold-star" title="Premium">★</span></button>
         <button type="button" id="learningLibraryButton">Library <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="jitCarriersButton">JIT Carriers <span class="tier-star gold-star" title="Premium">★</span></button>
       </nav>
-      <button class="prospects-toggle" type="button" id="prospectsToggleButton" aria-expanded="false">Prospects <span aria-hidden="true">＋</span></button>
+      <div class="gold-dashboard-divider" aria-hidden="true"></div>
+      <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
       <section id="prospectsWorkspace" class="prospects-workspace" hidden>
         <div class="prospects-actions prospects-actions-top"><button class="button button-primary" id="prospectsSaveTop" type="button">Save</button><button class="button button-secondary" id="prospectsExitTop" type="button">Exit</button></div>
-        <nav class="prospects-tabs" aria-label="Prospect tools"><button type="button" data-prospect-tool="scripts">Scripts</button><button type="button" data-prospect-tool="carriers">Carriers</button><button type="button" data-prospect-tool="library">Library</button><button type="button" data-prospect-tool="contacts">Contacts</button><button type="button" data-prospect-tool="letters">Letters/Marketing</button></nav>
       <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
       <header class="header">
         <div class="title-block">
@@ -1446,6 +1447,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div><h2 class="import-title" id="scriptsTitle">Quick Script Desk</h2><p class="import-help">Choose a product and situation. Your preloaded script appears immediately.</p></div>
             <button class="button button-quiet import-close" type="button" id="closeScriptsButton">Close</button>
           </div>
+          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptTop" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptTop" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
           <div class="settings-section script-quick-grid">
             <div class="field">
               <label for="scriptProduct">Product</label>
@@ -1485,7 +1487,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           </div>
           <div class="settings-section" id="scriptOutputWrap">
             <strong id="scriptOutputTitle">Script</strong>
-            <pre class="script-output" id="scriptOutput"></pre>
+            <pre class="script-output" id="scriptOutput" contenteditable="true" role="textbox" aria-label="Personalized script"></pre>
             <p class="import-help">Use only for permitted contact. Follow current CMS, carrier, agency, consent, and Do Not Call requirements before discussing plan-specific benefits.</p>
             <div class="form-actions">
               <button class="button button-secondary" type="button" id="copyScriptButton">Copy</button>
@@ -1493,6 +1495,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             </div>
           </div>
           <div class="form-actions"><button class="button button-secondary" type="button" id="cancelScriptsButton">Close</button></div>
+          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptBottom" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptBottom" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
         </section>
       </div>
 
@@ -1643,7 +1646,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <p class="pot-line" id="potLine" aria-live="polite"></p>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour back office">
-            <button class="button button-secondary" type="button" id="learningLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="freshLibraryButton">Library <span class="tier-star gold-star" aria-hidden="true">★</span></button>
             <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
             <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
           </nav>
@@ -2192,6 +2195,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           : genericPreloadedScript(product, situation);
         elements.scriptOutputTitle.textContent = `${product} — ${SCRIPT_SITUATION_LABELS[situation] || "Script"}`;
         elements.scriptOutput.textContent = fillPreloadedScript(template) + tpmoDisclaimer();
+        window.AgentRiseApplySavedScript?.(product,situation);
       }
 
       function toggleScriptCustomization() {
@@ -3359,6 +3363,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         elements.openScriptsButton.addEventListener("click", openScripts);
         elements.closeScriptsButton.addEventListener("click", closeScripts);
         elements.cancelScriptsButton.addEventListener("click", closeScripts);
+        document.getElementById("saveScriptTop").addEventListener("click",()=>document.getElementById("saveScriptBottom").click());
+        document.getElementById("saveScriptBottom").addEventListener("click",()=>{ window.AgentRiseSaveScriptNow?.(); closeScripts(); });
+        document.getElementById("exitScriptTop").addEventListener("click",closeScripts);
+        document.getElementById("exitScriptBottom").addEventListener("click",closeScripts);
         elements.customizeScriptButton.addEventListener("click", toggleScriptCustomization);
         elements.scriptProduct.addEventListener("change", renderPreloadedScript);
         elements.scriptFormat.addEventListener("change", renderPreloadedScript);
@@ -3547,25 +3555,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
             label: "Download: Medicare Field Guide",
             filename: "Medicare-Field-Guide-Agent-Notebook.md"
           }
-        },
-        {
-          id: "final-expense",
-          name: "Final Expense",
-          tag: "JIT contracting + daily pay",
-          desc: "A short seminar on just-in-time contracting and daily-pay shortcuts for Final Expense agents.",
-          audioSrc: "assets/audio/final-expense-jit-contracting.m4a",
-          resource: {
-            url: "assets/svg/final-expense-career-launchpad.svg",
-            label: "Download: Final Expense Cheat Code Infograph",
-            filename: "Final-Expense-Cheat-Code-Infograph.svg"
-          }
-        },
-        { id:"dvh", name:"DVH", tag:"Dental, vision + hearing", desc:"Training and approved resources for dental, vision, and hearing conversations.", audioSrc:"" },
-        { id:"ce-training", name:"CE Training", tag:"Licensing + continuing education", desc:"A back-office home for continuing education dates, requirements, and training.", audioSrc:"" },
-        { id:"marketing", name:"Marketing", tag:"Campaign production room", desc:"Build and organize approved marketing work away from the daily dashboard.", audioSrc:"" },
-        { id:"stats", name:"Stats", tag:"Performance review", desc:"Review production, activity, appointments, closes, and progress toward goals.", audioSrc:"" },
-        { id:"carrier-resources", name:"Carrier-Approved Marketing Resources", tag:"Approved materials by carrier", desc:"Keep carrier-approved marketing resources and state-specific materials organized here.", audioSrc:"" }
-      ];
+        }];
 
       const POT_LINES = [
         "First rule of the pot: nobody remembers who made it, everybody remembers if it was empty.",
@@ -3936,7 +3926,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout3" defer></script>
+    <script src="pilot.js?v=layout6" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -3985,6 +3975,17 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
