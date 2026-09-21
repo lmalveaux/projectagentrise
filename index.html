@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout8" />
+    <link rel="stylesheet" href="pilot.css?v=layout9" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -3795,6 +3795,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function openBreakroom() {
         breakroomOpener = document.activeElement;
         breakroomIsClosing = false;
+        document.body.classList.add("fresh-pour-open");
+        const demoBanner = document.querySelector("#demoBanner");
+        if (demoBanner && !demoBanner.hidden) {
+          demoBanner.dataset.hiddenForFreshPour = "true";
+          demoBanner.hidden = true;
+        }
         initializeBreakroomMedia();
         if (breakroomElements.ambienceToggle.getAttribute("aria-pressed") !== "true") {
           toggleAmbience();
@@ -3814,6 +3820,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         showBreakroomVideo();
         breakroomElements.view.hidden = true;
         breakroomIsClosing = false;
+        document.body.classList.remove("fresh-pour-open");
+        const demoBanner = document.querySelector("#demoBanner");
+        if (demoBanner?.dataset.hiddenForFreshPour === "true") {
+          delete demoBanner.dataset.hiddenForFreshPour;
+          demoBanner.hidden = false;
+        }
         document.body.style.overflow = "";
         if (breakroomOpener && typeof breakroomOpener.focus === "function") breakroomOpener.focus();
         breakroomOpener = null;
@@ -3931,7 +3943,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout8" defer></script>
+    <script src="pilot.js?v=layout9" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
