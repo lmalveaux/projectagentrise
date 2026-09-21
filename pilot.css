@@ -70,6 +70,15 @@ html{background:var(--theme-bg)!important}
 body{background:var(--theme-bg)!important;color:var(--theme-text)!important}
 body:before{background-image:none!important;filter:none!important;opacity:0!important}
 body:after{background:rgba(255,255,255,.30)!important;opacity:0!important}
+body[data-theme="light"]:before{
+  background:#F5F1EA url("assets/images/sky-view.jpg") center/cover no-repeat fixed!important;
+  filter:none!important;
+  opacity:1!important;
+}
+body[data-theme="light"]:after{
+  background:rgba(255,255,255,.30)!important;
+  opacity:1!important;
+}
 body[data-theme="dark"]:before{
   background:#1A1A20 url("assets/images/sky-view.jpg") center/cover no-repeat fixed!important;
   filter:none!important;
