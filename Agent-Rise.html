@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout10" />
+    <link rel="stylesheet" href="pilot.css?v=layout11" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1430,6 +1430,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <div class="settings-section"><strong>2. Appearance</strong><div class="theme-options">
             <label class="theme-option"><input type="radio" name="appearanceTheme" value="light" checked /> Light</label>
             <label class="theme-option"><input type="radio" name="appearanceTheme" value="dark" /> Dark</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view" /> Sky View</label>
           </div></div>
           <div class="settings-section"><strong>3. Workspace</strong><p class="import-help">More workspace preferences will be added here as the pilot grows.</p></div>
           <div class="settings-section">
@@ -2085,7 +2086,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
 
       function saveProspects() { return persistWorkspace(); }
       function applyTheme(theme) {
-        state.appearanceTheme = theme === "dark" ? "dark" : "light";
+        state.appearanceTheme = ["light", "dark", "sky-view"].includes(theme) ? theme : "light";
         document.body.dataset.theme=state.appearanceTheme;
         document.querySelectorAll('input[name="appearanceTheme"]').forEach(input=>input.checked=input.value===state.appearanceTheme);
       }
@@ -3943,7 +3944,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout10" defer></script>
+    <script src="pilot.js?v=layout11" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">

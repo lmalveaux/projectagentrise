@@ -67,6 +67,15 @@ body[data-theme="dark"]{
   --theme-primary-hover:#5969CF;
   color-scheme:dark;
 }
+body[data-theme="sky-view"]{
+  --theme-bg:#EDE7DC;
+  --theme-surface:#FFFFFF;
+  --theme-text:#0A0A0A;
+  --theme-secondary:#565B52;
+  --theme-primary:#2F3A6B;
+  --theme-primary-hover:#25305E;
+  color-scheme:light;
+}
 html{background:var(--theme-bg)!important}
 body{background:var(--theme-bg)!important;color:var(--theme-text)!important}
 body:before{background-image:none!important;filter:none!important;opacity:0!important}
@@ -88,6 +97,23 @@ body[data-theme="dark"]:before{
 body[data-theme="dark"]:after{
   background:radial-gradient(circle at center,rgba(245,241,234,.03),rgba(26,26,32,.24))!important;
   opacity:1!important;
+}
+body[data-theme="sky-view"]:before{
+  background:#173A52 url("assets/images/sky-view.jpg") center/cover no-repeat fixed!important;
+  filter:none!important;
+  opacity:1!important;
+}
+body[data-theme="sky-view"]:after{
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(10,24,38,.18))!important;
+  opacity:1!important;
+}
+body[data-theme="sky-view"] .topbar,
+body[data-theme="sky-view"] .agent-dashboard-bar,
+body[data-theme="sky-view"] .dashboard-main-actions,
+body[data-theme="sky-view"] .dashboard-secondary-actions,
+body[data-theme="sky-view"] .prospects-workspace{
+  background:rgba(255,255,255,.84)!important;
+  backdrop-filter:blur(8px);
 }
 .app,.app>*{color:var(--theme-text)!important}
 .app>header,.app>section,.app>nav,.topbar{text-shadow:none!important}
@@ -131,6 +157,13 @@ body[data-theme="dark"] .action-exit{
   background:transparent!important;
   color:#F5F1EA!important;
   border:1px solid #F5F1EA!important;
+}
+body[data-theme="light"] .dashboard-main-actions button,
+body[data-theme="light"] .dashboard-secondary-actions button,
+body[data-theme="sky-view"] .dashboard-main-actions button,
+body[data-theme="sky-view"] .dashboard-secondary-actions button{
+  border-color:#9A7100!important;
+  box-shadow:0 0 0 1px rgba(154,113,0,.38),0 3px 8px rgba(10,10,10,.16)!important;
 }
 .pbx-platform button.is-active{background:#2F3A6B!important;color:#F5F1EA!important}
 body[data-theme="dark"] .pbx-platform button,
