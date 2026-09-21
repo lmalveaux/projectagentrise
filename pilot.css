@@ -387,7 +387,7 @@ body.fresh-pour-open .pilot-status{display:none!important}
 .header-greeting{text-align:right}.header-greeting p,.header-greeting time{display:block;margin:0}.header-greeting .date{font-size:.82rem}
 .agent-avatar-choice[hidden]{display:none!important}
 #settingsButton{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;padding:0!important}
-.dashboard-main-actions{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;margin:12px 0}.dashboard-secondary-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}
+.dashboard-main-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}.dashboard-secondary-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}
 .dashboard-main-actions>button,.dashboard-main-actions>.dash-notification-wrap>button{width:100%;min-height:48px;position:relative}
 .dashboard-secondary-actions>button{min-height:40px;position:relative;background:transparent!important;border:1px solid var(--navy)!important;color:var(--navy)!important}
 .dashboard-secondary-actions>button:hover,.dashboard-secondary-actions>button:focus,.dashboard-secondary-actions>button.is-active{background:var(--navy)!important;color:var(--cream)!important}
@@ -414,6 +414,11 @@ body.fresh-pour-open .pilot-status{display:none!important}
   margin:18px 0 24px;
 }
 .fresh-office-tools .button{margin:0!important}
+.fresh-goal-tracker{margin:20px 0 26px;padding:18px;border:1px solid rgba(169,120,46,.34);border-radius:18px;background:rgba(255,250,240,.86);color:var(--espresso);box-shadow:0 12px 34px rgba(52,38,28,.10);backdrop-filter:blur(12px)}
+.fresh-goal-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.fresh-goal-head h2,.fresh-goal-head p{margin:0}.fresh-goal-head p{margin-top:3px;color:var(--espresso-soft);font-size:.86rem}.fresh-goal-head>strong{font-size:1.75rem;color:var(--champagne-deep);padding:6px 10px;border-radius:10px}.fresh-goal-head>strong.goal-met{background:var(--sage);color:var(--cream)}
+.fresh-goal-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}.fresh-goal-metrics>div{display:grid;gap:3px;padding:12px;border:1px solid rgba(107,75,52,.18);border-radius:12px;background:rgba(255,255,255,.56);text-align:center}.fresh-goal-metrics strong{font-size:1.25rem}.fresh-goal-metrics small{font-size:.72rem;font-weight:600;color:var(--espresso-soft)}.fresh-goal-metrics b{color:var(--champagne-deep)}
+.fresh-goal-targets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end}.fresh-goal-targets label{display:grid;gap:5px;font-size:.76rem;font-weight:700}.fresh-goal-targets input{width:100%;min-height:42px;padding:8px;border:1px solid rgba(107,75,52,.28)!important;border-radius:8px;background:rgba(255,255,255,.78)!important;color:var(--espresso)!important}.fresh-goal-targets .button{margin:0!important}.fresh-goal-result{margin:12px 0 0;font-weight:700;color:var(--espresso-soft)}
+.fresh-incentive-link{display:grid;grid-template-columns:minmax(180px,1fr) minmax(200px,2fr) minmax(130px,.7fr);gap:10px;align-items:end;margin-top:14px;padding-top:14px;border-top:1px solid rgba(169,120,46,.28)}.fresh-incentive-link>div{display:grid;gap:2px}.fresh-incentive-link>div span{font-size:.75rem;color:var(--espresso-soft)}.fresh-incentive-link label{display:grid;gap:5px;font-size:.76rem;font-weight:700}.fresh-incentive-link input{width:100%;min-height:42px;padding:8px;border:1px solid rgba(107,75,52,.28)!important;border-radius:8px;background:rgba(255,255,255,.78)!important;color:var(--espresso)!important}.fresh-incentive-link p{grid-column:1/-1;margin:2px 0 0;font-weight:700;color:var(--champagne-deep)}
 .table-floor{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
 .table-card{
   min-height:138px!important;
@@ -427,6 +432,7 @@ body.fresh-pour-open .pilot-status{display:none!important}
   .header-tools{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .fresh-office-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
   .table-floor{grid-template-columns:1fr!important}
+  .fresh-goal-metrics{grid-template-columns:1fr}.fresh-goal-targets{grid-template-columns:1fr 1fr}.fresh-goal-targets .button{grid-column:1/-1}.fresh-incentive-link{grid-template-columns:1fr}
   .pbx-platform{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 

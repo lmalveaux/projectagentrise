@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout15" />
+    <link rel="stylesheet" href="pilot.css?v=layout17" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1383,7 +1383,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="openScriptsButton">Scripts</button>
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
-        <button type="button" id="goalTrackerButton">Goal Tracker</button>
         <button type="button" id="leadsButton">Leads</button>
         <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education</li><li>Conventions</li><li>Vacations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
@@ -1660,6 +1659,24 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Trip Incentives — Active</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
             <div class="trip-incentive-row" id="tripIncentiveRows"></div>
+          </section>
+
+          <section class="fresh-goal-tracker" aria-labelledby="freshGoalTitle">
+            <div class="fresh-goal-head"><div><h2 id="freshGoalTitle">Goal Tracker</h2><p>Weekly progress from Client Journey activity.</p></div><strong id="freshGoalOverall">0%</strong></div>
+            <div class="fresh-goal-metrics" id="freshGoalMetrics"></div>
+            <div class="fresh-goal-targets" aria-label="Weekly goals">
+              <label>Lead goal<input id="freshLeadGoal" type="number" min="1" step="1" /></label>
+              <label>Call goal<input id="freshCallGoal" type="number" min="1" step="1" /></label>
+              <label>Close goal<input id="freshCloseGoal" type="number" min="1" step="1" /></label>
+              <button class="button button-primary" id="saveFreshGoals" type="button">Save goals</button>
+            </div>
+            <p class="fresh-goal-result" id="freshGoalResult">Set your weekly goals to begin.</p>
+            <div class="fresh-incentive-link" aria-labelledby="freshIncentiveTitle">
+              <div><strong id="freshIncentiveTitle">Travel incentive</strong><span>Optional carrier goal</span></div>
+              <label>Incentive name<input id="freshIncentiveName" type="text" placeholder="Example: Carrier Adventure Trip" /></label>
+              <label>Closes required<input id="freshIncentiveGoal" type="number" min="1" step="1" /></label>
+              <p id="freshIncentiveResult">Add an incentive to track eligibility.</p>
+            </div>
           </section>
 
           <div class="table-floor" id="tableFloor" aria-label="Conversation tables"></div>
@@ -3944,7 +3961,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout15" defer></script>
+    <script src="pilot.js?v=layout17" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -3993,6 +4010,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
 
 
 
