@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Medicare & Social Security Payment Matrix",
+    "description": "Automatic, voluntary and direct premium payment paths.",
+    "path": "assets/images/Medicare_Social_Security_Payment_Matrix.png",
+    "image": "assets/images/Medicare_Social_Security_Payment_Matrix.png",
+    "action": "Download infograph"
+  },
+  {
+    "title": "Medicare Advantage Agent Launch Blueprint",
+    "description": "Certification, revenue structure and retention overview.",
+    "path": "assets/images/Medicare_Advantage_Agent_Launch_Blueprint.png",
+    "image": "assets/images/Medicare_Advantage_Agent_Launch_Blueprint.png",
+    "action": "Download infograph"
+  },
+  {
+    "title": "2026 Income Surcharge Cheat Sheet",
+    "description": "IRMAA brackets, adjustments and SSA-44 appeal reminders.",
+    "path": "assets/images/2026_Income_Surcharge_Cheat_Sheet.png",
+    "image": "assets/images/2026_Income_Surcharge_Cheat_Sheet.png",
+    "action": "Download infograph"
+  },
+  {
+    "title": "Medicare Field Guide / Agent Notebook",
+    "description": "Offline reference and working guide from the earlier build.",
+    "path": "assets/md/Medicare_Field_Guide_Agent_Notebook.md",
+    "action": "Download field guide"
+  }
+]

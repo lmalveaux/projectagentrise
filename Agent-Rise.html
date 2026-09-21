@@ -1369,36 +1369,37 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
   <body>
     <link rel="stylesheet" href="pilot.css?v=layout3" />
     <main class="app">
-      <div class="topbar" aria-label="Workspace header">
-        <div class="agent-identity">
-          <div class="agent-avatar-choice" id="agentAvatarChoice" aria-label="Agent monogram">AR</div>
-          <div><p class="welcome-line" id="workspaceGreeting">Agent</p><p class="agent-credentials"><span id="headerNpn">NPN not added</span> · <span id="headerStates">States not added</span></p><time class="date" id="todayDate" hidden></time></div>
+      <div class="topbar ar-header" aria-label="Workspace header">
+        <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
+        <div class="header-breathing-space" aria-hidden="true"></div>
+        <div class="header-account-zone">
+          <div class="header-greeting"><p class="welcome-line" id="workspaceGreeting">Welcome back, Agent!</p><time class="date" id="todayDate"></time><span class="agent-credentials" hidden><span id="headerNpn">NPN not added</span><span id="headerStates">States not added</span></span></div>
+          <div class="agent-avatar-choice" id="agentAvatarChoice" aria-hidden="true" hidden>AR</div>
+          <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">A</button>
         </div>
-        <div class="journey-title">Client Journey</div>
-        <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">ARP</button>
-        <nav class="theater-tabs header-tools" aria-label="Workspace tools">
-          <button type="button" id="openScriptsButton">Scripts</button>
-          <button type="button" id="carriersButton">Carriers</button>
-          <button type="button" id="campaignsButton">Campaigns</button>
-          <button type="button" data-coming-soon="Contracts">Contracts <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
-          <button type="button" data-coming-soon="Call-E">Call-E <span class="tier-star gold-star" title="Pro Plus Gold">★</span></button>
-        </nav>
       </div>
 
-      <section class="agent-dash-strip" aria-label="Agent's Dash">
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education <small>TODO: add original license date</small></li><li>Conventions</li><li>Vacations</li></ul></div></div>
-        <button type="button" id="dashAddProspect">Add Prospects</button>
+      <section class="dashboard-main-actions" aria-label="Primary dashboard actions">
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education</li><li>Conventions</li><li>Vacations</li></ul></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
-        <div class="phone-apps"><button type="button" data-coming-soon="RingCentral">☎ RingCentral</button></div>
+        <button type="button" id="openScriptsButton">Scripts</button>
+        <button type="button" id="contractsButton">Contracts</button>
+        <button type="button" id="leadsButton">Leads</button>
+        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star gold-star" title="Premium">★</span></button>
       </section>
 
-      <nav class="pbx-platform" aria-label="Agent Rise workspaces">
-        <button type="button" id="leadDeskButton">Lead Desk <span class="badge-count" id="leadDeskBadge">0</span></button>
-        <button type="button" id="clientJourneyButton" class="is-active">Client Journey</button>
+      <nav class="dashboard-secondary-actions" aria-label="Dashboard tools">
         <button type="button" id="goalTrackerButton">Goal Tracker</button>
-        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
-        <button type="button" class="locked-control" aria-label="Agency workspace, Pro Plus Gold">Agency <span class="tier-star gold-star" title="Pro Plus Gold Agency">★</span></button>
+        <button type="button" id="carriersButton">Carriers</button>
+        <button type="button" id="marketingButton">Marketing <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="statsButton">Stats <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="agencyButton" class="locked-control">Agency <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="learningLibraryButton">Library <span class="tier-star gold-star" title="Premium">★</span></button>
       </nav>
+      <button class="prospects-toggle" type="button" id="prospectsToggleButton" aria-expanded="false">Prospects <span aria-hidden="true">＋</span></button>
+      <section id="prospectsWorkspace" class="prospects-workspace" hidden>
+        <div class="prospects-actions prospects-actions-top"><button class="button button-primary" id="prospectsSaveTop" type="button">Save</button><button class="button button-secondary" id="prospectsExitTop" type="button">Exit</button></div>
+        <nav class="prospects-tabs" aria-label="Prospect tools"><button type="button" data-prospect-tool="scripts">Scripts</button><button type="button" data-prospect-tool="carriers">Carriers</button><button type="button" data-prospect-tool="library">Library</button><button type="button" data-prospect-tool="contacts">Contacts</button><button type="button" data-prospect-tool="letters">Letters/Marketing</button></nav>
       <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
       <header class="header">
         <div class="title-block">
@@ -1601,6 +1602,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <section class="follow-up-queue" id="followUpQueue" aria-label="Follow-Up Queue"></section>
 
       <section class="list" id="prospectList" aria-label="Prospect list"></section>
+        <div class="prospects-actions prospects-actions-bottom"><button class="button button-primary" id="prospectsSaveBottom" type="button">Save</button><button class="button button-secondary" id="prospectsExitBottom" type="button">Exit</button></div>
+      </section>
     </main>
 
     <div class="breakroom" id="breakroomView" role="dialog" aria-modal="true" aria-label="Fresh Pour break room" hidden>
@@ -1640,7 +1643,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <p class="pot-line" id="potLine" aria-live="polite"></p>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour back office">
-            <button class="button button-secondary" type="button" id="freshCampaignsButton">Campaign Review</button>
             <button class="button button-secondary" type="button" id="learningLibraryButton">Library</button>
             <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
             <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
@@ -2082,10 +2084,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       function agentDisplayName() { return state.preferredAgentName.trim()||"Agent"; }
       function updateAgentLabels() {
         const name=agentDisplayName();
-        elements.workspaceGreeting.textContent=`Welcome Back, ${name}!`;
+        const parts=name.split(/\s+/).filter(Boolean);
+        const firstName=parts[0]||"Agent";
+        const lastInitial=(parts.length>1?parts[parts.length-1][0]:firstName[0]||"A").toUpperCase();
+        elements.workspaceGreeting.textContent=`Welcome back, ${firstName}!`;
         const title=document.querySelector("#agentTitle"); if(title) title.textContent=`${name} Dashboard`;
         const monogram=document.querySelector("#agentAvatarChoice"); if(monogram) monogram.textContent=name.split(/\s+/).map(part=>part[0]).join("").slice(0,2).toUpperCase()||"AR";
-        const settings=document.querySelector("#settingsButton"); if(settings) settings.textContent="ARP";
+        const settings=document.querySelector("#settingsButton"); if(settings) settings.textContent=lastInitial;
       }
       function openSettings() {
         state.settingsOpener=document.activeElement;
@@ -2441,7 +2446,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const now=new Date();
         const timeZone=localStorage.getItem("agentRiseTimeZone")||Intl.DateTimeFormat().resolvedOptions().timeZone;
         return new Intl.DateTimeFormat("en-US",{
-          timeZone,month:"2-digit",day:"2-digit",year:"numeric",
+          timeZone,weekday:"long",month:"long",day:"numeric",year:"numeric",
           hour:"numeric",minute:"2-digit",timeZoneName:"short"
         }).format(now);
       }

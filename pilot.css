@@ -270,6 +270,27 @@ body[data-theme="dark"] .pbx-platform .locked-control{
 .gold-star{color:#F1D26B;text-shadow:0 1px 1px #6B5510}
 .demo-banner{background:var(--wine)!important;color:#FFFFFF!important}
 #openBreakroomButton{background:var(--wine)!important;border-color:var(--soft-gold)!important}
+
+/* Dashboard structure pass: layout only; palette remains unchanged. */
+.ar-header{display:grid!important;grid-template-columns:44px 1fr auto!important;align-items:center!important;gap:18px!important;min-height:68px!important}
+.arp-logo-block{width:44px;height:44px;border:1px solid var(--navy);border-radius:9px;display:grid;place-items:center;overflow:hidden}
+.arp-logo-block img{width:100%;height:100%;object-fit:contain}
+.header-breathing-space{min-width:20px}
+.header-account-zone{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.header-greeting{text-align:right}.header-greeting p,.header-greeting time{display:block;margin:0}.header-greeting .date{font-size:.82rem}
+.agent-avatar-choice[hidden]{display:none!important}
+#settingsButton{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;padding:0!important}
+.dashboard-main-actions,.dashboard-secondary-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:12px 0}
+.dashboard-main-actions>button,.dashboard-main-actions>.dash-notification-wrap>button{width:100%;min-height:48px;position:relative}
+.dashboard-secondary-actions>button{min-height:40px;position:relative;background:transparent!important;border:1px solid var(--navy)!important;color:var(--navy)!important}
+.dashboard-secondary-actions>button:hover,.dashboard-secondary-actions>button:focus,.dashboard-secondary-actions>button.is-active{background:var(--navy)!important;color:var(--cream)!important}
+.tier-star{position:absolute;right:6px;top:3px;color:#C9A227}
+.prospects-toggle{width:100%;min-height:46px;margin:8px 0 12px}
+.prospects-workspace{display:block}.prospects-workspace[hidden]{display:none!important}
+.prospects-actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0}
+.prospects-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:10px 0}
+.prospects-tabs button{min-height:40px}
+@media(max-width:768px){.dashboard-main-actions,.dashboard-secondary-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.prospects-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.ar-header{grid-template-columns:44px 1fr auto!important;gap:9px!important}.header-greeting{font-size:.82rem}}
 .pbx-platform{grid-template-columns:repeat(5,minmax(0,1fr))!important}
 .contact-ribbon[hidden]{display:none!important}
 .fresh-office-tools{
