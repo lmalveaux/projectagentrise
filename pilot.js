@@ -321,6 +321,9 @@ function bindPilot(){
   document.addEventListener('click',e=>{if(!e.target.closest('.dash-notification-wrap'))closeNotifications();});
   document.addEventListener('focusin',e=>{if(!e.target.closest('.dash-notification-wrap'))closeNotifications();});
   document.querySelectorAll('.pbx-platform button,.header-tools button').forEach(button=>button.addEventListener('pointerenter',closeNotifications));
+  let scriptsOpenedFromCollapsed=false;
+  $('openScriptsButton').addEventListener('click',()=>{const area=$('prospectsWorkspace');if(area.hidden){scriptsOpenedFromCollapsed=true;area.hidden=false;area.classList.add('scripts-overlay-only');}});
+  $('scriptsBackdrop').addEventListener('close',()=>{if(!scriptsOpenedFromCollapsed)return;const area=$('prospectsWorkspace');area.classList.remove('scripts-overlay-only');area.hidden=true;scriptsOpenedFromCollapsed=false;});
   const setProspectsOpen=open=>{const area=$('prospectsWorkspace'),button=$('prospectsToggleButton'),ribbon=$('contactRibbon');area.hidden=!open;if(ribbon)ribbon.hidden=!open;button.setAttribute('aria-expanded',String(open));button.querySelector('span').textContent=open?'−':'＋';if(open)setTimeout(()=>area.scrollIntoView({behavior:'smooth',block:'start'}),0);};
   $('prospectsToggleButton').onclick=()=>setProspectsOpen($('prospectsWorkspace').hidden);
   $('leadsButton').onclick=()=>setProspectsOpen(true);

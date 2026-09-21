@@ -287,6 +287,7 @@ body[data-theme="dark"] .pbx-platform .locked-control{
 .tier-star{position:absolute;right:6px;top:3px;color:#C9A227}
 .prospects-toggle{width:100%;min-height:46px;margin:8px 0 12px}
 .prospects-workspace{display:block}.prospects-workspace[hidden]{display:none!important}
+.prospects-workspace.scripts-overlay-only>:not(#scriptsBackdrop){display:none!important}
 .prospects-actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0}
 .prospects-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:10px 0}
 .prospects-tabs button{min-height:40px}
