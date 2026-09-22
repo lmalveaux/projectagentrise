@@ -436,3 +436,6 @@ body.fresh-pour-open .pilot-status{display:none!important}
   .pbx-platform{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
+
+.seat-download-tabs{display:flex;gap:10px;margin:12px 0}.seat-download-tabs .button{min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+.launch-kit-preview{display:block;width:min(100%,820px);height:auto;margin:14px auto;border:1px solid rgba(169,120,46,.45);border-radius:12px;box-shadow:0 10px 26px rgba(20,24,40,.18)}
