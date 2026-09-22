@@ -110,6 +110,8 @@ body[data-theme="sky-view"]:after{
   background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(10,24,38,.18))!important;
   opacity:1!important;
 }
+body:before,body:after{z-index:0!important;pointer-events:none!important}
+body>.app{position:relative;z-index:1}
 body[data-theme="sky-view"] .topbar,
 body[data-theme="sky-view"] .agent-dashboard-bar,
 body[data-theme="sky-view"] .dashboard-main-actions,
