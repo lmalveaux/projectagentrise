@@ -437,7 +437,7 @@ function bindPilot(){
   ['prospectsExitTop','prospectsExitBottom'].forEach(id=>$(id).onclick=()=>setProspectsOpen(false));
   ['prospectsSaveTop','prospectsSaveBottom'].forEach(id=>$(id).onclick=async()=>{await persistWorkspace();notify('Prospect changes saved.');});
   $('importExportButton').onclick=()=>{setProspectsOpen(true);elements.importPanel.classList.add('is-visible');setTimeout(()=>elements.closeImport.focus(),0);};
-  $('saveFreshGoals').onclick=saveFreshGoals;
+  ['saveFreshGoalsTop','saveFreshGoals'].forEach(id=>$(id).onclick=saveFreshGoals);
   const openCampaignReview=()=>{renderLeadDesk();$('leadDeskDialog').showModal();setTimeout(()=>document.querySelector('[data-lead-tab="campaigns"]')?.click(),0);};
   $('marketingButton').onclick=openCampaignReview;
   $('bookBusinessButton').onclick=()=>{renderContracts();$('contractsDialog').showModal();};
@@ -475,7 +475,7 @@ function bindPilot(){
   $('saveFreshPourNote').onclick=saveFreshPourNote;$('downloadFreshPourNote').onclick=()=>{const id=freshPourTableId();download(`agent-rise-${id}-notes.txt`,$('freshPourNote').value,'text/plain;charset=utf-8');};
   const setFreshGoalOpen=open=>{const panel=document.querySelector('.fresh-goal-tracker'),button=$('freshGoalTrackerButton');panel.hidden=!open;button.setAttribute('aria-expanded',String(open));button.classList.toggle('is-active',open);if(open)setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),0);};
   $('freshGoalTrackerButton').onclick=()=>setFreshGoalOpen(document.querySelector('.fresh-goal-tracker').hidden);
-  $('closeFreshGoalTracker').onclick=()=>setFreshGoalOpen(false);
+  ['closeFreshGoalTracker','closeFreshGoalTrackerBottom'].forEach(id=>$(id).onclick=()=>setFreshGoalOpen(false));
   renderLaunchKitVoices();if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=renderLaunchKitVoices;
   $('freshLaunchKitButton').onclick=()=>{renderLaunchKitVoices();$('launchKitDialog').showModal();renderLaunchKitPages();};
   $('readLaunchKit').onclick=readLaunchKit;
