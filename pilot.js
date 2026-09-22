@@ -16,6 +16,7 @@ const iso = () => new Date().toISOString();
 const LAUNCH_KIT_PDF = 'assets/docs/medicare-advantage-launch-kit.pdf';
 const launchKitSpeech = {text:'',chunks:[],index:0,stopped:true};
 let feedbackPreviewUrl='';
+let softProtectionController=null;
 function revisionValue(value) {
     if (typeof value === "number" && Number.isFinite(value) && value >= 0) return value;
     if (typeof value === "string" && /^\d+$/.test(value)) return Number(value);
@@ -112,23 +113,15 @@ function applyPremiumAccess(){
   controls.forEach(control=>{if(!control.dataset.premiumOriginalTitle)control.dataset.premiumOriginalTitle=control.getAttribute('title')||'';control.classList.toggle('premium-locked',!allowed);control.setAttribute('aria-disabled',String(!allowed));if(!allowed){control.dataset.premiumLocked='true';control.title='Premium feature — coming soon';}else{delete control.dataset.premiumLocked;const original=control.dataset.premiumOriginalTitle;if(original)control.title=original;else control.removeAttribute('title');}});
 }
 function applyAccessMode(){const admin=isAdminAccount();document.body.dataset.accessMode=admin?'admin':'medicare';document.querySelectorAll('[data-admin-only]').forEach(element=>element.hidden=!admin);applyPremiumAccess();}
-function setContentProtectionDetected(active){
-  document.body.classList.toggle('content-protection-detected',!!active);const notice=$('contentProtectionNotice');if(notice)notice.hidden=!active;if(active)window.speechSynthesis?.cancel();
-}
-function installContentProtections(){
-  document.body.classList.add('soft-content-protection');
-  document.body.insertAdjacentHTML('beforeend','<section id="contentProtectionNotice" class="content-protection-notice" role="alert" aria-live="assertive" hidden><div><strong>This content is protected.</strong><p>Please close your developer tools to continue.</p></div></section>');
-  document.addEventListener('contextmenu',event=>event.preventDefault());
-  document.addEventListener('selectstart',event=>{if(!event.target.closest('input,textarea,select,[contenteditable="true"]'))event.preventDefault();});
-  document.addEventListener('dragstart',event=>{if(event.target.closest('img'))event.preventDefault();});
+function initSoftProtection(){
+  softProtectionController?.abort();softProtectionController=null;document.body.classList.remove('soft-content-protection');document.querySelectorAll('img').forEach(image=>{image.draggable=true;});
+  if(!pilot.user||isOwner(pilot.user.email))return;
+  softProtectionController=new AbortController();const options={signal:softProtectionController.signal};document.body.classList.add('soft-content-protection');
+  document.addEventListener('contextmenu',event=>event.preventDefault(),options);
+  document.addEventListener('selectstart',event=>event.preventDefault(),options);
+  document.addEventListener('dragstart',event=>{if(event.target.closest('img'))event.preventDefault();},options);
   document.querySelectorAll('img').forEach(image=>{image.draggable=false;});
-  document.addEventListener('keydown',event=>{const key=String(event.key||'').toLowerCase(),modifier=event.ctrlKey||event.metaKey;if(key==='f12'||(modifier&&(key==='p'||key==='s'||key==='u'))){event.preventDefault();event.stopImmediatePropagation();notify('This content is protected.');}},true);
-  if(location.protocol==='https:'&&!['localhost','127.0.0.1'].includes(location.hostname)){
-    const monitor=document.createElement('iframe');monitor.id='beyckProtectionMonitor';monitor.title='Content protection monitor';monitor.hidden=true;monitor.setAttribute('sandbox','allow-scripts allow-same-origin');
-    window.addEventListener('message',event=>{if(event.source!==monitor.contentWindow||event.data?.type!=='agent-rise-beyck')return;setContentProtectionDetected(!!event.data.detected);});
-    monitor.srcdoc=`<!doctype html><meta charset="utf-8"><base href="${location.origin}/"><script src="assets/vendor/beyck-1.1.3.js"><\/script><script>try{Beyck(function(app){app.defend(function(state){parent.postMessage({type:'agent-rise-beyck',detected:!!state},'*')})})}catch(error){parent.postMessage({type:'agent-rise-beyck-error'},'*')}<\/script>`;
-    document.body.appendChild(monitor);
-  }
+  document.addEventListener('keydown',event=>{const key=String(event.key||'').toLowerCase(),modifier=event.ctrlKey||event.metaKey;if(key==='f12'||(modifier&&(key==='p'||key==='s'||key==='u'))){event.preventDefault();event.stopImmediatePropagation();notify('This content is protected.');}}, {...options,capture:true});
 }
 function renderDash(){const info=pilot.workspaceData.agentInfo||{};$("headerNpn").textContent=info.npn?"NPN "+info.npn:"NPN not added";$("headerStates").textContent=info.states||"States not added";const name=state.preferredAgentName.trim()||"Agent";const parts=name.split(/\s+/).filter(Boolean);const first=parts[0]||"Agent",last=parts.at(-1)||first;$("agentAvatarChoice").textContent=parts.map(part=>part[0]).join("").slice(0,2).toUpperCase()||"AR";$("settingsButton").textContent=(last[0]||"A").toUpperCase();$("workspaceGreeting").textContent=`Welcome back, ${first}!`;for(const [id,key] of [["agentAvatar","avatar"],["agentNpn","npn"],["agentSpecialization","specialization"],["agentStates","states"],["agentHomeState","homeState"],["agentTimezone","timezone"]])if(document.activeElement!==$(id))$(id).value=info[key]||"";if(info.timezone)localStorage.setItem("agentRiseTimeZone",info.timezone);$("todayDate").textContent=todayLabel();$("menuTheme").value=["light","dark","sky-view"].includes(state.appearanceTheme)?state.appearanceTheme:"light";}
 function renderContracts(){const clients=state.prospects.filter(p=>p.status==="Client"||p.clientStatus==="Client");const referrals=pilot.workspaceData.referrals||[];$("contractsRows").innerHTML=clients.length?clients.map(p=>{const asked=referrals.some(r=>String(r.from||"").toLowerCase()===fullName(p).toLowerCase());return `<article class="card"><strong>${html(fullName(p))}</strong><p>${html(p.product||"Policy")}</p><span class="${asked?"":"due-badge"}">${asked?"Referral request recorded":"Referral pool candidate"}</span></article>`;}).join(""):"<p class=\"pilot-muted\">No completed client contracts yet.</p>";}
@@ -210,10 +203,10 @@ async function loadAccount(user){
     const guestBackup=pilot.demo&&pilot.dirty?migrateBackup(snapshot()):null;
     const result=await pilot.db.rpc('load_agent_workspace');if(result.error)throw result.error;
     const data=migrateBackup(result.data);state.prospects=data.prospects;state.resourceGroups=data.resourceGroups;trainingAppointments=data.training;pilot.calls=data.calls;pilot.carriers=data.carriers;pilot.events=data.events;state.preferredAgentName=data.profile?.preferredAgentName||'';state.appearanceTheme=['light','dark','sky-view'].includes(data.profile?.appearanceTheme)?data.profile.appearanceTheme:'light';state.skipRemoveImportWarning=!!data.profile?.skipRemoveImportWarning;pilot.workspaceData=normalizeWorkspaceData(data.profile?.workspaceData);
-    pilot.revision=revisionValue(result.data.revision);pilot.user=user;pilot.demo=false;pilot.loaded=true;pilot.dirty=false;previousProspects=new Map(state.prospects.map(p=>[p.id,structuredClone(p)]));let guestSaved=true;if(guestBackup)guestSaved=await mergeBackup(guestBackup);else redraw();$('demoBanner').hidden=true;$('accountState').textContent=`Signed in as ${user.email}`;$('menuAccountState').textContent=`Signed in as ${user.email}`;$('footerAccountAction').textContent='Sign out';$('accountDialog').close();if(!guestBackup)notify('Connected • '+user.email);else if(guestSaved)notify('Connected • preview work saved to '+user.email);offerMigration();
+    pilot.revision=revisionValue(result.data.revision);pilot.user=user;pilot.demo=false;pilot.loaded=true;pilot.dirty=false;initSoftProtection();previousProspects=new Map(state.prospects.map(p=>[p.id,structuredClone(p)]));let guestSaved=true;if(guestBackup)guestSaved=await mergeBackup(guestBackup);else redraw();$('demoBanner').hidden=true;$('accountState').textContent=`Signed in as ${user.email}`;$('menuAccountState').textContent=`Signed in as ${user.email}`;$('footerAccountAction').textContent='Sign out';$('accountDialog').close();if(!guestBackup)notify('Connected • '+user.email);else if(guestSaved)notify('Connected • preview work saved to '+user.email);offerMigration();
   }finally{loadingAccount=false;}
 }
-function clearAccount(){state.prospects=[];state.resourceGroups=[];trainingAppointments=[];pilot.calls=[];pilot.carriers=[];pilot.events=[];pilot.workspaceData=normalizeWorkspaceData({dailyGoal:5});state.preferredAgentName='';state.appearanceTheme='light';pilot.user=null;pilot.loaded=false;pilot.demo=false;pilot.dirty=false;pilot.revision=0;previousProspects.clear();$('rcHost').replaceChildren();pilot.rcAuthorized=false;pilot.rcReady=false;$('demoBanner').hidden=true;redraw();notify('Signed out');$('accountState').textContent='Sign in to load your account.';$('menuAccountState').textContent='Sign in to save across devices.';$('footerAccountAction').textContent='Sign in';}
+function clearAccount(){state.prospects=[];state.resourceGroups=[];trainingAppointments=[];pilot.calls=[];pilot.carriers=[];pilot.events=[];pilot.workspaceData=normalizeWorkspaceData({dailyGoal:5});state.preferredAgentName='';state.appearanceTheme='light';pilot.user=null;pilot.loaded=false;pilot.demo=false;pilot.dirty=false;pilot.revision=0;initSoftProtection();previousProspects.clear();$('rcHost').replaceChildren();pilot.rcAuthorized=false;pilot.rcReady=false;$('demoBanner').hidden=true;redraw();notify('Signed out');$('accountState').textContent='Sign in to load your account.';$('menuAccountState').textContent='Sign in to save across devices.';$('footerAccountAction').textContent='Sign in';}
 async function persistWorkspace() {
     if (!pilot.loaded) {
         pilot.dirty = true;
@@ -489,7 +482,7 @@ window.AgentRise.captureLead=async function(lead={}){
  else state.prospects.unshift(normalizeProspect({id:uid(),firstName:clean('firstName')||name.firstName,lastName:clean('lastName')||name.lastName,phone,email,product:clean('product'),source:clean('source'),notes:clean('notes'),leadPool:'Contact Review Pool',qualificationStatus:'Review Needed',marketingEligibility:'Review Needed',status:'New Lead',createdAt:iso()}));
  const saved=await persistWorkspace();redraw();return {saved,updated:!!existing,preview:pilot.demo};
 };
-try{injectUI();installContentProtections();document.body.dataset.pilotStep='injected';$('modalCallActions').addEventListener('click',handleListClick);init();document.body.dataset.pilotStep='initialized';bindPilot();installEditActions();document.body.dataset.pilotStep='ready';}catch(e){document.body.dataset.pilotStep='failed: '+e.message;setTimeout(()=>reportError('Agent Rise startup failed',e),0);}
+try{injectUI();document.body.dataset.pilotStep='injected';$('modalCallActions').addEventListener('click',handleListClick);init();document.body.dataset.pilotStep='initialized';bindPilot();installEditActions();document.body.dataset.pilotStep='ready';}catch(e){document.body.dataset.pilotStep='failed: '+e.message;setTimeout(()=>reportError('Agent Rise startup failed',e),0);}
 try{Object.assign(config,JSON.parse(localStorage.getItem('agentRisePublicConfig')||'{}'));}catch{}
 if($('adminSupabaseUrl')){$('adminSupabaseUrl').value=config.supabaseUrl||'';$('adminSupabaseAnonKey').value=config.supabaseAnonKey||'';$('adminRcClientId').value=config.ringCentralClientId||'';$('adminRcRedirect').value=config.ringCentralRedirectUri||'';$('adminCallEUrl').value=config.callEEndpoint||'';}
 renderActivityStrip();
