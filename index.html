@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout22" />
+    <link rel="stylesheet" href="pilot.css?v=layout26" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1648,7 +1648,9 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
             <button class="button button-secondary" type="button" id="freshInfographicsButton">Infographics</button>
             <button class="button button-secondary" type="button" id="freshResourcesButton">Resources</button>
+            <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library <span class="tier-star gold-star" aria-label="Premium">★</span></button>
+            <button class="button button-secondary" type="button" id="freshLaunchKitButton" hidden>Launch Kit <span class="tier-star gold-star" aria-label="Premium">★</span></button>
           </nav>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour administration" data-admin-only hidden>
@@ -1661,8 +1663,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div class="trip-incentive-row" id="tripIncentiveRows"></div>
           </section>
 
-          <section class="fresh-goal-tracker" aria-labelledby="freshGoalTitle">
-            <div class="fresh-goal-head"><div><h2 id="freshGoalTitle">Goal Tracker</h2><p>Weekly progress from Client Journey activity.</p></div><strong id="freshGoalOverall">0%</strong></div>
+          <section class="fresh-goal-tracker" aria-labelledby="freshGoalTitle" hidden>
+            <div class="fresh-goal-head"><div><h2 id="freshGoalTitle">Goal Tracker</h2><p>Weekly progress from Client Journey activity.</p></div><div class="fresh-goal-head-actions"><strong id="freshGoalOverall">0%</strong><button class="button button-secondary" id="closeFreshGoalTracker" type="button">Close</button></div></div>
             <div class="fresh-goal-metrics" id="freshGoalMetrics"></div>
             <div class="fresh-goal-targets" aria-label="Weekly goals">
               <label>Lead goal<input id="freshLeadGoal" type="number" min="1" step="1" /></label>
@@ -1701,7 +1703,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <audio id="seatAudio" preload="metadata" data-replaceable="true"></audio>
             </div>
             <p class="seat-note" id="seatNote">This conversation will become available when its audio is added.</p>
-            <nav class="seat-download-tabs" aria-label="Table downloads"><a class="button button-primary hidden" id="seatLaunchKitLink" download>Launch Kit · Download</a></nav>
             <div class="seat-resource hidden" id="seatResource">
               <p class="seat-resource-locked" id="seatResourceLocked">🔒 Finish listening to unlock this table's download.</p>
               <a class="button button-primary hidden" id="seatResourceLink" download>Download</a>
@@ -3555,11 +3556,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           tag: "Plans, field guidance + JIT",
           desc: "Medicare Advantage training, field guidance, and just-in-time contracting resources.",
           audioSrc: "assets/audio/medicare-advantage-jit-contracting.m4a",
-          launchKit: {
-            url: "assets/images/Medicare_Advantage_Agent_Launch_Blueprint.png",
-            label: "Launch Kit · Download",
-            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
-          }
         },
         {
           id: "pdp",
@@ -3573,12 +3569,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           name: "Turning 65",
           tag: "New-to-Medicare preparation",
           desc: "Resources and training for clients approaching Medicare eligibility.",
-          audioSrc: "",
-          resource: {
-            url: "assets/md/Medicare_Field_Guide_Agent_Notebook.md",
-            label: "Download: Medicare Field Guide",
-            filename: "Medicare-Field-Guide-Agent-Notebook.md"
-          }
+          audioSrc: ""
         }];
 
       const POT_LINES = [
@@ -3612,7 +3603,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         playFill: document.querySelector("#seatPlayFill"),
         seatAudio: document.querySelector("#seatAudio"),
         seatNote: document.querySelector("#seatNote"),
-        seatLaunchKitLink: document.querySelector("#seatLaunchKitLink"),
         seatResource: document.querySelector("#seatResource"),
         seatResourceLocked: document.querySelector("#seatResourceLocked"),
         seatResourceLink: document.querySelector("#seatResourceLink"),
@@ -3672,16 +3662,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           breakroomElements.seatNote.textContent = "This Fresh Pour workspace is ready for its approved training, media, or state-specific resources.";
         }
         setupSeatResource(table);
-        const launchLink = breakroomElements.seatLaunchKitLink;
-        if (table.launchKit) {
-          launchLink.href = table.launchKit.url;
-          launchLink.textContent = table.launchKit.label;
-          launchLink.setAttribute("download", table.launchKit.filename || "Agent-Rise-Launch-Kit.png");
-          launchLink.classList.remove("hidden");
-        } else {
-          launchLink.removeAttribute("href");
-          launchLink.classList.add("hidden");
-        }
         breakroomElements.seat.classList.remove("hidden");
         breakroomElements.playFill.style.width = "0%";
         breakroomElements.playIcon.textContent = "▶";
@@ -3973,7 +3953,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js?v=layout22" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="pilot.js?v=layout26" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -4022,6 +4003,9 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
+
 
 
 
