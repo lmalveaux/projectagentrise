@@ -3,6 +3,7 @@ const SUPABASE_ANON_KEY_PLACEHOLDER = "sb_publishable_BXa9IpnGRJ20xsu4bdj86Q_tw8
 window.AGENT_RISE_CONFIG = {
   supabaseUrl: "https://kyonqikuyizbbbctfmol.supabase.co",
   supabaseAnonKey: SUPABASE_ANON_KEY_PLACEHOLDER,
+  premiumEmailAllowlist: ["lisasjazz@gmail.com", "121media.info@gmail.com"],
   ringCentralClientId: "",
   ringCentralRedirectUri: "",
   // Authenticated Agent Rise platform endpoint; provider secrets stay on your server.
