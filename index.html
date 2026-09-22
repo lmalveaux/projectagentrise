@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout38" />
+    <link rel="stylesheet" href="pilot.css?v=layout41" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1384,7 +1384,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education</li><li>Conventions</li><li>Vacations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -1424,12 +1424,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       </section>
       <div class="settings-backdrop" id="settingsBackdrop">
         <section class="settings-panel prospect-card" id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-          <div class="import-head"><div><h2 class="import-title" id="settingsTitle">Settings</h2><p class="import-help">Personalize this workspace without changing contact data.</p></div><button class="button button-quiet import-close" type="button" id="closeSettingsButton">Close</button></div>
+          <div class="import-head"><div><h2 class="import-title" id="settingsTitle">Settings</h2><p class="import-help">Personalize this workspace without changing contact data.</p></div><button class="button button-quiet import-close" type="button" id="closeSettingsButton">Exit</button></div>
           <div class="settings-section"><strong>1. Profile</strong><div class="field"><label for="preferredAgentName">Preferred Agent Name</label><input id="preferredAgentName" type="text" placeholder="Agent" /><small class="import-help">This is the name shown throughout your Agent Rise workspace.</small></div></div>
           <div class="settings-section"><strong>2. Appearance</strong><div class="theme-options">
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="light" checked /> Light</label>
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="dark" /> Dark</label>
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view" /> Sky View</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="plain-dark" /> Plain Dark</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="plain-light" /> Plain Light</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view-day" checked /> Sky-view Day</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view-night" /> Sky-view Night</label>
           </div></div>
           <div class="settings-section"><strong>3. Workspace</strong><p class="import-help">More workspace preferences will be added here as the pilot grows.</p></div>
           <div class="settings-section">
@@ -1437,7 +1438,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <p class="import-help">Permanently remove every saved contact and Resource Group from this account. Your preferred name and appearance will remain.</p>
             <button class="button button-danger" type="button" id="clearContactsAndGroupsButton">Erase All Contacts and Groups</button>
           </div>
-          <div class="form-actions"><button class="button button-primary" type="button" id="saveSettingsButton">Save and Close</button><button class="button button-secondary" type="button" id="cancelSettingsButton">Cancel</button></div>
+          <div class="form-actions"><button class="button button-primary" type="button" id="saveSettingsButton">Save</button><button class="button button-secondary" type="button" id="cancelSettingsButton">Exit</button></div>
         </section>
       </div>
 
@@ -1445,7 +1446,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <section class="settings-panel prospect-card" id="scriptsPanel" role="dialog" aria-modal="true" aria-labelledby="scriptsTitle">
           <div class="import-head">
             <div><h2 class="import-title" id="scriptsTitle">Quick Script Desk</h2><p class="import-help">Choose a product and situation. Your preloaded script appears immediately.</p></div>
-            <button class="button button-quiet import-close" type="button" id="closeScriptsButton">Close</button>
+            <button class="button button-quiet import-close" type="button" id="closeScriptsButton">Exit</button>
           </div>
           <div class="edit-action-pair"><button class="button button-primary" id="saveScriptTop" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptTop" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
           <div class="settings-section script-quick-grid">
@@ -1494,7 +1495,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <button class="button button-secondary" type="button" id="downloadScriptButton">Download .txt</button>
             </div>
           </div>
-          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelScriptsButton">Close</button></div>
+          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelScriptsButton">Exit</button></div>
           <div class="edit-action-pair"><button class="button button-primary" id="saveScriptBottom" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptBottom" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
         </section>
       </div>
@@ -1506,7 +1507,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <h2 class="import-title" id="trainingTitle">Training Appointments</h2>
               <p class="import-help">Keep insurance seminars, webinars, and continuing education together, then send each event to Yahoo Calendar.</p>
             </div>
-            <button class="button button-quiet import-close" type="button" id="closeTrainingButton">Close</button>
+            <button class="button button-quiet import-close" type="button" id="closeTrainingButton">Exit</button>
           </div>
           <form class="training-form" id="trainingForm">
             <div class="training-grid">
@@ -1528,7 +1529,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div class="training-list" id="trainingList"></div>
           </div>
           <p class="import-help">Yahoo opens in a separate tab. Agent Rise stores no Yahoo password or account access.</p>
-          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelTrainingButton">Close</button></div>
+          <div class="form-actions"><button class="button button-secondary" type="button" id="cancelTrainingButton">Exit</button></div>
         </section>
       </div>
 
@@ -1546,7 +1547,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <h2 class="import-title">Import Contacts — CSV or vCard</h2>
             <p class="import-help">Preview and select contacts before placing them in the Contact Review Pool. Nothing enters sales follow-up automatically.</p>
           </div>
-          <button class="button button-quiet import-close" type="button" id="closeImportButton">Close</button>
+          <button class="button button-quiet import-close" type="button" id="closeImportButton">Exit</button>
         </div>
         <input id="csvFileInput" type="file" accept=".csv,.vcf,text/csv,text/vcard,text/x-vcard" />
         <div class="mapping-grid hidden" id="mappingGrid">
@@ -1723,7 +1724,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <section class="modal-card">
         <div class="modal-head">
           <h2 class="modal-title" id="modalTitle">New Prospect</h2>
-          <button class="button button-quiet" type="button" id="closeModalButton">Cancel</button>
+          <button class="button button-quiet" type="button" id="closeModalButton">Exit</button>
         </div>
 
         <form id="prospectForm">
@@ -1835,7 +1836,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
 
           <div class="form-actions" id="formActions">
             <button class="button button-primary" type="submit">Save</button>
-            <button class="button button-secondary" type="button" id="cancelFormButton">Cancel</button>
+            <button class="button button-secondary" type="button" id="cancelFormButton">Exit</button>
           </div>
         </form>
       </section>
@@ -1917,7 +1918,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         importRows: [],
         removedImportRows: [],
         resourceGroups: [],
-        appearanceTheme: "light",
+        appearanceTheme: "sky-view-day",
         preferredAgentName: "",
         settingsOriginalTheme: "default",
         settingsOpener: null,
@@ -2105,10 +2106,16 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       }
 
       function saveProspects() { return persistWorkspace(); }
+      function normalizeAppearanceTheme(theme) {
+        const aliases={light:"plain-light",dark:"plain-dark","sky-view":"sky-view-day"};
+        const normalized=aliases[theme]||theme;
+        return ["plain-dark","plain-light","sky-view-day","sky-view-night"].includes(normalized)?normalized:"sky-view-day";
+      }
       function applyTheme(theme) {
-        state.appearanceTheme = ["light", "dark", "sky-view"].includes(theme) ? theme : "light";
+        state.appearanceTheme = normalizeAppearanceTheme(theme);
         document.body.dataset.theme=state.appearanceTheme;
         document.querySelectorAll('input[name="appearanceTheme"]').forEach(input=>input.checked=input.value===state.appearanceTheme);
+        document.dispatchEvent(new CustomEvent('agent-rise-theme-change',{detail:{theme:state.appearanceTheme}}));
       }
       function agentDisplayName() { return state.preferredAgentName.trim()||"Agent"; }
       function updateAgentLabels() {
@@ -3955,7 +3962,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout38" defer></script>
+    <script src="pilot.js?v=layout41" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
