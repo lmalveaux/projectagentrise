@@ -1,6 +1,6 @@
 /* Agent Rise pilot extensions. Supabase stores account data; the Agent Rise
    platform owns the application, integrations, and provider callbacks. */
-const pilot = { db:null,user:null,demo:false,loaded:false,revision:0,calls:[],carriers:[],events:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},tripIncentives:[],agentInfo:{},scriptProfiles:{}},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
+const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},tripIncentives:[],agentInfo:{},scriptProfiles:{}},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
 const config = {...window.AGENT_RISE_CONFIG};
 const OWNER_EMAILS = ['lisasjazz@gmail.com', '121media.info@gmail.com'];
 function isOwner(email){return OWNER_EMAILS.includes((email||'').trim().toLowerCase());}
@@ -14,6 +14,7 @@ const html = escapeHtml;
 const uid = () => crypto.randomUUID();
 const iso = () => new Date().toISOString();
 const LAUNCH_KIT_PDF = 'assets/docs/medicare-advantage-launch-kit.pdf';
+const MEDICARE_LAUNCH_KIT_PDF = 'assets/docs/medicare-launch-kit.pdf';
 const launchKitSpeech = {text:'',chunks:[],index:0,stopped:true};
 let launchKitRenderPromise=null;
 let feedbackPreviewUrl='';
@@ -72,6 +73,7 @@ function injectUI(){
   dialog('migrationDialog','Existing browser contacts found',`<p id="migrationSummary"></p><p>Your original browser data will remain unchanged.</p><button id="acceptMigration" class="button button-primary" type="button">Import to this account</button><button id="declineMigration" class="button button-secondary" type="button">Leave in browser</button>`);
   dialog('comingSoonDialog','Coming soon',`<p id="comingSoonText"></p>${closeButton('comingSoonDialog')}`);
   dialog('launchKitDialog','Medicare Advantage Agent Launch Kit',`<p class="launch-kit-intro">Read the Medicare Advantage Agent Launch Kit here, listen at your preferred pace, or save a copy to your device.</p><div class="launch-kit-controls"><label for="launchKitVoice">Voice<select id="launchKitVoice"><option value="">Browser default</option></select></label><label for="launchKitSpeed">Reading speed<select id="launchKitSpeed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><button class="button button-primary" id="readLaunchKit" type="button">🔊 Read aloud</button><button class="button button-secondary" id="stopLaunchKit" type="button">Stop</button><a class="button button-secondary launch-kit-download" href="${LAUNCH_KIT_PDF}" download>Download PDF</a>${closeButton('launchKitDialog')}</div><p id="launchKitSpeechStatus" class="pilot-muted" role="status">Choose a voice and speed, then select Read aloud.</p><div id="launchKitPages" class="launch-kit-pages" aria-label="Medicare Advantage Agent Launch Kit PDF"><p class="pilot-muted">Preparing the Launch Kit…</p></div>`,true);
+  dialog('medicareLaunchKitDialog','Medicare Advantage Launch Kit',`<div id="medicareLaunchKitMount"></div>${closeButton('medicareLaunchKitDialog')}`,true);
   dialog('lettersDialog','Letters/Marketing',`<p>Client mail generation — coming in a future update.</p><p class="pilot-muted">Upgrade tier</p>${closeButton('lettersDialog')}`);
   dialog('soaReminderDialog','Scope of Appointment required',`<p>This is a Medicare Advantage lead. Complete the Scope of Appointment form.</p><button class="button button-primary" id="openSoaForm" type="button">Open SOA form</button>${closeButton('soaReminderDialog')}`);
   dialog('tripIncentiveDialog','Trip incentive',`<form id="tripIncentiveForm"><input id="tripIncentiveId" type="hidden"><div class="pilot-grid">${field('tripCarrier','Carrier')}${field('tripName','Incentive name')}${field('tripCriteria','Qualification criteria')}${field('tripValue','Value')}${field('tripDeadline','Deadline','date')}${field('tripProgress','Manual progress count')}</div><button class="button button-primary" type="submit">Save</button>${closeButton('tripIncentiveDialog')}</form>`);
@@ -415,6 +417,22 @@ async function readLaunchKit(){
   stopLaunchKitSpeech('Preparing the Launch Kit…');
   try{const text=await extractLaunchKitText();launchKitSpeech.chunks=splitSpeechText(text);launchKitSpeech.index=0;launchKitSpeech.stopped=false;$('launchKitSpeechStatus').textContent=`Reading at ${$('launchKitSpeed').value}× speed.`;speakLaunchKitChunk();}catch(error){$('launchKitSpeechStatus').textContent=error.message||String(error);reportError('Launch Kit could not be read',error);}
 }
+const medicareLaunchSpeech={chunks:[],index:0,stopped:true,text:''};
+function hasLaunchKitTrialAccess(){return isOwner(pilot.user?.email)||pilot.trialActive===true;}
+function renderMedicareLaunchKit(){
+  const mount=$('medicareLaunchKitMount'),unlocked=hasLaunchKitTrialAccess();
+  if(!unlocked){mount.innerHTML=`<article class="medicare-launch-card is-locked"><span class="medicare-launch-icon" aria-hidden="true">📄</span><span class="medicare-launch-lock" aria-label="Locked">🔒</span><h3>Medicare Advantage Launch Kit</h3><p>The complete launch kit for new Medicare Advantage agents — bundled with the Turning 65 training materials. Start your 7-day free trial to unlock.</p><button class="button button-primary" id="startLaunchKitTrial" type="button">Start Free Trial</button></article>`;return;}
+  mount.innerHTML=`<article class="medicare-launch-card"><span class="medicare-launch-icon" aria-hidden="true">📄</span><h3>Medicare Advantage Launch Kit</h3><p>The complete launch kit for new Medicare Advantage agents — bundled with the Turning 65 training materials. Start your 7-day free trial to unlock.</p><div class="medicare-launch-actions"><button class="button button-secondary" id="readMedicareLaunchKit" type="button">Read in app</button><button class="button medicare-launch-listen" id="listenMedicareLaunchKit" type="button">Listen</button><a class="button medicare-launch-download" href="${MEDICARE_LAUNCH_KIT_PDF}" download>Download</a></div><p id="medicareLaunchSpeechStatus" class="pilot-muted" role="status"></p><iframe class="medicare-launch-preview" id="medicareLaunchPreview" title="Medicare Advantage Launch Kit" hidden></iframe></article>`;
+}
+function speakMedicareLaunchChunk(){
+  if(medicareLaunchSpeech.stopped||medicareLaunchSpeech.index>=medicareLaunchSpeech.chunks.length){medicareLaunchSpeech.stopped=true;if($('medicareLaunchSpeechStatus'))$('medicareLaunchSpeechStatus').textContent='Finished reading the Launch Kit.';return;}
+  const utterance=new SpeechSynthesisUtterance(medicareLaunchSpeech.chunks[medicareLaunchSpeech.index++]);utterance.onend=speakMedicareLaunchChunk;utterance.onerror=event=>{medicareLaunchSpeech.stopped=true;$('medicareLaunchSpeechStatus').textContent='Read-aloud stopped.';reportError('Medicare Launch Kit read-aloud failed',event.error||event);};window.speechSynthesis.speak(utterance);
+}
+async function listenMedicareLaunchKit(){
+  if(!hasLaunchKitTrialAccess())return;
+  const status=$('medicareLaunchSpeechStatus');window.speechSynthesis?.cancel();medicareLaunchSpeech.stopped=true;status.textContent='Preparing the Launch Kit…';
+  try{if(!medicareLaunchSpeech.text){if(!window.pdfjsLib)throw Error('The PDF reader did not load.');const pdf=await window.pdfjsLib.getDocument({url:MEDICARE_LAUNCH_KIT_PDF,disableWorker:true}).promise,pages=[];for(let number=1;number<=pdf.numPages;number++){const page=await pdf.getPage(number),content=await page.getTextContent();pages.push(content.items.map(item=>item.str).join(' '));}medicareLaunchSpeech.text=pages.join('\n\n').trim();}if(!medicareLaunchSpeech.text)throw Error('This PDF does not contain readable text.');medicareLaunchSpeech.chunks=splitSpeechText(medicareLaunchSpeech.text);medicareLaunchSpeech.index=0;medicareLaunchSpeech.stopped=false;status.textContent='Reading the Launch Kit.';speakMedicareLaunchChunk();}catch(error){status.textContent='The Launch Kit audio is not available right now.';reportError('Medicare Launch Kit could not be read',error);}
+}
 function bindPilot(){
   window.arReportError=reportError;
   document.addEventListener('click',event=>{const locked=event.target.closest('[data-premium-locked="true"]');if(!locked)return;event.preventDefault();event.stopImmediatePropagation();notify('Premium feature — coming soon');},true);
@@ -478,6 +496,9 @@ function bindPilot(){
   ['closeFreshGoalTracker','closeFreshGoalTrackerBottom'].forEach(id=>$(id).onclick=()=>setFreshGoalOpen(false));
   renderLaunchKitVoices();if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=renderLaunchKitVoices;
   $('freshLaunchKitButton').onclick=()=>{renderLaunchKitVoices();$('launchKitDialog').showModal();renderLaunchKitPages();};
+  $('freshMedicareLaunchKitButton').onclick=()=>{renderMedicareLaunchKit();$('medicareLaunchKitDialog').showModal();};
+  $('medicareLaunchKitMount').onclick=e=>{if(e.target.closest('#startLaunchKitTrial')){$('comingSoonText').textContent='This is included with your 7-day free trial. Start the trial to unlock the full Launch Kit.';$('comingSoonDialog').showModal();return;}if(e.target.closest('#readMedicareLaunchKit')&&hasLaunchKitTrialAccess()){const frame=$('medicareLaunchPreview');frame.hidden=!frame.hidden;if(!frame.hidden&&!frame.src)frame.src=MEDICARE_LAUNCH_KIT_PDF;}if(e.target.closest('#listenMedicareLaunchKit'))listenMedicareLaunchKit();};
+  $('medicareLaunchKitDialog').addEventListener('close',()=>{medicareLaunchSpeech.stopped=true;window.speechSynthesis?.cancel();});
   $('readLaunchKit').onclick=readLaunchKit;
   $('stopLaunchKit').onclick=()=>stopLaunchKitSpeech();
   $('launchKitDialog').addEventListener('close',()=>stopLaunchKitSpeech('Choose a voice and speed, then select Read aloud.'));
