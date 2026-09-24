@@ -1367,13 +1367,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout46" />
+    <link rel="stylesheet" href="pilot.css?v=layout47" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
         <div class="header-breathing-space"><button class="premium-phone-orb" type="button" id="premiumPhoneButton" aria-label="Premium phone" title="Premium phone">☎<span class="tier-star gold-star" aria-hidden="true">★</span></button></div>
         <div class="header-account-zone">
-          <div class="header-greeting"><p class="welcome-line" id="workspaceGreeting">Welcome back, Agent!</p><time class="date" id="todayDate"></time><span class="agent-credentials" hidden><span id="headerNpn">NPN not added</span><span id="headerStates">States not added</span></span></div>
+          <div class="header-greeting"><p class="welcome-line" id="workspaceGreeting">Welcome back, Agent!</p><time class="date" id="todayDate"></time><span class="agent-credentials" hidden></span></div>
           <div class="agent-avatar-choice" id="agentAvatarChoice" aria-hidden="true" hidden>AR</div>
           <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">A</button>
         </div>
@@ -1647,8 +1647,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <p class="pot-line" id="potLine" aria-live="polite"></p>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
-            <button class="button button-secondary" type="button" id="freshInfographicsButton">Infographics</button>
-            <button class="button button-secondary" type="button" id="freshResourcesButton">Resources <span class="tier-star gold-star" aria-label="Premium">★</span></button>
+            <button class="button button-secondary" type="button" id="freshInfographicsButton">Infographics</button><button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button><button class="button button-secondary" type="button" id="freshPdpButton">PDP</button><button class="button button-secondary" type="button" id="freshIncentivesButton" data-admin-only hidden>Incentives</button>
+            <button class="button button-secondary" type="button" id="freshResourcesButton">Resources</button>
             <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
@@ -1662,7 +1662,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           </nav>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
-            <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Trip Incentives — Active</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
+            <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Incentives</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
             <div class="trip-incentive-row" id="tripIncentiveRows"></div>
           </section>
 
@@ -2229,7 +2229,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           ? MEDICARE_ADVANTAGE_SCRIPTS[situation]
           : genericPreloadedScript(product, situation);
         elements.scriptOutputTitle.textContent = `${product} — ${SCRIPT_SITUATION_LABELS[situation] || "Script"}`;
-        elements.scriptOutput.textContent = fillPreloadedScript(template) + tpmoDisclaimer();
+        const renderedScript = fillPreloadedScript(template) + tpmoDisclaimer();
+        elements.scriptOutput.innerHTML = escapeHtml(renderedScript).replaceAll("TPMO", '<span class="tpmo-term" title="Third-Party Marketing Organization. Per CMS rules, agents must disclose their TPMO status before discussing plan-specific benefits.">TPMO</span>');
         window.AgentRiseApplySavedScript?.(product,situation);
       }
 
@@ -3964,7 +3965,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout46" defer></script>
+    <script src="pilot.js?v=layout47" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -4013,6 +4014,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
 
 
 
