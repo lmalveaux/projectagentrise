@@ -21,9 +21,17 @@
     "action": "Download infograph"
   },
   {
-    "title": "Medicare Field Guide / Agent Notebook",
-    "description": "Offline reference and working guide from the earlier build.",
-    "path": "assets/md/Medicare_Field_Guide_Agent_Notebook.md",
-    "action": "Download field guide"
+    "title": "The 3/40/56 Marketing Rule",
+    "description": "A visual framework for prospect readiness, long-term nurturing, and building a durable book of business.",
+    "path": "assets/images/the-3-40-56-marketing-rule.png",
+    "image": "assets/images/the-3-40-56-marketing-rule.png",
+    "action": "Download infograph"
+  },
+  {
+    "title": "One-Call Close Sales Framework",
+    "description": "A seven-step quick-reference framework for qualifying, presenting, and closing insurance conversations.",
+    "path": "assets/images/one-call-close-sales-framework.png",
+    "image": "assets/images/one-call-close-sales-framework.png",
+    "action": "Download infograph"
   }
 ]
