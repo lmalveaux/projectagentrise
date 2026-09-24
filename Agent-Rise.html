@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout48" />
+    <link rel="stylesheet" href="pilot.css?v=layout50" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -2139,10 +2139,11 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         document.body.style.overflow="hidden";
         elements.preferredAgentName.focus();
       }
-      function closeSettings(save=false) {
+      async function closeSettings(save=false) {
         if(save) {
           state.preferredAgentName=elements.preferredAgentName.value.trim();
-          saveProspects(); updateAgentLabels(); renderFollowUpQueue();
+          const saved=await saveProspects(); updateAgentLabels(); renderFollowUpQueue();
+          if(saved) window.AgentRiseSettingsSaved?.();
         } else applyTheme(state.settingsOriginalTheme);
         elements.settingsBackdrop.classList.remove("is-visible");
         document.body.style.overflow="";
@@ -3965,7 +3966,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout48" defer></script>
+    <script src="pilot.js?v=layout50" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
