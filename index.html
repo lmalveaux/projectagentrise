@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout52" />
+    <link rel="stylesheet" href="pilot.css?v=layout57" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1400,7 +1400,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
       <section id="prospectsWorkspace" class="prospects-workspace" hidden>
         <div class="prospects-actions prospects-actions-top"><button class="button button-primary" id="prospectsSaveTop" type="button">Save</button><button class="button button-secondary" id="prospectsExitTop" type="button">Exit</button></div>
-      <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
       <header class="header">
         <div class="title-block">
           <h1 id="agentTitle">Agent Dashboard</h1>
@@ -1409,6 +1408,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <button class="button button-primary" type="button" id="addProspectButton">+ Add Prospect</button>
         </div>
       </header>
+      <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
 
       <section class="controls" aria-label="Prospect controls">
         <input
@@ -2121,7 +2121,9 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       }
       function agentDisplayName() { return state.preferredAgentName.trim()||"Agent"; }
       function updateAgentLabels() {
-        const name=agentDisplayName();
+        const storedName=agentDisplayName();
+        const demoMode=typeof pilot!=="undefined"&&pilot.demo===true;
+        const name=!demoMode&&/^demo(?:\s+agent)?$/i.test(storedName)?"Agent":storedName;
         const parts=name.split(/\s+/).filter(Boolean);
         const firstName=parts[0]||"Agent";
         const lastInitial=(parts.length>1?parts[parts.length-1][0]:firstName[0]||"A").toUpperCase();
@@ -3966,7 +3968,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout52" defer></script>
+    <script src="pilot.js?v=layout57" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">

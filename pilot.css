@@ -405,6 +405,7 @@ body[data-theme="sky-view-night"] .breakroom-fallback{background:#1A1A20 url("as
 body[data-theme="plain-dark"] .breakroom,body[data-theme="sky-view-night"] .breakroom{color:#F5F1EA}
 body[data-theme="plain-light"] .breakroom,body[data-theme="sky-view-day"] .breakroom{color:#0A0A0A}
 .demo-banner{background:var(--wine)!important;color:#FFFFFF!important}
+.prospects-workspace>.demo-banner{position:static;inset:auto;z-index:auto;width:100%;box-sizing:border-box;margin:0 0 12px;background:#2A2A32!important;color:#F5F1EA!important}
 #openBreakroomButton{background:var(--wine)!important;border-color:var(--soft-gold)!important}
 
 /* Dashboard structure pass: layout only; palette remains unchanged. */
