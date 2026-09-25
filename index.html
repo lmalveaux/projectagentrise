@@ -1367,7 +1367,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout57" />
+    <link rel="stylesheet" href="pilot.css?v=layout58" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1384,7 +1384,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><div id="medicareMinuteNotification"></div><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -1650,6 +1650,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="freshInfographicsButton">Infographics</button><button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button><button class="button button-secondary" type="button" id="freshPdpButton">PDP</button><button class="button button-secondary" type="button" id="freshIncentivesButton" data-admin-only hidden>Incentives</button>
             <button class="button button-secondary" type="button" id="freshResourcesButton">Resources</button>
             <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
+            <button class="button button-secondary" type="button" id="freshDailyBriefButton">Daily Brief</button>
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
             <button class="button button-secondary" type="button" id="freshLaunchKitButton">Medicare Agent Blueprint</button>
@@ -3968,7 +3969,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout57" defer></script>
+    <script src="pilot.js?v=layout58" defer></script>
+    <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">

@@ -1,6 +1,6 @@
 /* Agent Rise pilot extensions. Supabase stores account data; the Agent Rise
    platform owns the application, integrations, and provider callbacks. */
-const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],demoProspects:[],demoCalls:[],demoCarriers:[],demoTraining:[],demoTripIncentives:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},tripIncentives:[],agentInfo:{},scriptProfiles:{},libraryPreferences:{voice:'',speed:1}},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
+const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],demoProspects:[],demoCalls:[],demoCarriers:[],demoTraining:[],demoTripIncentives:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},tripIncentives:[],agentInfo:{},scriptProfiles:{},libraryPreferences:{voice:'',speed:1},signaturePhrases:["I smell opportunity.","Stay in the game.","Don't leave money on the table."]},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
 const config = {...window.AGENT_RISE_CONFIG};
 const OWNER_EMAILS = ['lisasjazz@gmail.com', '121media.info@gmail.com'];
 function isOwner(email){return OWNER_EMAILS.includes((email||'').trim().toLowerCase());}
@@ -145,8 +145,9 @@ function normalizeWorkspaceData(value={}){
   const scriptProfiles=value.scriptProfiles&&typeof value.scriptProfiles==='object'&&!Array.isArray(value.scriptProfiles)?value.scriptProfiles:{};
   const rawLibraryPreferences=value.libraryPreferences&&typeof value.libraryPreferences==='object'?value.libraryPreferences:{};
   const libraryPreferences={voice:String(rawLibraryPreferences.voice||''),speed:[.75,1,1.25,1.5,2].includes(Number(rawLibraryPreferences.speed))?Number(rawLibraryPreferences.speed):1};
+  const signaturePhrases=Array.isArray(value.signaturePhrases)?value.signaturePhrases.map(item=>String(item||'').trim()).filter(Boolean).slice(0,100):["I smell opportunity.","Stay in the game.","Don't leave money on the table."];
   const appearanceTheme=value.appearanceTheme===undefined?'':normalizeAppearanceTheme(value.appearanceTheme);
-  return {appearanceTheme,dailyGoal,goalTargets,campaigns:safeArray(value.campaigns),referrals:safeArray(value.referrals),freshPourNotes:notes,tripIncentives:safeArray(value.tripIncentives),agentInfo,scriptProfiles,libraryPreferences};
+  return {appearanceTheme,dailyGoal,goalTargets,campaigns:safeArray(value.campaigns),referrals:safeArray(value.referrals),freshPourNotes:notes,tripIncentives:safeArray(value.tripIncentives),agentInfo,scriptProfiles,libraryPreferences,signaturePhrases};
 }
 function renderContactRibbon(){const host=$('contactRibbon');if(!host)return;const items=state.prospects.filter(p=>p.status==='Client'||p.clientStatus==='Active Client'||p.policyStatus==='Active').sort((a,b)=>fullName(a).localeCompare(fullName(b))).slice(0,20);host.innerHTML=items.length?items.map(p=>`<button type="button" data-ribbon-id="${html(p.id)}"><span>${html(((p.firstName||'A')[0]+(p.lastName||'R')[0]).toUpperCase())}</span><small>${html(fullName(p))}</small></button>`).join(''):'<p>No current clients yet.</p>';}
 function arrangeClientJourney(){const workspace=$('prospectsWorkspace'),header=workspace?.querySelector(':scope > .header'),banner=$('demoBanner'),ribbon=$('contactRibbon');if(!workspace||!header||!ribbon)return;if(!pilot.demo)workspace.insertBefore(header,banner||ribbon);}
@@ -161,7 +162,7 @@ function applyPremiumAccess(){
   const controls=new Set([...document.querySelectorAll('.tier-star,.gold-star')].map(star=>star.closest('button,a,[role="button"]')).filter(Boolean));
   controls.forEach(control=>{if(!control.dataset.premiumOriginalTitle)control.dataset.premiumOriginalTitle=control.getAttribute('title')||'';control.classList.toggle('premium-locked',!allowed);control.setAttribute('aria-disabled',String(!allowed));if(!allowed){control.dataset.premiumLocked='true';control.title='Premium feature — coming soon';}else{delete control.dataset.premiumLocked;const original=control.dataset.premiumOriginalTitle;if(original)control.title=original;else control.removeAttribute('title');}});
 }
-function applyAccessMode(){const admin=isAdminAccount();document.body.dataset.accessMode=admin?'admin':'medicare';document.querySelectorAll('[data-admin-only]').forEach(element=>element.hidden=!admin);applyPremiumAccess();updateFreshPourDownloadAccess();}
+function applyAccessMode(){const admin=isAdminAccount();document.body.dataset.accessMode=admin?'admin':'medicare';document.querySelectorAll('[data-admin-only]').forEach(element=>element.hidden=!admin);applyPremiumAccess();updateFreshPourDownloadAccess();window.AgentRiseMedicareMinute?.syncAccess();}
 function initSoftProtection(){
   softProtectionController?.abort();softProtectionController=null;document.body.classList.remove('soft-content-protection');document.querySelectorAll('img').forEach(image=>{image.draggable=true;});
   if(!pilot.user||isOwner(pilot.user.email))return;
