@@ -2128,7 +2128,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         const parts=name.split(/\s+/).filter(Boolean);
         const firstName=parts[0]||"Agent";
         const lastInitial=(parts.length>1?parts[parts.length-1][0]:firstName[0]||"A").toUpperCase();
-        elements.workspaceGreeting.textContent=`Welcome back, ${firstName}!`;
+        const info=typeof pilot!=="undefined"?(pilot.workspaceData?.agentInfo||{}):{};
+        elements.workspaceGreeting.textContent=demoMode?'Demo Mode':(info.greeting||(typeof timeAwareGreeting==='function'?timeAwareGreeting(info.timezone):'Good morning, superstar'));
         const title=document.querySelector("#agentTitle"); if(title) title.textContent=`${name} Dashboard`;
         const monogram=document.querySelector("#agentAvatarChoice"); if(monogram) monogram.textContent=name.split(/\s+/).map(part=>part[0]).join("").slice(0,2).toUpperCase()||"AR";
         const settings=document.querySelector("#settingsButton"); if(settings) settings.textContent=lastInitial;
@@ -3969,7 +3970,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout58" defer></script>
+    <script src="pilot.js?v=layout59" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
