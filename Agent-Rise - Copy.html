@@ -3,31 +3,88 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Agent Rise — Client Journey</title>
+    <title>Agent Rise — Agent Workspace</title>
     <style>
-      :root {
-        --page: #f3f6f9;
-        --surface: #ffffff;
-        --panel: #f5f5f5;
-        --text: #333333;
-        --muted: #6f7378;
-        --line: #e7e9ec;
-        --accent: #164f9f;
-        --accent-dark: #103c78;
-        --shadow: 0 22px 58px rgba(22, 35, 52, 0.1);
-        --radius: 20px;
-        --focus: 0 0 0 4px rgba(22, 79, 159, 0.16);
-      }
-      body[data-theme="pink-mauve"] { --page:#fff4f8; --surface:#ffffff; --panel:#f8e7ef; --text:#321f2b; --muted:#6f5362; --line:#e7c7d5; --accent:#9b2f62; --accent-dark:#742149; --focus:0 0 0 4px rgba(155,47,98,.25); --shadow:0 22px 58px rgba(87,27,57,.14); }
-      body[data-theme="dark-charcoal"] { --page:#202225; --surface:#fffdf8; --panel:#f2e7d7; --text:#29231f; --muted:#665b51; --line:#d2b991; --accent:#713f28; --accent-dark:#4c2718; --focus:0 0 0 4px rgba(205,148,54,.34); --shadow:0 22px 58px rgba(0,0,0,.3); }
-      body[data-theme="burgundy-champagne"] { --page:#f2eee8; --surface:#fffdf8; --panel:#f4e8cf; --text:#302426; --muted:#6d5a5d; --line:#d9c39a; --accent:#861f3d; --accent-dark:#61142c; --focus:0 0 0 4px rgba(134,31,61,.25); --shadow:0 22px 58px rgba(83,22,39,.16); }
-      body[data-theme="dark-charcoal"] .topbar,
-      body[data-theme="dark-charcoal"] .topbar .brand,
-      body[data-theme="dark-charcoal"] .header .title-block,
-      body[data-theme="dark-charcoal"] .header .subtitle { color:#fff8ea; }
-      body[data-theme="dark-charcoal"] .header h1,
-      body[data-theme="dark-charcoal"] .topbar .date { color:#fff8ea; }
-      body[data-theme="dark-charcoal"] .brand-mark { background:#38271f; color:#efbd64; border-color:#9c6c38; }
+      /* ---- Base (Palette A: Charcoal / Burgundy / Gold) ---- */
+:root {
+  --page: #F5F1EA;
+  --surface: #F5F1EA;
+  --panel: #F5F1EA;
+  --text: #2A2A32;
+  --muted: #A8B8A0;
+  --line: #F5F1EA;
+  --accent: #2F3A6B;
+  --accent-dark: #2F3A6B;
+  --accent-soft: #2F3A6B;
+  --gold: #7BC0CA;
+  --gold-soft: #7BC0CA;
+  --shadow: 0 22px 58px #2A2A32;
+  --radius: 20px;
+  --focus: 0 0 0 4px #2F3A6B;
+}
+
+/* ---- Palette B: Brown / Khaki / Forest / Gold ---- */
+body[data-theme="palette-b"] {
+  --page: #F5F1EA;
+  --surface: #F5F1EA;
+  --panel: #F5F1EA;
+  --text: #2A2A32;
+  --muted: #2F3A6B;
+  --line: #A8B8A0;
+  --accent: #3E4A3A;
+  --accent-dark: #0A0A0A;
+  --accent-soft: #3E4A3A;
+  --gold: #7BC0CA;
+  --gold-soft: #7BC0CA;
+  --shadow: 0 22px 58px #2A2A32;
+  --focus: 0 0 0 4px #3E4A3A;
+}
+body[data-theme="palette-b"] .brand-mark { background: #2F3A6B; color: #A8B8A0; border-color: #A8B8A0; }
+body[data-theme="palette-b"] .button-primary { background: #3E4A3A; color: #F5F1EA; }
+body[data-theme="palette-b"] .button-primary:hover { background: #0A0A0A; }
+body[data-theme="palette-b"] .due-badge { background: #7BC0CA; color: #F5F1EA; }
+body[data-theme="palette-b"] .status { background: #A8B8A0; color: #3E4A3A; }
+
+/* ---- Palette C: Turquoise / Tropical / Charcoal / Gold ---- */
+body[data-theme="palette-c"] {
+  --page: #0A0A0A;
+  --surface: #2A2A32;
+  --panel: #2A2A32;
+  --text: #F5F1EA;
+  --muted: #A8B8A0;
+  --line: #2A2A32;
+  --accent: #A8B8A0;
+  --accent-dark: #3E4A3A;
+  --accent-soft: #A8B8A0;
+  --gold: #7BC0CA;
+  --gold-soft: #7BC0CA;
+  --shadow: 0 22px 58px #0A0A0A;
+  --focus: 0 0 0 4px #A8B8A0;
+}
+body[data-theme="palette-c"] .brand-mark { background: #7BC0CA; color: #7BC0CA; border-color: #7BC0CA; }
+body[data-theme="palette-c"] .button-primary { background: #A8B8A0; color: #0A0A0A; }
+body[data-theme="palette-c"] .button-primary:hover { background: #3E4A3A; }
+body[data-theme="palette-c"] .button-secondary { background: #2A2A32; color: #F5F1EA; }
+body[data-theme="palette-c"] .button-secondary:hover { background: #2A2A32; }
+body[data-theme="palette-c"] .due-badge { background: #7BC0CA; color: #F5F1EA; }
+body[data-theme="palette-c"] .status { background: #A8B8A0; color: #A8B8A0; }
+body[data-theme="palette-c"] input,
+body[data-theme="palette-c"] select,
+body[data-theme="palette-c"] textarea { background: #2A2A32; color: #F5F1EA; border-color: #2A2A32; }
+body[data-theme="palette-c"] .filter { background: #2A2A32; color: #A8B8A0; border-color: #2A2A32; }
+body[data-theme="palette-c"] .filter.is-active { background: #A8B8A0; color: #7BC0CA; border-color: #A8B8A0; }
+
+/* ---- Legacy themes (kept for existing users) ---- */
+body[data-theme="pink-mauve"] { --page:#F5F1EA; --surface:#F5F1EA; --panel:#F5F1EA; --text:#2A2A32; --muted:#2F3A6B; --line:#F5F1EA; --accent:#2F3A6B; --accent-dark:#2F3A6B; --focus:0 0 0 4px #2F3A6B; --shadow:0 22px 58px #2F3A6B; }
+body[data-theme="dark-charcoal"] { --page:#0A0A0A; --surface:#F5F1EA; --panel:#F5F1EA; --text:#0A0A0A; --muted:#2F3A6B; --line:#A8B8A0; --accent:#2F3A6B; --accent-dark:#2F3A6B; --focus:0 0 0 4px #7BC0CA; --shadow:0 22px 58px #0A0A0A; }
+body[data-theme="burgundy-champagne"] { --page:#F5F1EA; --surface:#F5F1EA; --panel:#F5F1EA; --text:#2A2A32; --muted:#2F3A6B; --line:#A8B8A0; --accent:#2F3A6B; --accent-dark:#2F3A6B; --focus:0 0 0 4px #2F3A6B; --shadow:0 22px 58px #2F3A6B; }
+body[data-theme="dark-charcoal"] .topbar,
+body[data-theme="dark-charcoal"] .topbar .brand,
+body[data-theme="dark-charcoal"] .header .title-block,
+body[data-theme="dark-charcoal"] .header .subtitle { color:#F5F1EA; }
+body[data-theme="dark-charcoal"] .header h1,
+body[data-theme="dark-charcoal"] .topbar .date { color:#F5F1EA; }
+body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA; border-color:#7BC0CA; }
 
       * {
         box-sizing: border-box;
@@ -46,7 +103,7 @@
         min-height: 100vh;
         margin: 0;
         background:
-          linear-gradient(180deg, rgba(245, 245, 245, 0.72), rgba(255, 255, 255, 0) 340px),
+          linear-gradient(180deg, #F5F1EA, #F5F1EA 340px),
           var(--page);
       }
 
@@ -67,12 +124,96 @@
         padding: 20px 16px 28px;
       }
 
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 8px 0 22px;
+      .topbar {.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: -20px -16px 24px;
+  padding: 14px 20px;
+  background: #0A0A0A;
+  border-bottom: 1px solid #2A2A32;
+  box-shadow: 0 4px 18px #0A0A0A;
+}
+
+.topbar .brand {
+  color: #F5F1EA;
+}
+
+.topbar .brand span {
+  color: #F5F1EA;
+}
+
+.topbar .import-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.topbar .button {
+  min-height: 38px;
+  padding: 0 14px;
+  background: #F5F1EA;
+  color: #0A0A0A;
+  border: 1px solid #2A2A32;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  transition: all 140ms ease;
+}
+
+.topbar .button:hover {
+  background: #F5F1EA;
+  border-color: #7BC0CA;
+  box-shadow: 0 0 0 2px #7BC0CA;
+  transform: translateY(-1px);
+}
+
+.topbar .button-secondary {
+  background: #F5F1EA;
+  color: #0A0A0A;
+}
+
+.topbar .button-secondary:hover {
+  background: #F5F1EA;
+}
+
+.topbar .button-primary {
+  background: #2F3A6B;
+  color: #F5F1EA;
+  border-color: #2F3A6B;
+}
+
+.topbar .button-primary:hover {
+  background: #2F3A6B;
+  border-color: #7BC0CA;
+}
+
+.topbar .button-quiet {
+  background: #F5F1EA;
+  color: #0A0A0A;
+}
+
+.topbar .button-quiet:hover {
+  background: #F5F1EA;
+  border-color: #7BC0CA;
+}
+
+.topbar .date {
+  color: #7BC0CA;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    margin: -20px -16px 20px;
+    padding: 12px 14px;
+  }
+}
+        
       }
 
       .brand {
@@ -167,7 +308,7 @@
 
       .button-primary {
         background: var(--accent);
-        color: #ffffff;
+        color: #F5F1EA;
       }
 
       .button-primary:hover {
@@ -180,7 +321,7 @@
       }
 
       .button-secondary:hover {
-        background: #eceff3;
+        background: #F5F1EA;
       }
 
       .button-quiet {
@@ -193,12 +334,12 @@
       }
 
       .button-danger {
-        background: #fff1f2;
-        color: #9f1d2d;
+        background: #F5F1EA;
+        color: #2F3A6B;
       }
 
       .button-danger:hover {
-        background: #ffe4e6;
+        background: #F5F1EA;
       }
 
       .controls {
@@ -237,11 +378,11 @@
         padding-bottom: 2px;
       }
       .internal-filters { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-      .settings-backdrop { display:none; position:fixed; inset:0; z-index:50; padding:16px; background:rgba(12,16,22,.58); overflow-y:auto; }
+      .settings-backdrop { display:none; position:fixed; inset:0; z-index:50; padding:16px; background:#0A0A0A; overflow-y:auto; }
       .script-output {
         white-space: pre-wrap;
         font-family: inherit;
-        background: rgba(213, 173, 104, 0.14);
+        background: #7BC0CA;
         border-radius: 14px;
         padding: 14px 16px;
         max-height: 360px;
@@ -289,8 +430,8 @@
       }
 
       .filter.is-active {
-        border-color: rgba(22, 79, 159, 0.35);
-        background: rgba(22, 79, 159, 0.08);
+        border-color: #3E4A3A;
+        background: #3E4A3A;
         color: var(--accent-dark);
       }
 
@@ -329,7 +470,7 @@
       .queue-count {
         min-height: 28px;
         border-radius: 999px;
-        background: rgba(22, 79, 159, 0.08);
+        background: #3E4A3A;
         color: var(--accent-dark);
         font-size: 0.76rem;
         font-weight: 800;
@@ -405,7 +546,7 @@
       .due-badge {
         border-radius: 999px;
         background: var(--accent);
-        color: #ffffff;
+        color: #F5F1EA;
         font-size: 0.72rem;
         font-weight: 800;
         padding: 6px 9px;
@@ -480,7 +621,7 @@
       .status {
         min-height: 32px;
         border-radius: 999px;
-        background: rgba(22, 79, 159, 0.08);
+        background: #3E4A3A;
         color: var(--accent-dark);
         font-size: 0.78rem;
         font-weight: 800;
@@ -549,7 +690,7 @@
 
       .card-actions .button-danger {
         margin-top: 8px;
-        border: 1px solid rgba(159, 29, 45, 0.22);
+        border: 1px solid #2F3A6B;
       }
 
       .empty-card {
@@ -575,7 +716,7 @@
         align-items: flex-start;
         justify-content: center;
         overflow-y: auto;
-        background: rgba(255, 255, 255, 0.78);
+        background: #F5F1EA;
         padding: 18px 16px;
       }
 
@@ -676,7 +817,7 @@
       .import-panel { display: none; gap: 14px; margin-bottom: 16px; padding: 18px; }
       .import-panel.is-visible { display: grid; }
       .import-head { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; }
-      .import-close { position:sticky; top:10px; z-index:3; margin-left:auto; background:var(--surface); border:2px solid var(--primary); box-shadow:0 4px 14px rgba(25,50,80,.14); }
+      .import-close { position:sticky; top:10px; z-index:3; margin-left:auto; background:var(--surface); border:2px solid var(--primary); box-shadow:0 4px 14px #3E4A3A; }
       .import-title { margin:0; font-size:1.25rem; font-weight:820; }
       .import-help { margin:0; color:var(--muted); line-height:1.5; }
       .mapping-grid { display:grid; gap:10px; }
@@ -685,7 +826,7 @@
       .preview-table th,.preview-table td { padding:10px; border-bottom:1px solid var(--line); text-align:left; font-size:.86rem; vertical-align:top; }
       .preview-table th { background:var(--panel); font-weight:800; }
       .preview-table tr:last-child td { border-bottom:0; }
-      .duplicate-warning { color:#8a4b00; font-weight:800; }
+      .duplicate-warning { color:#2F3A6B; font-weight:800; }
       .import-summary { margin:0; color:var(--muted); font-weight:700; }
       .import-counts { display:flex; flex-wrap:wrap; gap:8px; }
       .import-count { padding:7px 10px; border-radius:999px; background:var(--panel); border:1px solid var(--line); font-size:.78rem; font-weight:800; }
@@ -715,13 +856,13 @@
         background:linear-gradient(var(--surface) 42%, var(--accent) 43% 57%, var(--surface) 58%);
       }
       .circle-toggle:focus-visible { box-shadow:var(--focus); outline:none; }
-      .import-safety { margin:0; padding:10px 12px; border-radius:12px; background:#eef7ff; color:var(--text); font-weight:750; }
+      .import-safety { margin:0; padding:10px 12px; border-radius:12px; background:#F5F1EA; color:var(--text); font-weight:750; }
       .removed-import { display:grid; gap:8px; padding:12px; border:1px dashed var(--line); border-radius:14px; }
       .export-panel { display:grid; gap:10px; padding-top:14px; border-top:1px solid var(--line); }
       .import-destination { max-width:360px; }
       .import-row-actions { display:flex; gap:6px; align-items:center; }
       .import-row-select { min-width:125px; }
-      .review-badge { border-radius:999px; background:#fff5d6; color:#6e5200; font-size:.72rem; font-weight:800; padding:6px 9px; }
+      .review-badge { border-radius:999px; background:#F5F1EA; color:#2F3A6B; font-size:.72rem; font-weight:800; padding:6px 9px; }
 
       .hidden {
         display: none !important;
@@ -829,14 +970,14 @@
 
       /* ---------- Fresh Pour break room ---------- */
       .breakroom {
-        --espresso: #382418;
-        --espresso-soft: #6b4b34;
-        --champagne: #d5ad68;
-        --champagne-deep: #a9782e;
-        --cream: #fffaf0;
-        --ivory: #f7ecd8;
-        --terracotta: #a95732;
-        --sage: #66755a;
+        --espresso: #2A2A32;
+        --espresso-soft: #2F3A6B;
+        --champagne: #7BC0CA;
+        --champagne-deep: #7BC0CA;
+        --cream: #F5F1EA;
+        --ivory: #F5F1EA;
+        --terracotta: #7BC0CA;
+        --sage: #2F3A6B;
         position: fixed;
         inset: 0;
         z-index: 40;
@@ -885,8 +1026,8 @@
       .breakroom-wash {
         z-index: 2;
         background:
-          linear-gradient(90deg, rgba(255, 250, 240, 0.34), rgba(255, 255, 255, 0.04) 55%, rgba(255, 248, 232, 0.16)),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 45%, rgba(35, 26, 20, 0.08));
+          linear-gradient(90deg, #F5F1EA, #F5F1EA 55%, #F5F1EA),
+          linear-gradient(180deg, #F5F1EA, transparent 45%, #0A0A0A);
         pointer-events: none;
       }
 
@@ -912,10 +1053,10 @@
       }
 
       .breakroom-back {
-        background: rgba(255, 250, 240, 0.86);
-        border: 1px solid rgba(80, 54, 35, 0.18);
+        background: #F5F1EA;
+        border: 1px solid #2F3A6B;
         color: var(--espresso);
-        box-shadow: 0 8px 28px rgba(52, 38, 28, 0.1);
+        box-shadow: 0 8px 28px #2A2A32;
         backdrop-filter: blur(12px);
       }
 
@@ -930,15 +1071,15 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid rgba(80, 54, 35, 0.18);
-        background: rgba(255, 250, 240, 0.86);
+        border: 1px solid #2F3A6B;
+        background: #F5F1EA;
         color: var(--espresso);
         border-radius: 999px;
         padding: 8px 14px;
         font-size: 0.85rem;
         font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 8px 28px rgba(52, 38, 28, 0.1);
+        box-shadow: 0 8px 28px #2A2A32;
         backdrop-filter: blur(12px);
       }
 
@@ -946,13 +1087,13 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #9b8b79;
+        background: #A8B8A0;
         display: inline-block;
       }
 
       .ambience-toggle[aria-pressed="true"] .ambience-dot {
-        background: #7fbf6a;
-        box-shadow: 0 0 0 3px rgba(127, 191, 106, 0.25);
+        background: #A8B8A0;
+        box-shadow: 0 0 0 3px #A8B8A0;
       }
 
       .ambience-toggle:disabled,
@@ -965,10 +1106,10 @@
         width: min(100%, 880px);
         margin: 5vh 0 0;
         padding: clamp(24px, 4.5vw, 48px);
-        border: 1px solid rgba(255, 255, 255, 0.7);
+        border: 1px solid #F5F1EA;
         border-radius: 30px;
-        background: rgba(255, 250, 240, 0.86);
-        box-shadow: 0 24px 80px rgba(40, 31, 23, 0.2);
+        background: #F5F1EA;
+        box-shadow: 0 24px 80px #0A0A0A;
         backdrop-filter: blur(18px) saturate(112%);
         transition: opacity 260ms ease, transform 260ms ease;
       }
@@ -1020,8 +1161,8 @@
         align-items: center;
         gap: 14px;
         width: 100%;
-        background: linear-gradient(135deg, rgba(213, 173, 104, 0.22), rgba(255, 255, 255, 0.58));
-        border: 1px solid rgba(169, 120, 46, 0.24);
+        background: linear-gradient(135deg, #7BC0CA, #F5F1EA);
+        border: 1px solid #7BC0CA;
         border-radius: 18px;
         padding: 16px 18px;
         cursor: pointer;
@@ -1059,10 +1200,10 @@
         position: relative;
         min-height: 154px;
         border-radius: 20px;
-        border: 1px solid rgba(107, 75, 52, 0.18);
+        border: 1px solid #2F3A6B;
         background:
-          radial-gradient(circle at 50% 18%, rgba(213, 173, 104, 0.28), transparent 54%),
-          rgba(255, 255, 255, 0.62);
+          radial-gradient(circle at 50% 18%, #7BC0CA, transparent 54%),
+          #F5F1EA;
         color: var(--espresso);
         cursor: pointer;
         display: flex;
@@ -1072,7 +1213,7 @@
         gap: 6px;
         text-align: center;
         padding: 16px;
-        box-shadow: 0 10px 26px rgba(62, 44, 31, 0.08);
+        box-shadow: 0 10px 26px #2A2A32;
         transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
       }
 
@@ -1080,7 +1221,7 @@
       .table-card:focus-visible {
         transform: translateY(-3px);
         border-color: var(--champagne-deep);
-        box-shadow: 0 14px 34px rgba(62, 44, 31, 0.14);
+        box-shadow: 0 14px 34px #2A2A32;
         outline: none;
       }
 
@@ -1103,8 +1244,8 @@
 
       .table-seat {
         margin-top: 34px;
-        background: rgba(255, 255, 255, 0.62);
-        border: 1px solid rgba(107, 75, 52, 0.18);
+        background: #F5F1EA;
+        border: 1px solid #2F3A6B;
         border-radius: 22px;
         padding: 22px;
       }
@@ -1137,7 +1278,7 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        background: rgba(213, 173, 104, 0.14);
+        background: #7BC0CA;
         border-radius: 14px;
         padding: 12px 14px;
       }
@@ -1161,7 +1302,7 @@
       .player-bar {
         height: 5px;
         border-radius: 999px;
-        background: rgba(107, 75, 52, 0.16);
+        background: #2F3A6B;
         overflow: hidden;
       }
 
@@ -1186,7 +1327,7 @@
         margin-top: 14px;
         padding: 12px 14px;
         border-radius: 14px;
-        background: rgba(213, 173, 104, 0.14);
+        background: #7BC0CA;
       }
 
       .seat-resource.hidden { display: none; }
@@ -1226,32 +1367,42 @@
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css" />
+    <link rel="stylesheet" href="pilot.css?v=layout3" />
     <main class="app">
       <div class="topbar" aria-label="Workspace header">
-        <div class="brand" aria-label="Agent Rise">
-          <span class="brand-mark" aria-hidden="true">A</span>
-          <span>Agent Rise</span>
+        <div class="agent-identity">
+          <div class="agent-avatar-choice" id="agentAvatarChoice" aria-label="Agent monogram">AR</div>
+          <div><p class="welcome-line" id="workspaceGreeting">Agent</p><p class="agent-credentials"><span id="headerNpn">NPN not added</span> · <span id="headerStates">States not added</span></p><time class="date" id="todayDate" hidden></time></div>
         </div>
-        <div class="import-row-actions">
-          <button class="button button-secondary" type="button" id="openTrainingButton">
-            <span aria-hidden="true">📅</span> Training
-          </button>
-          <button class="button button-secondary" type="button" id="openScriptsButton">
-            <span aria-hidden="true">📝</span> Scripts
-          </button>
-          <button class="button button-secondary breakroom-entry" type="button" id="openBreakroomButton">
-            <span aria-hidden="true">☕</span> Fresh Pour
-          </button>
-          <time class="date" id="todayDate"></time>
-          <button class="button button-quiet" type="button" id="settingsButton">Settings</button>
-        </div>
+        <div class="journey-title">Client Journey</div>
+        <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">ARP</button>
+        <nav class="theater-tabs header-tools" aria-label="Workspace tools">
+          <button type="button" id="openScriptsButton">Scripts</button>
+          <button type="button" id="carriersButton">Carriers</button>
+          <button type="button" id="campaignsButton">Campaigns</button>
+          <button type="button" data-coming-soon="Contracts">Contracts <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
+          <button type="button" data-coming-soon="Call-E">Call-E <span class="tier-star gold-star" title="Pro Plus Gold">★</span></button>
+        </nav>
       </div>
 
+      <section class="agent-dash-strip" aria-label="Agent's Dash">
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><strong>Notifications</strong><ul><li>Calendar</li><li>Training</li><li>Follow-ups</li><li>Appointments</li><li>Meetings</li><li>Birthdays</li><li>Anniversaries</li><li>Continuing Education <small>TODO: add original license date</small></li><li>Conventions</li><li>Vacations</li></ul></div></div>
+        <button type="button" id="dashAddProspect">Add Prospects</button>
+        <button type="button" id="openBreakroomButton">Fresh Pour</button>
+        <div class="phone-apps"><button type="button" data-coming-soon="RingCentral">☎ RingCentral</button></div>
+      </section>
+
+      <nav class="pbx-platform" aria-label="Agent Rise workspaces">
+        <button type="button" id="leadDeskButton">Lead Desk <span class="badge-count" id="leadDeskBadge">0</span></button>
+        <button type="button" id="clientJourneyButton" class="is-active">Client Journey</button>
+        <button type="button" id="goalTrackerButton">Goal Tracker</button>
+        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star silver-star" title="Pro Plus Silver">★</span></button>
+        <button type="button" class="locked-control" aria-label="Agency workspace, Pro Plus Gold">Agency <span class="tier-star gold-star" title="Pro Plus Gold Agency">★</span></button>
+      </nav>
+      <section class="contact-ribbon" id="contactRibbon" aria-label="Contact slider" hidden></section>
       <header class="header">
         <div class="title-block">
-          <h1>Client Journey</h1>
-          <p class="subtitle" id="workspaceGreeting">Welcome back, Agent.</p>
+          <h1 id="agentTitle">Agent Dashboard</h1>
         </div>
         <div class="header-actions">
           <button class="button button-primary" type="button" id="addProspectButton">+ Add Prospect</button>
@@ -1275,10 +1426,8 @@
           <div class="import-head"><div><h2 class="import-title" id="settingsTitle">Settings</h2><p class="import-help">Personalize this workspace without changing contact data.</p></div><button class="button button-quiet import-close" type="button" id="closeSettingsButton">Close</button></div>
           <div class="settings-section"><strong>1. Profile</strong><div class="field"><label for="preferredAgentName">Preferred Agent Name</label><input id="preferredAgentName" type="text" placeholder="Agent" /><small class="import-help">This is the name shown throughout your Agent Rise workspace.</small></div></div>
           <div class="settings-section"><strong>2. Appearance</strong><div class="theme-options">
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="default" /> Current Agent Rise</label>
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="pink-mauve" /> Pink / Mauve</label>
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="dark-charcoal" /> Dark Charcoal / Chocolate Brown</label>
-            <label class="theme-option"><input type="radio" name="appearanceTheme" value="burgundy-champagne" /> Corporate Burgundy / Champagne</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="light" checked /> Light</label>
+            <label class="theme-option"><input type="radio" name="appearanceTheme" value="dark" /> Dark</label>
           </div></div>
           <div class="settings-section"><strong>3. Workspace</strong><p class="import-help">More workspace preferences will be added here as the pilot grows.</p></div>
           <div class="settings-section">
@@ -1456,9 +1605,9 @@
 
     <div class="breakroom" id="breakroomView" role="dialog" aria-modal="true" aria-label="Fresh Pour break room" hidden>
       <div class="breakroom-media" aria-hidden="true">
-        <video class="breakroom-bg-video" id="breakroomEntryVideo" muted playsinline preload="metadata"></video>
-        <video class="breakroom-bg-video" id="breakroomLoopVideo" muted playsinline preload="metadata" loop></video>
-        <video class="breakroom-bg-video" id="breakroomExitVideo" muted playsinline preload="metadata"></video>
+        <video class="breakroom-bg-video" id="breakroomEntryVideo" muted playsinline preload="metadata" data-replaceable="true"></video>
+        <video class="breakroom-bg-video" id="breakroomLoopVideo" autoplay muted playsinline preload="metadata" loop data-replaceable="true"></video>
+        <video class="breakroom-bg-video" id="breakroomExitVideo" muted playsinline preload="metadata" data-replaceable="true"></video>
         <div class="breakroom-fallback"></div>
         <div class="breakroom-wash"></div>
       </div>
@@ -1490,6 +1639,18 @@
           </button>
           <p class="pot-line" id="potLine" aria-live="polite"></p>
 
+          <nav class="fresh-office-tools" aria-label="Fresh Pour back office">
+            <button class="button button-secondary" type="button" id="freshCampaignsButton">Campaign Review</button>
+            <button class="button button-secondary" type="button" id="learningLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
+            <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
+          </nav>
+
+          <section class="trip-incentives" aria-labelledby="tripIncentivesTitle">
+            <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Trip Incentives — Active</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
+            <div class="trip-incentive-row" id="tripIncentiveRows"></div>
+          </section>
+
           <div class="table-floor" id="tableFloor" aria-label="Conversation tables"></div>
 
           <section class="table-seat hidden" id="tableSeat" aria-live="polite">
@@ -1509,7 +1670,7 @@
                 <span class="player-title" id="seatTrackTitle">Two hosts, one topic — audio not loaded yet</span>
                 <div class="player-bar"><div class="player-bar-fill" id="seatPlayFill"></div></div>
               </div>
-              <audio id="seatAudio" preload="metadata"></audio>
+              <audio id="seatAudio" preload="metadata" data-replaceable="true"></audio>
             </div>
             <p class="seat-note" id="seatNote">This conversation will become available when its audio is added.</p>
             <div class="seat-resource hidden" id="seatResource">
@@ -1521,8 +1682,9 @@
             </div>
           </section>
         </div>
-        <audio id="ambienceAudio" preload="metadata" loop></audio>
-        <audio id="breakroomMusicAudio" preload="metadata" loop></audio>
+        <audio id="ambienceAudio" preload="metadata" loop data-replaceable="true"></audio>
+        <audio id="breakroomMusicAudio" preload="metadata" loop data-replaceable="true"></audio>
+        <p class="fresh-pour-watermark">Agentrisepro, client management system — © 2026</p>
       </div>
     </div>
 
@@ -1667,16 +1829,10 @@
       ];
       const EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "aol.com", "outlook.com", "icloud.com", "Other"];
       const PRODUCTS = [
-        "Final Expense",
-        "Life Insurance",
-        "Medicare Supplement",
         "Medicare Advantage",
-        "Dental / Vision",
-        "Annuity",
-        "IUL",
-        "Travel Insurance",
-        "Business Insurance",
-        "Digital Marketing",
+        "Final Expense",
+        "Dental/Vision/Hearing",
+        "Notary",
         "Other",
       ];
       const FILTERS = ["All Contacts", "New Leads", "Active Journey", "Clients", "Resource Contacts", "Do Not Contact", "Permission Lapsing"];
@@ -1730,7 +1886,7 @@
         importRows: [],
         removedImportRows: [],
         resourceGroups: [],
-        appearanceTheme: "default",
+        appearanceTheme: "light",
         preferredAgentName: "",
         settingsOriginalTheme: "default",
         settingsOpener: null,
@@ -1919,14 +2075,17 @@
 
       function saveProspects() { return persistWorkspace(); }
       function applyTheme(theme) {
-        state.appearanceTheme=["pink-mauve","dark-charcoal","burgundy-champagne"].includes(theme)?theme:"default";
-        if(state.appearanceTheme==="default") document.body.removeAttribute("data-theme"); else document.body.dataset.theme=state.appearanceTheme;
+        state.appearanceTheme = theme === "dark" ? "dark" : "light";
+        document.body.dataset.theme=state.appearanceTheme;
         document.querySelectorAll('input[name="appearanceTheme"]').forEach(input=>input.checked=input.value===state.appearanceTheme);
       }
       function agentDisplayName() { return state.preferredAgentName.trim()||"Agent"; }
       function updateAgentLabels() {
-        const hour=new Date().getHours(); const greeting=hour<12?"Good morning":hour<18?"Good afternoon":"Welcome back";
-        elements.workspaceGreeting.textContent=`${greeting}, ${agentDisplayName()}.`;
+        const name=agentDisplayName();
+        elements.workspaceGreeting.textContent=`Welcome Back, ${name}!`;
+        const title=document.querySelector("#agentTitle"); if(title) title.textContent=`${name} Dashboard`;
+        const monogram=document.querySelector("#agentAvatarChoice"); if(monogram) monogram.textContent=name.split(/\s+/).map(part=>part[0]).join("").slice(0,2).toUpperCase()||"AR";
+        const settings=document.querySelector("#settingsButton"); if(settings) settings.textContent="ARP";
       }
       function openSettings() {
         state.settingsOpener=document.activeElement;
@@ -2042,13 +2201,18 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         scriptsOpener = document.activeElement;
         renderPreloadedScript();
         elements.scriptsBackdrop.classList.add("is-visible");
+        elements.scriptsBackdrop.setAttribute("aria-hidden", "false");
+        document.body.classList.add("scroll-lock");
         document.body.style.overflow = "hidden";
         elements.scriptProduct.focus();
       }
 
       function closeScripts() {
         elements.scriptsBackdrop.classList.remove("is-visible");
+        elements.scriptsBackdrop.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
+        document.body.classList.remove("scroll-lock", "modal-open", "no-scroll");
+        elements.scriptsBackdrop.dispatchEvent(new Event("close"));
         const opener = scriptsOpener; scriptsOpener = null;
         if (opener && typeof opener.focus === "function") opener.focus();
       }
@@ -2274,11 +2438,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       }
 
       function todayLabel() {
-        return new Intl.DateTimeFormat("en", {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-        }).format(new Date());
+        const now=new Date();
+        const timeZone=localStorage.getItem("agentRiseTimeZone")||Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return new Intl.DateTimeFormat("en-US",{
+          timeZone,month:"2-digit",day:"2-digit",year:"numeric",
+          hour:"numeric",minute:"2-digit",timeZoneName:"short"
+        }).format(now);
       }
 
       function fullName(prospect) {
@@ -2286,6 +2451,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       }
 
       function splitEmail(email = "") {
+        email = String(email ?? "").trim();
         const atIndex = email.indexOf("@");
         if (atIndex < 1) {
           return { username: email, domain: "gmail.com", customDomain: "" };
@@ -2822,12 +2988,15 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       }
 
       function moveToOldLeadPool(id) {
+        const current = state.prospects.find((prospect) => prospect.id === id);
+        if (!current || String(current.leadPool ?? "") === "Old Lead Pool") return false;
         state.prospects = state.prospects.map((prospect) =>
           prospect.id === id ? { ...prospect, leadPool: "Old Lead Pool", archived: false } : prospect,
         );
         saveProspects();
         renderFollowUpQueue();
         renderList();
+        return true;
       }
 
       function deleteClosedProspect(id) {
@@ -3157,11 +3326,15 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const url=URL.createObjectURL(new Blob([content],{type:mime})); const link=document.createElement('a'); link.href=url; link.download=`agent-rise-${(group?.name||'resource-contacts').toLowerCase().replace(/[^a-z0-9]+/g,'-')}.${extension}`; link.click(); URL.revokeObjectURL(url);
       }
       function moveToNewLeadPool(id) {
-        const prospect=state.prospects.find(p=>p.id===id); if(!prospect) return;
-        if(prospect.clientStatus==='Active Client' || prospect.policyStatus==='Active'){ alert('This record appears to be an existing client or active policy. Move it to Client Service & Review instead of New Lead Pool.'); return; }
-        state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'New Lead Pool',qualificationStatus:'Ready for Journey',marketingEligibility:'Active Insurance Prospect',status:'New Lead'}:p); saveProspects(); renderFollowUpQueue(); renderList();
+        const prospect=state.prospects.find(p=>p.id===id); if(!prospect) return false;
+        if(String(prospect.leadPool ?? '') === 'New Lead Pool') return false;
+        if(prospect.clientStatus==='Active Client' || prospect.policyStatus==='Active'){ alert('This record appears to be an existing client or active policy. Move it to Client Service & Review instead of New Lead Pool.'); return false; }
+        state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'New Lead Pool',qualificationStatus:'Ready for Journey',marketingEligibility:'Active Insurance Prospect',status:'New Lead'}:p); saveProspects(); renderFollowUpQueue(); renderList(); return true;
       }
-      function markDoNotMarket(id) { state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'Do Not Contact',qualificationStatus:'Do Not Market',marketingEligibility:'Do Not Market',clientStatus:'Do Not Contact',nextFollowUp:''}:p); saveProspects(); renderFollowUpQueue(); renderList(); }
+      function markDoNotMarket(id) {
+        const prospect=state.prospects.find(p=>p.id===id); if(!prospect || String(prospect.leadPool ?? '') === 'Do Not Contact') return false;
+        state.prospects=state.prospects.map(p=>p.id===id?{...p,leadPool:'Do Not Contact',qualificationStatus:'Do Not Market',marketingEligibility:'Do Not Market',clientStatus:'Do Not Contact',nextFollowUp:''}:p); saveProspects(); renderFollowUpQueue(); renderList(); return true;
+      }
       function deleteImportedContact(id) { const p=state.prospects.find(x=>x.id===id); if(!p||p.leadPool!=='Contact Review Pool') return; if(!confirm(`Delete imported contact ${fullName(p)}?`)) return; state.prospects=state.prospects.filter(x=>x.id!==id); saveProspects(); renderList(); }
 
       function bindEvents() {
@@ -3172,7 +3345,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         elements.trainingList.addEventListener("click", handleTrainingListClick);
         elements.openYahooCalendarButton.addEventListener("click", () => window.open("https://calendar.yahoo.com/", "_blank", "noopener,noreferrer"));
         elements.trainingBackdrop.addEventListener("click", event => { if (event.target === elements.trainingBackdrop) closeTraining(); });
-        elements.settingsButton.addEventListener("click",openSettings);
+        elements.settingsButton.addEventListener("click",()=>window.AgentRiseToggleAccountMenu?.());
         elements.closeSettings.addEventListener("click",()=>closeSettings(false));
         elements.cancelSettings.addEventListener("click",()=>closeSettings(false));
         elements.saveSettings.addEventListener("click",()=>closeSettings(true));
@@ -3189,6 +3362,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         elements.copyScriptButton.addEventListener("click", copyScriptToClipboard);
         elements.downloadScriptButton.addEventListener("click", downloadScriptAsText);
         elements.scriptsBackdrop.addEventListener("click", event => { if (event.target === elements.scriptsBackdrop) closeScripts(); });
+        elements.scriptsBackdrop.addEventListener("close", () => {
+          document.body.style.overflow = "";
+          document.body.classList.remove("scroll-lock", "modal-open", "no-scroll");
+        });
         document.addEventListener("keydown",event=>{
           if(event.key!=="Escape") return;
           if(elements.removeImportBackdrop.classList.contains("is-visible")) closeImportRemoval(false);
@@ -3292,6 +3469,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function init() {
         // Non-destructive migrations run after account loading.
         elements.date.textContent = todayLabel();
+        elements.date.hidden = false;
+        setInterval(()=>{ elements.date.textContent=todayLabel(); },60000);
         populateStatusOptions();
         populateLeadPoolOptions();
         populateEmailDomainOptions();
@@ -3322,62 +3501,65 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Fresh Pour media is packaged beside the app for dependable browser playback.
       // The audio layers stay separate so room sound can be gently lowered during a conversation.
       const BREAKROOM_MEDIA = {
-        entryVideo: "",
-        loopVideo: "media/fresh-pour-room-loop.mp4",
-        loopVideoMobile: "media/fresh-pour-room-loop-mobile.mp4",
-        exitVideo: "media/fresh-pour-exit.mp4",
+        entryVideo: "assets/video/fresh-pour-entry.mp4",
+        loopVideo: "assets/video/fresh-pour-room-loop 16-9.mp4",
+        loopVideoMobile: "assets/video/fresh-pour-room-loop-mobile.mp4",
+        exitVideo: "assets/video/fresh-pour-exit.mp4",
         ambience: "",
-        music: "media/fresh-pour-music.mp3"
+        music: "assets/audio/fresh-pour-ambience.mp3"
       };
       // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
       // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
       const BREAKROOM_TRANSITION_SPEED = 1.4;
       const BREAKROOM_TABLES = [
         {
+          id: "medicare-advantage",
+          name: "Medicare Advantage",
+          tag: "Plans, field guidance + JIT",
+          desc: "Medicare Advantage training, field guidance, and just-in-time contracting resources.",
+          audioSrc: "assets/audio/medicare-advantage-jit-contracting.m4a",
+          resource: {
+            url: "assets/images/Medicare_Advantage_Agent_Launch_Blueprint.png",
+            label: "Download: Medicare Advantage Agent Launch Blueprint",
+            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
+          }
+        },
+        {
+          id: "pdp",
+          name: "PDP",
+          tag: "Prescription drug plans",
+          desc: "A quiet work area for PDP training, plan-year changes, and approved carrier resources.",
+          audioSrc: ""
+        },
+        {
+          id: "turning-65",
+          name: "Turning 65",
+          tag: "New-to-Medicare preparation",
+          desc: "Resources and training for clients approaching Medicare eligibility.",
+          audioSrc: "",
+          resource: {
+            url: "assets/md/Medicare_Field_Guide_Agent_Notebook.md",
+            label: "Download: Medicare Field Guide",
+            filename: "Medicare-Field-Guide-Agent-Notebook.md"
+          }
+        },
+        {
           id: "final-expense",
           name: "Final Expense",
           tag: "JIT contracting + daily pay",
           desc: "A short seminar on just-in-time contracting and daily-pay shortcuts for Final Expense agents.",
-          audioSrc: "assets/final-expense-jit-contracting.m4a",
+          audioSrc: "assets/audio/final-expense-jit-contracting.m4a",
           resource: {
-            url: "assets/final-expense-career-launchpad.svg",
+            url: "assets/svg/final-expense-career-launchpad.svg",
             label: "Download: Final Expense Cheat Code Infograph",
             filename: "Final-Expense-Cheat-Code-Infograph.svg"
           }
         },
-        {
-          id: "iul",
-          name: "IUL",
-          tag: "The upside, the caps, the catch",
-          desc: "An honest walk through indexed universal life — where it shines, where the caps and fees actually bite.",
-          audioSrc: ""
-        },
-        {
-          id: "tsa",
-          name: "TSA / 403(b)",
-          tag: "Tax-sheltered, not headache-sheltered",
-          desc: "What a tax-sheltered annuity in a 403(b) arrangement may be doing for a client, plus the paperwork realities agents wish someone had explained sooner.",
-          audioSrc: ""
-        },
-        {
-          id: "spia",
-          name: "Single Premium Immediate Annuity",
-          tag: "One check, one promise",
-          desc: "When a single premium immediate annuity is the right fit — and the trade-off of giving up access to that lump sum.",
-          audioSrc: ""
-        },
-        {
-          id: "medicare-advantage",
-          name: "Medicare Advantage",
-          tag: "JIT contracting + daily pay",
-          desc: "A short seminar on just-in-time contracting and daily-pay opportunities for Medicare Advantage agents.",
-          audioSrc: "assets/medicare-advantage-jit-contracting.m4a",
-          resource: {
-            url: "assets/Medicare_Advantage_Agent_Launch_Blueprint.png",
-            label: "Download: Medicare Advantage Agent Launch Blueprint",
-            filename: "Medicare-Advantage-Agent-Launch-Blueprint.png"
-          }
-        }
+        { id:"dvh", name:"DVH", tag:"Dental, vision + hearing", desc:"Training and approved resources for dental, vision, and hearing conversations.", audioSrc:"" },
+        { id:"ce-training", name:"CE Training", tag:"Licensing + continuing education", desc:"A back-office home for continuing education dates, requirements, and training.", audioSrc:"" },
+        { id:"marketing", name:"Marketing", tag:"Campaign production room", desc:"Build and organize approved marketing work away from the daily dashboard.", audioSrc:"" },
+        { id:"stats", name:"Stats", tag:"Performance review", desc:"Review production, activity, appointments, closes, and progress toward goals.", audioSrc:"" },
+        { id:"carrier-resources", name:"Carrier-Approved Marketing Resources", tag:"Approved materials by carrier", desc:"Keep carrier-approved marketing resources and state-specific materials organized here.", audioSrc:"" }
       ];
 
       const POT_LINES = [
@@ -3467,7 +3649,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           breakroomElements.playToggle.setAttribute("aria-label", `${table.name} conversation not loaded`);
           breakroomElements.seatTrackTitle.textContent = `Conversation coming soon — ${table.name}`;
           breakroomElements.seatNote.hidden = false;
-          breakroomElements.seatNote.textContent = "This conversation is not included in the pilot. Choose Final Expense or Medicare Advantage for a playable seminar, or return to your desk.";
+          breakroomElements.seatNote.textContent = "This Fresh Pour workspace is ready for its approved training, media, or state-specific resources.";
         }
         setupSeatResource(table);
         breakroomElements.seat.classList.remove("hidden");
@@ -3749,7 +3931,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       // Version 2: connect captureLead to a secure form/webhook endpoint so downloads and quote requests flow in across devices.
     </script>
     <script src="config.js"></script>
-    <script src="pilot.js" defer></script>
+    <script src="pilot.js?v=layout3" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
@@ -3798,3 +3980,13 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+

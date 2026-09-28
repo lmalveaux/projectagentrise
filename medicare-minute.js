@@ -113,13 +113,15 @@
     try {
       const response = await callFunction({ script, date: fields.date, brief: fields, publish });
       if (publish) {
-        const result = await response.json(); status.textContent = `Published ${displayDate(result.date)}.`; await loadBriefs(); return;
+        const result = await response.json(); status.textContent = `Published ${displayDate(result.date)} · ${Number(result.characterCount || script.length).toLocaleString()} characters via ${result.modelId || "eleven_turbo_v2_5"}.`; await loadBriefs(); return;
       }
+      const sentCharacters = Number(response.headers.get("X-Script-Characters") || script.length);
+      const modelId = response.headers.get("X-ElevenLabs-Model") || "eleven_turbo_v2_5";
       const blob = await response.blob(); if (previewUrl) URL.revokeObjectURL(previewUrl); previewUrl = URL.createObjectURL(blob);
       const audio = $m("minutePreviewAudio");
       audio.onloadedmetadata = () => { const seconds = Math.round(audio.duration || 0), warning = $m("minuteDurationWarning"); warning.hidden = seconds >= 50 && seconds <= 60; warning.textContent = `Target is 56 seconds. Current: ${seconds}s.`; };
       audio.src = previewUrl; await audio.play().catch(() => undefined);
-      status.textContent = "Preview ready. Listen before publishing.";
+      status.textContent = `Preview ready · ${sentCharacters.toLocaleString()} characters via ${modelId}. Listen before publishing.`;
     } catch (error) { status.textContent = error.message || String(error); reportError("Medicare Minute generation failed", error); }
     finally { generate.disabled = publishButton.disabled = false; }
   }

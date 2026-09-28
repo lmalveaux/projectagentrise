@@ -1,10 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const OWNER_EMAILS = new Set(["lisasjazz@gmail.com", "121media.info@gmail.com"]);
+const ELEVENLABS_MODEL_ID = "eleven_turbo_v2_5";
+const ELEVENLABS_CHARACTER_LIMIT = 40_000;
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Expose-Headers": "X-ElevenLabs-Model, X-Script-Characters",
 };
 
 function json(body: unknown, status = 200) {
@@ -21,11 +24,16 @@ Deno.serve(async (request) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    const elevenLabsKey = Deno.env.get("ELEVENLABS_API_KEY") ?? "";
+    // The project originally stored this secret with a trailing space in its name.
+    // Accept that legacy name so production works until the secret is re-saved cleanly.
+    const elevenLabsKey = Deno.env.get("ELEVENLABS_API_KEY") ?? Deno.env.get("ELEVENLABS_API_KEY ") ?? "";
     const voiceId = Deno.env.get("ELEVENLABS_VOICE_ID") ?? "";
-    if (!supabaseUrl || !serviceKey || !elevenLabsKey || !voiceId) {
-      throw new Error("The Medicare Minute service is not fully configured.");
-    }
+    if (!elevenLabsKey) throw new Error("Missing ELEVENLABS_API_KEY");
+    if (!voiceId) throw new Error("Missing ELEVENLABS_VOICE_ID");
+    // These two values are supplied automatically by the Supabase Edge runtime.
+    // They remain required for owner verification and Storage publishing.
+    if (!supabaseUrl) throw new Error("Supabase runtime is missing SUPABASE_URL");
+    if (!serviceKey) throw new Error("Supabase runtime is missing SUPABASE_SERVICE_ROLE_KEY");
 
     const authorization = request.headers.get("Authorization") ?? "";
     const token = authorization.replace(/^Bearer\s+/i, "");
@@ -42,7 +50,13 @@ Deno.serve(async (request) => {
     const body = await request.json();
     const script = String(body?.script ?? "").trim();
     if (!script) return json({ error: "A script is required." }, 400);
-    if (script.length > 5000) return json({ error: "The script is too long." }, 400);
+    if (script.length > ELEVENLABS_CHARACTER_LIMIT) {
+      throw new Error(`Script exceeds ${ELEVENLABS_CHARACTER_LIMIT} character limit. Current length: ${script.length}`);
+    }
+    console.info("Medicare Minute generation", {
+      modelId: ELEVENLABS_MODEL_ID,
+      characterCount: script.length,
+    });
 
     const speechResponse = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}`,
@@ -55,7 +69,7 @@ Deno.serve(async (request) => {
         },
         body: JSON.stringify({
           text: script,
-          model_id: "eleven_turbo_v2_5",
+          model_id: ELEVENLABS_MODEL_ID,
           output_format: "mp3_44100_128",
           voice_settings: { stability: 0.48, similarity_boost: 0.78, style: 0.18, use_speaker_boost: true },
         }),
@@ -97,7 +111,7 @@ Deno.serve(async (request) => {
         if (result.error) throw result.error;
       }
       const publicUrl = admin.storage.from("medicare-minute").getPublicUrl(audioPath).data.publicUrl;
-      return json({ ok: true, date, audioUrl: publicUrl, record });
+      return json({ ok: true, date, audioUrl: publicUrl, record, modelId: ELEVENLABS_MODEL_ID, characterCount: script.length });
     }
 
     return new Response(audio, {
@@ -107,6 +121,8 @@ Deno.serve(async (request) => {
         "Content-Type": "audio/mpeg",
         "Content-Length": String(audio.byteLength),
         "Cache-Control": "no-store",
+        "X-ElevenLabs-Model": ELEVENLABS_MODEL_ID,
+        "X-Script-Characters": String(script.length),
       },
     });
   } catch (error) {

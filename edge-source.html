@@ -1,0 +1,131 @@
+<!doctype html><meta charset="utf-8"><pre id="source">import { createClient } from &quot;npm:@supabase/supabase-js@2&quot;;
+
+const OWNER_EMAILS = new Set([&quot;lisasjazz@gmail.com&quot;, &quot;121media.info@gmail.com&quot;]);
+const ELEVENLABS_MODEL_ID = &quot;eleven_turbo_v2_5&quot;;
+const ELEVENLABS_CHARACTER_LIMIT = 40_000;
+const corsHeaders = {
+  &quot;Access-Control-Allow-Origin&quot;: &quot;*&quot;,
+  &quot;Access-Control-Allow-Headers&quot;: &quot;authorization, x-client-info, apikey, content-type&quot;,
+  &quot;Access-Control-Allow-Methods&quot;: &quot;POST, OPTIONS&quot;,
+  &quot;Access-Control-Expose-Headers&quot;: &quot;X-ElevenLabs-Model, X-Script-Characters&quot;,
+};
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, &quot;Content-Type&quot;: &quot;application/json&quot; },
+  });
+}
+
+Deno.serve(async (request) =&gt; {
+  if (request.method === &quot;OPTIONS&quot;) return new Response(&quot;ok&quot;, { headers: corsHeaders });
+  if (request.method !== &quot;POST&quot;) return json({ error: &quot;Method not allowed&quot; }, 405);
+
+  try {
+    const supabaseUrl = Deno.env.get(&quot;SUPABASE_URL&quot;) ?? &quot;&quot;;
+    const serviceKey = Deno.env.get(&quot;SUPABASE_SERVICE_ROLE_KEY&quot;) ?? &quot;&quot;;
+    const elevenLabsKey = Deno.env.get(&quot;ELEVENLABS_API_KEY&quot;) ?? &quot;&quot;;
+    const voiceId = Deno.env.get(&quot;ELEVENLABS_VOICE_ID&quot;) ?? &quot;&quot;;
+    if (!elevenLabsKey) throw new Error(&quot;Missing ELEVENLABS_API_KEY&quot;);
+    if (!voiceId) throw new Error(&quot;Missing ELEVENLABS_VOICE_ID&quot;);
+    // These two values are supplied automatically by the Supabase Edge runtime.
+    // They remain required for owner verification and Storage publishing.
+    if (!supabaseUrl) throw new Error(&quot;Supabase runtime is missing SUPABASE_URL&quot;);
+    if (!serviceKey) throw new Error(&quot;Supabase runtime is missing SUPABASE_SERVICE_ROLE_KEY&quot;);
+
+    const authorization = request.headers.get(&quot;Authorization&quot;) ?? &quot;&quot;;
+    const token = authorization.replace(/^Bearer\s+/i, &quot;&quot;);
+    if (!token) return json({ error: &quot;Sign in is required.&quot; }, 401);
+
+    const admin = createClient(supabaseUrl, serviceKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data: userData, error: userError } = await admin.auth.getUser(token);
+    if (userError || !userData.user) return json({ error: &quot;Your session has expired.&quot; }, 401);
+    const email = String(userData.user.email ?? &quot;&quot;).trim().toLowerCase();
+    if (!OWNER_EMAILS.has(email)) return json({ error: &quot;Owner access is required.&quot; }, 403);
+
+    const body = await request.json();
+    const script = String(body?.script ?? &quot;&quot;).trim();
+    if (!script) return json({ error: &quot;A script is required.&quot; }, 400);
+    if (script.length &gt; ELEVENLABS_CHARACTER_LIMIT) {
+      throw new Error(`Script exceeds ${ELEVENLABS_CHARACTER_LIMIT} character limit. Current length: ${script.length}`);
+    }
+    console.info(&quot;Medicare Minute generation&quot;, {
+      modelId: ELEVENLABS_MODEL_ID,
+      characterCount: script.length,
+    });
+
+    const speechResponse = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}`,
+      {
+        method: &quot;POST&quot;,
+        headers: {
+          &quot;xi-api-key&quot;: elevenLabsKey,
+          &quot;Content-Type&quot;: &quot;application/json&quot;,
+          Accept: &quot;audio/mpeg&quot;,
+        },
+        body: JSON.stringify({
+          text: script,
+          model_id: ELEVENLABS_MODEL_ID,
+          output_format: &quot;mp3_44100_128&quot;,
+          voice_settings: { stability: 0.48, similarity_boost: 0.78, style: 0.18, use_speaker_boost: true },
+        }),
+      },
+    );
+    if (!speechResponse.ok) {
+      const detail = await speechResponse.text();
+      throw new Error(`Voice generation failed (${speechResponse.status}): ${detail.slice(0, 300)}`);
+    }
+    const audio = new Uint8Array(await speechResponse.arrayBuffer());
+
+    if (body?.publish === true) {
+      const date = /^\d{4}-\d{2}-\d{2}$/.test(String(body?.date ?? &quot;&quot;))
+        ? String(body.date)
+        : new Date().toISOString().slice(0, 10);
+      const brief = body?.brief &amp;&amp; typeof body.brief === &quot;object&quot; ? body.brief : {};
+      await admin.storage.createBucket(&quot;medicare-minute&quot;, { public: true }).catch(() =&gt; undefined);
+      const audioPath = `daily/${date}.mp3`;
+      const record = {
+        ...brief,
+        date,
+        script,
+        audioPath,
+        publishedAt: new Date().toISOString(),
+      };
+      const audioUpload = await admin.storage.from(&quot;medicare-minute&quot;).upload(audioPath, audio, {
+        contentType: &quot;audio/mpeg&quot;,
+        upsert: true,
+        cacheControl: &quot;300&quot;,
+      });
+      if (audioUpload.error) throw audioUpload.error;
+      const recordBytes = new TextEncoder().encode(JSON.stringify({ medicareMinute: record }, null, 2));
+      for (const path of [`daily/${date}.json`, &quot;latest.json&quot;, &quot;assets/data/news.json&quot;]) {
+        const result = await admin.storage.from(&quot;medicare-minute&quot;).upload(path, recordBytes, {
+          contentType: &quot;application/json&quot;,
+          upsert: true,
+          cacheControl: &quot;60&quot;,
+        });
+        if (result.error) throw result.error;
+      }
+      const publicUrl = admin.storage.from(&quot;medicare-minute&quot;).getPublicUrl(audioPath).data.publicUrl;
+      return json({ ok: true, date, audioUrl: publicUrl, record, modelId: ELEVENLABS_MODEL_ID, characterCount: script.length });
+    }
+
+    return new Response(audio, {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        &quot;Content-Type&quot;: &quot;audio/mpeg&quot;,
+        &quot;Content-Length&quot;: String(audio.byteLength),
+        &quot;Cache-Control&quot;: &quot;no-store&quot;,
+        &quot;X-ElevenLabs-Model&quot;: ELEVENLABS_MODEL_ID,
+        &quot;X-Script-Characters&quot;: String(script.length),
+      },
+    });
+  } catch (error) {
+    console.error(&quot;generate-medicare-minute&quot;, error);
+    return json({ error: error instanceof Error ? error.message : String(error) }, 500);
+  }
+});
+</pre>

@@ -332,3 +332,29 @@ grant execute on function public.complete_automation_job(uuid,jsonb) to service_
 -- order by table_name;
 -- Required core tables include: agents, call_log, prospect_resource_groups,
 -- prospects, resource_groups, and training_appointments.
+
+-- Profile photos are public display assets, but each authenticated user may
+-- only create or change the avatar stored under their own user-id folder.
+insert into storage.buckets(id,name,public)
+values('agent-photos','agent-photos',true)
+on conflict(id) do update set public=true;
+
+drop policy if exists agent_photos_insert_own on storage.objects;
+create policy agent_photos_insert_own on storage.objects for insert to authenticated
+with check(bucket_id='agent-photos' and (storage.foldername(name))[1]=auth.uid()::text);
+drop policy if exists agent_photos_update_own on storage.objects;
+create policy agent_photos_update_own on storage.objects for update to authenticated
+using(bucket_id='agent-photos' and (storage.foldername(name))[1]=auth.uid()::text)
+with check(bucket_id='agent-photos' and (storage.foldername(name))[1]=auth.uid()::text);
+drop policy if exists agent_photos_read on storage.objects;
+create policy agent_photos_read on storage.objects for select to public
+using(bucket_id='agent-photos');
+
+create or replace function public.delete_agent_workspace()
+returns void language plpgsql security definer set search_path=public,pg_temp as $$
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  delete from public.agents where id=auth.uid();
+end $$;
+revoke all on function public.delete_agent_workspace() from public,anon;
+grant execute on function public.delete_agent_workspace() to authenticated;

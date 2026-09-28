@@ -1,0 +1,12 @@
+# Local package-manager caches
+.npm-cache/
+.pnpm-home/
+.pnpm-store/
+node_modules/
+
+# Local Supabase CLI login state (contains authentication material)
+.supabase-home/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
