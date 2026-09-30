@@ -1,6 +1,6 @@
 /* Agent Rise pilot extensions. Supabase stores account data; the Agent Rise
    platform owns the application, integrations, and provider callbacks. */
-const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],demoProspects:[],demoCalls:[],demoCarriers:[],demoTraining:[],demoTripIncentives:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},agentNotes:[],freshPourTrack:'rise',freshPourMuted:false,tripIncentives:[],agentInfo:{},scriptProfiles:{},libraryPreferences:{voice:'',speed:1},signaturePhrases:["I smell opportunity.","Stay in the game.","Don't leave money on the table."]},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
+const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],demoProspects:[],demoCalls:[],demoCarriers:[],demoTraining:[],demoTripIncentives:[],workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],freshPourNotes:{},agentNotes:[],freshPourTrack:'instrumental-1',freshPourMuted:false,tripIncentives:[],agentInfo:{},scriptProfiles:{},libraryPreferences:{voice:'',speed:1},signaturePhrases:["I smell opportunity.","Stay in the game.","Don't leave money on the table."]},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
 const config = {...window.AGENT_RISE_CONFIG};
 const OWNER_EMAILS = ['lisasjazz@gmail.com', '121media.info@gmail.com'];
 function isOwner(email){return OWNER_EMAILS.includes((email||'').trim().toLowerCase());}
@@ -148,7 +148,9 @@ function normalizeWorkspaceData(value={}){
   const signaturePhrases=Array.isArray(value.signaturePhrases)?value.signaturePhrases.map(item=>String(item||'').trim()).filter(Boolean).slice(0,100):["I smell opportunity.","Stay in the game.","Don't leave money on the table."];
   const agentNotes=Array.isArray(value.agentNotes)?value.agentNotes.filter(item=>item&&String(item.text||'').trim()).map(item=>{const createdAt=String(item.createdAt||item.updatedAt||iso());return {id:/^[0-9a-f-]{36}$/i.test(item.id||'')?item.id:uid(),text:String(item.text).trim(),appTitle:String(item.appTitle||'Agent Rise Pro'),createdAt,updatedAt:String(item.updatedAt||createdAt)};}):[];
   const appearanceTheme=value.appearanceTheme===undefined?'':normalizeAppearanceTheme(value.appearanceTheme);
-  const freshPourTrack=value.freshPourTrack==='jazz'||value.freshPourTrack==='rise'||/^https:\/\//i.test(String(value.freshPourTrack||''))?String(value.freshPourTrack):'rise';
+  const savedFreshPourTrack=String(value.freshPourTrack||'');
+  const defaultFreshPourTracks=['vocal-1','vocal-2','instrumental-1','instrumental-2','instrumental-3','instrumental-4'];
+  const freshPourTrack=/^https:\/\//i.test(savedFreshPourTrack)?savedFreshPourTrack:defaultFreshPourTracks.includes(savedFreshPourTrack)?savedFreshPourTrack:'instrumental-1';
   const freshPourMuted=value.freshPourMuted===true;
   return {appearanceTheme,dailyGoal,goalTargets,campaigns:safeArray(value.campaigns),referrals:safeArray(value.referrals),freshPourNotes:notes,agentNotes,freshPourTrack,freshPourMuted,tripIncentives:safeArray(value.tripIncentives),agentInfo,scriptProfiles,libraryPreferences,signaturePhrases};
 }
@@ -436,10 +438,17 @@ function renderAgentNotes(){const host=$('agentNotesList');if(!host)return;const
 async function saveAgentNote(event){event.preventDefault();const field=$('agentNoteText'),text=field.value.trim();if(!text)return field.focus();const now=iso();pilot.workspaceData.agentNotes.unshift({id:uid(),text,appTitle:'Fresh Pour',createdAt:now,updatedAt:now});const saved=await persistWorkspace();if(saved){field.value='';$('agentNoteStatus').textContent='Note saved to Agent Rise.';}else $('agentNoteStatus').textContent='Note remains in this session until the account reconnects.';renderAgentNotes();}
 let agentNoteRecognition=null;
 function startAgentNoteSpeech(){const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('agentNoteStatus').textContent='Speech-to-text is not available in this browser. You can still type your note.';return;}if(agentNoteRecognition){agentNoteRecognition.stop();return;}const button=$('agentNoteSpeech'),field=$('agentNoteText'),recognition=new SpeechRecognition();agentNoteRecognition=recognition;recognition.lang='en-US';recognition.interimResults=false;recognition.continuous=false;button.setAttribute('aria-pressed','true');button.textContent='■ Stop';$('agentNoteStatus').textContent='Listening…';recognition.onresult=event=>{const transcript=Array.from(event.results).map(result=>result[0]?.transcript||'').join(' ').trim();field.value=[field.value.trim(),transcript].filter(Boolean).join(' ');$('agentNoteStatus').textContent='Speech added. Review it, then save your note.';};recognition.onerror=event=>{$('agentNoteStatus').textContent=event.error==='not-allowed'?'Microphone permission is needed for speech-to-text.':'Speech was not captured. Please try again.';};recognition.onend=()=>{agentNoteRecognition=null;button.setAttribute('aria-pressed','false');button.textContent='🎙 Speak';};recognition.start();}
-const FRESH_POUR_TRACKS={rise:'assets/audio/rise-theme.mp3',jazz:'assets/audio/jazz-instrumental.mp3'};
+const FRESH_POUR_TRACKS={
+  'vocal-1':'assets/audio/rise-vocal-1.mp3',
+  'vocal-2':'assets/audio/rise-vocal-2.mp3',
+  'instrumental-1':'assets/audio/rise-instrumental-1.mp3',
+  'instrumental-2':'assets/audio/rise-instrumental-2.mp3',
+  'instrumental-3':'assets/audio/rise-instrumental-3.mp3',
+  'instrumental-4':'assets/audio/rise-instrumental-4.mp3'
+};
 let freshPourMusicShouldResume=true;
-function freshPourTrackSource(){const choice=pilot.workspaceData.freshPourTrack||'rise';return FRESH_POUR_TRACKS[choice]||choice;}
-function renderFreshPourMusic(){const audio=breakroomElements?.musicAudio,select=$('freshMusicTrack'),mute=$('freshMusicMute');if(!audio||!select||!mute)return;const choice=pilot.workspaceData.freshPourTrack||'rise',source=freshPourTrackSource();if(![...select.options].some(option=>option.value===choice)){const custom=document.createElement('option');custom.value=choice;custom.textContent='My track';select.append(custom);}select.value=choice;audio.loop=true;audio.volume=Number($('freshMusicVolume')?.value||.25);audio.muted=pilot.workspaceData.freshPourMuted===true;mute.setAttribute('aria-pressed',String(audio.muted));mute.textContent=audio.muted?'Unmute':'Mute';if(audio.getAttribute('src')!==source){audio.src=source;audio.load();}$('freshMusicPlay').textContent=audio.paused?'▶ Play':'❚❚ Pause';$('freshMusicPlay').setAttribute('aria-pressed',String(!audio.paused));}
+function freshPourTrackSource(){const choice=pilot.workspaceData.freshPourTrack||'instrumental-1';return FRESH_POUR_TRACKS[choice]||choice;}
+function renderFreshPourMusic(){const audio=breakroomElements?.musicAudio,select=$('freshMusicTrack'),mute=$('freshMusicMute');if(!audio||!select||!mute)return;const choice=pilot.workspaceData.freshPourTrack||'instrumental-1',source=freshPourTrackSource();if(![...select.options].some(option=>option.value===choice)){const custom=document.createElement('option');custom.value=choice;custom.textContent='My track';select.append(custom);}select.value=choice;audio.loop=true;audio.volume=Number($('freshMusicVolume')?.value||.25);audio.muted=pilot.workspaceData.freshPourMuted===true;mute.setAttribute('aria-pressed',String(audio.muted));mute.textContent=audio.muted?'Unmute':'Mute';if(audio.getAttribute('src')!==source){audio.src=source;audio.load();}$('freshMusicPlay').textContent=audio.paused?'▶ Play':'❚❚ Pause';$('freshMusicPlay').setAttribute('aria-pressed',String(!audio.paused));}
 async function playFreshPourMusic(){const audio=breakroomElements.musicAudio;renderFreshPourMusic();freshPourMusicShouldResume=true;try{await audio.play();$('freshMusicStatus').textContent='Playing in Fresh Pour.';}catch(error){freshPourMusicShouldResume=false;$('freshMusicStatus').textContent='This track is not available yet.';reportError('Fresh Pour music failed',error);}}
 function pauseFreshPourMusic(preserveResume=false){const audio=breakroomElements.musicAudio;if(!preserveResume)freshPourMusicShouldResume=false;audio.pause();renderFreshPourMusic();}
 async function selectFreshPourTrack(choice){pilot.workspaceData.freshPourTrack=choice;const resume=freshPourMusicShouldResume;pauseFreshPourMusic(true);renderFreshPourMusic();await persistWorkspace();if(!breakroomElements.view.hidden&&resume)await playFreshPourMusic();}
@@ -678,6 +687,7 @@ if(config.supabaseUrl&&config.supabaseAnonKey){ensureClient().then(async db=>{co
 // with a $19.99 first-month trial CTA. Copy: "Time is running out. AEP is almost here.
 // Create your account now and be ready with Agent Rise Pro. First month $19.99."
 // Popup fires once per session. Dismissible. Links to the signup flow.
+
 
 
 
