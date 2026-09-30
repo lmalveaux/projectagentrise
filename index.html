@@ -1367,9 +1367,9 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout58" />
+    <link rel="stylesheet" href="pilot.css?v=layout60" />
     <main class="app">
-      <div class="topbar ar-header" aria-label="Workspace header">
+      <div class="topbar ar-header agent-bar" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
         <div class="header-breathing-space"><button class="premium-phone-orb" type="button" id="premiumPhoneButton" aria-label="Premium phone" title="Premium phone">☎<span class="tier-star gold-star" aria-hidden="true">★</span></button></div>
         <div class="header-account-zone">
@@ -1661,6 +1661,19 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
             <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
           </nav>
+
+          <section class="agent-notes" aria-labelledby="agentNotesTitle">
+            <div class="agent-notes-heading">
+              <div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div>
+              <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
+            </div>
+            <form id="agentNotesForm" class="agent-notes-compose">
+              <label for="agentNoteText">New note<textarea id="agentNoteText" rows="3" placeholder="Type or speak what you want to remember."></textarea></label>
+              <div class="agent-note-actions"><button class="button button-secondary" id="agentNoteSpeech" type="button" aria-pressed="false">🎙 Speak</button><button class="button button-primary" type="submit">Save note</button></div>
+              <p id="agentNoteStatus" class="agent-note-status" role="status"></p>
+            </form>
+            <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
+          </section>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Incentives</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
@@ -3970,7 +3983,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout59" defer></script>
+    <script src="pilot.js?v=layout60" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
