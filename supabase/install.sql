@@ -350,6 +350,23 @@ drop policy if exists agent_photos_read on storage.objects;
 create policy agent_photos_read on storage.objects for select to public
 using(bucket_id='agent-photos');
 
+-- Fresh Pour user music is publicly playable, while each signed-in user may
+-- only upload or replace files inside their own user-id folder.
+insert into storage.buckets(id,name,public)
+values('user-music','user-music',true)
+on conflict(id) do update set public=true;
+
+drop policy if exists user_music_insert_own on storage.objects;
+create policy user_music_insert_own on storage.objects for insert to authenticated
+with check(bucket_id='user-music' and (storage.foldername(name))[1]=auth.uid()::text);
+drop policy if exists user_music_update_own on storage.objects;
+create policy user_music_update_own on storage.objects for update to authenticated
+using(bucket_id='user-music' and (storage.foldername(name))[1]=auth.uid()::text)
+with check(bucket_id='user-music' and (storage.foldername(name))[1]=auth.uid()::text);
+drop policy if exists user_music_read on storage.objects;
+create policy user_music_read on storage.objects for select to public
+using(bucket_id='user-music');
+
 create or replace function public.delete_agent_workspace()
 returns void language plpgsql security definer set search_path=public,pg_temp as $$
 begin

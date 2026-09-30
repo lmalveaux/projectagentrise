@@ -1675,6 +1675,19 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
           </section>
 
+          <section class="fresh-music-player" aria-labelledby="freshMusicTitle">
+            <div class="fresh-music-heading"><div><h2 id="freshMusicTitle">Fresh Pour Music</h2><p>Choose a track for your time in Fresh Pour.</p></div><p id="freshMusicStatus" class="fresh-music-status" role="status"></p></div>
+            <div class="fresh-music-controls">
+              <label for="freshMusicTrack">Track<select id="freshMusicTrack"><option value="rise">Rise</option><option value="jazz">Jazz instrumental</option></select></label>
+              <button class="button button-primary" id="freshMusicPlay" type="button" aria-pressed="false">▶ Play</button>
+              <label class="fresh-music-volume" for="freshMusicVolume">Volume<input id="freshMusicVolume" type="range" min="0" max="1" step="0.05" value="0.25" /></label>
+              <button class="button button-primary" id="freshMusicMute" type="button" aria-pressed="false">Mute</button>
+              <button class="button button-primary" id="freshMusicUploadButton" type="button">Use my own track</button>
+              <input id="freshMusicUpload" type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp4,audio/wav" hidden />
+              <button class="button button-primary" id="freshMusicSpotify" type="button">Connect Spotify</button>
+            </div>
+          </section>
+
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Incentives</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
             <div class="trip-incentive-row" id="tripIncentiveRows"></div>
@@ -3573,7 +3586,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         loopVideoMobile: "assets/video/fresh-pour-room-loop-mobile.mp4",
         exitVideo: "assets/video/fresh-pour-exit.mp4",
         ambience: "",
-        music: "assets/audio/freshpour-music.mp3"
+        music: "assets/audio/rise-theme.mp3"
       };
       // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
       // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
@@ -3750,8 +3763,9 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       function restoreRoomMix() {
         const conversationIsPlaying = !breakroomElements.seatAudio.paused;
+        const selectedMusicVolume = Number(document.querySelector("#freshMusicVolume")?.value || 0.25);
         breakroomElements.ambienceAudio.volume = conversationIsPlaying ? 0.18 : 0.55;
-        breakroomElements.musicAudio.volume = conversationIsPlaying ? 0.025 : 0.11;
+        breakroomElements.musicAudio.volume = conversationIsPlaying ? selectedMusicVolume * 0.25 : selectedMusicVolume;
       }
 
       function pauseRoomSound() {
@@ -3845,6 +3859,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           toggleAmbience();
         }
         breakroomElements.view.hidden = false;
+        window.AgentRiseFreshPourMusic?.open();
         breakroomElements.seat.classList.add("hidden");
         breakroomElements.panel.classList.remove("is-hidden", "is-waiting");
         breakroomElements.toggleMenuButton.textContent = "Hide menu";
@@ -3872,6 +3887,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       async function closeBreakroom() {
         if (breakroomElements.view.hidden || breakroomIsClosing) return;
+        window.AgentRiseFreshPourMusic?.close();
         stopConversationAudio(true);
         pauseRoomSound();
         if (BREAKROOM_MEDIA.exitVideo && !reduceBreakroomMotion) {
@@ -3983,7 +3999,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout60" defer></script>
+    <script src="pilot.js?v=layout61" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
