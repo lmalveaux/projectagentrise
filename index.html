@@ -1115,6 +1115,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       }
 
       .breakroom-panel.is-hidden {
+        visibility: hidden;
         opacity: 0;
         transform: translateY(12px);
         pointer-events: none;
@@ -1367,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout60" />
+    <link rel="stylesheet" href="pilot.css?v=layout63" />
     <main class="app">
       <div class="topbar ar-header agent-bar" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1626,11 +1627,11 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <span class="ambience-dot" aria-hidden="true"></span>
               <span id="ambienceLabel">Room sound: not loaded</span>
             </button>
-            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="true" aria-controls="breakroomPanel">Hide menu</button>
+            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Menu</button>
           </div>
         </div>
 
-        <div class="breakroom-panel" id="breakroomPanel">
+        <div class="breakroom-panel is-hidden" id="breakroomPanel">
           <div class="breakroom-sign">
             <span class="sign-eyebrow">Agent Rise presents</span>
             <h1 class="sign-title">Fresh Pour</h1>
@@ -1663,16 +1664,18 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           </nav>
 
           <section class="agent-notes" aria-labelledby="agentNotesTitle">
-            <div class="agent-notes-heading">
-              <div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div>
-              <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
+            <button class="agent-notes-toggle" id="agentNotesToggle" type="button" aria-expanded="false" aria-controls="agentNotesBody"><span><strong id="agentNotesTitle">Agent Notes</strong><small>Every note in one searchable place.</small></span><span class="agent-notes-toggle-icon" aria-hidden="true">⌄</span></button>
+            <div class="agent-notes-body" id="agentNotesBody" hidden>
+              <div class="agent-notes-heading">
+                <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
+              </div>
+              <form id="agentNotesForm" class="agent-notes-compose">
+                <label for="agentNoteText">New note<textarea id="agentNoteText" rows="3" placeholder="Type or speak what you want to remember."></textarea></label>
+                <div class="agent-note-actions"><button class="button button-secondary" id="agentNoteSpeech" type="button" aria-pressed="false">🎙 Speak</button><button class="button button-primary" type="submit">Save note</button></div>
+                <p id="agentNoteStatus" class="agent-note-status" role="status"></p>
+              </form>
+              <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
             </div>
-            <form id="agentNotesForm" class="agent-notes-compose">
-              <label for="agentNoteText">New note<textarea id="agentNoteText" rows="3" placeholder="Type or speak what you want to remember."></textarea></label>
-              <div class="agent-note-actions"><button class="button button-secondary" id="agentNoteSpeech" type="button" aria-pressed="false">🎙 Speak</button><button class="button button-primary" type="submit">Save note</button></div>
-              <p id="agentNoteStatus" class="agent-note-status" role="status"></p>
-            </form>
-            <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
           </section>
 
           <section class="fresh-music-player" aria-labelledby="freshMusicTitle">
@@ -3841,7 +3844,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function toggleBreakroomMenu() {
         const menuWillBeHidden = !breakroomElements.panel.classList.contains("is-hidden");
         breakroomElements.panel.classList.toggle("is-hidden", menuWillBeHidden);
-        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Show menu" : "Hide menu";
+        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Menu" : "Close menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
       }
 
@@ -3861,9 +3864,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         breakroomElements.view.hidden = false;
         window.AgentRiseFreshPourMusic?.open();
         breakroomElements.seat.classList.add("hidden");
-        breakroomElements.panel.classList.remove("is-hidden", "is-waiting");
-        breakroomElements.toggleMenuButton.textContent = "Hide menu";
-        breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "true");
+        breakroomElements.panel.classList.remove("is-waiting");
+        breakroomElements.panel.classList.add("is-hidden");
+        breakroomElements.toggleMenuButton.textContent = "Menu";
+        breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "hidden";
         startBreakroomVisuals();
         breakroomElements.closeButton.focus();
@@ -3999,7 +4003,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout62" defer></script>
+    <script src="pilot.js?v=layout63" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
