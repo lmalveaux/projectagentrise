@@ -513,8 +513,9 @@ body[data-theme="plain-light"] .breakroom,body[data-theme="sky-view-day"] .break
 @media(max-width:700px){.agent-notes-heading{grid-template-columns:1fr}.agent-note-actions{justify-content:stretch}.agent-note-actions .button{flex:1}}
 
 /* Teal is reserved for Fresh Pour, Client Journey, and contact actions. */
-.prospect-card .card-actions .button{background:rgba(45,90,110,.55)!important;color:#F5F1EA!important;border-color:rgba(245,241,234,.72)!important}
-.prospect-card .card-actions .button:hover,.prospect-card .card-actions .button:focus-visible{background:rgba(60,115,140,.65)!important;color:#F5F1EA!important}
+#prospectsWorkspace .prospect-card .card-actions .button{background:rgba(45,90,110,.72)!important;color:#F5F1EA!important;border-color:rgba(245,241,234,.72)!important}
+#prospectsWorkspace .prospect-card .card-actions .button:hover,#prospectsWorkspace .prospect-card .card-actions .button:focus-visible{background:rgba(60,115,140,.82)!important;color:#F5F1EA!important}
+#prospectsWorkspace .filter.is-active,#prospectsWorkspace .status,#prospectsWorkspace .queue-count{background:rgba(45,90,110,.72)!important;color:#F5F1EA!important;border-color:rgba(245,241,234,.72)!important}
 .breakroom .fresh-office-tools .button{background:#3A3A45!important;color:#A8A29A!important}
 .breakroom .fresh-office-tools .button:hover,.breakroom .fresh-office-tools .button:focus-visible{background:#45454F!important;color:#F5F1EA!important}
 .breakroom .fresh-office-tools .button.is-active,.breakroom .fresh-office-tools .button[aria-expanded="true"]{background:#2F3A6B!important;color:#F5F1EA!important}
