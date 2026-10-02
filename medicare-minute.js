@@ -125,11 +125,11 @@
     } catch (error) { status.textContent = error.message || String(error); reportError("Medicare Minute generation failed", error); }
     finally { generate.disabled = publishButton.disabled = false; }
   }
-  function playerMarkup(record, compact = false) {
+  function playerMarkup(record, compact = false, shownDate = record?.date) {
     if (!record?.audioUrl && !record?.audioPath) return "";
     const url = record.audioUrl || storageUrl(record.audioPath), id = `minute-player-${generateUUID()}`;
-    const date = new Date(`${record.date}T12:00:00`), label = aepActive(date) ? "🎙 AEP Daily Briefing" : "🎙 Medicare brief";
-    return `<div class="minute-player ${compact ? "is-compact" : ""}" data-minute-player><strong>${label} for ${html(displayDate(record.date))}</strong><audio id="${id}" preload="metadata" src="${html(url)}"></audio><div class="minute-player-controls"><button class="button button-secondary" type="button" data-minute-play>▶ Play</button><input data-minute-seek type="range" min="0" max="100" value="0" aria-label="Seek Medicare brief"><span data-minute-time>0:00 / 0:00</span></div><button class="auth-link minute-full-link" type="button" data-open-daily-brief hidden>Full brief available in Fresh Pour →</button></div>`;
+    const date = new Date(`${shownDate}T12:00:00`), label = aepActive(date) ? "🎙 AEP Daily Briefing" : "🎙 Medicare brief";
+    return `<div class="minute-player ${compact ? "is-compact" : ""}" data-minute-player><strong>${label} for ${html(displayDate(shownDate))}</strong><audio id="${id}" preload="metadata" src="${html(url)}"></audio><div class="minute-player-controls"><button class="button button-secondary" type="button" data-minute-play>▶ Play</button><input data-minute-seek type="range" min="0" max="100" value="0" aria-label="Seek Medicare brief"><span data-minute-time>0:00 / 0:00</span></div><button class="auth-link minute-full-link" type="button" data-open-daily-brief hidden>Full brief available in Fresh Pour →</button></div>`;
   }
   function bindPlayers(root = document) {
     root.querySelectorAll("[data-minute-player]").forEach(player => {
@@ -160,14 +160,9 @@
   }
   function renderNotificationBrief() {
     const host = $m("medicareMinuteNotification"); if (!host) return;
-    const today = localDate(), yesterdayDate = new Date(); yesterdayDate.setDate(yesterdayDate.getDate() - 1); const yesterday = localDate(yesterdayDate);
-    let record = latestRecord, note = "";
-    if (!record) { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No brief posted yet today.</p></section>`; return; }
-    if (record.date !== today) {
-      if (record.date === yesterday) note = "<p>Today's brief is coming — here's yesterday's.</p>";
-      else { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No brief posted yet today.</p></section>`; return; }
-    }
-    host.innerHTML = `<section class="minute-notification"><h3>${briefTitle()}</h3>${note}${playerMarkup(record, true)}</section>`; bindPlayers(host);
+    const today = localDate(), record = latestRecord;
+    if (!record) { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No Medicare Minute has been posted yet.</p></section>`; return; }
+    host.innerHTML = `<section class="minute-notification"><h3>${briefTitle()}</h3>${playerMarkup(record, true, today)}</section>`; bindPlayers(host);
   }
   function contextMarkup(record) {
     const sections = [[record.headline1, record.context1], [record.headline2, record.context2], [record.headline3, record.context3]].filter(([headline]) => headline);
@@ -175,9 +170,10 @@
   }
   function renderDailyBrief() {
     const host = $m("dailyBriefContent"); if (!host) return;
-    if (!latestRecord) { host.innerHTML = "<p>No brief posted yet today.</p>"; return; }
+    if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute has been posted yet.</p>"; return; }
+    const today = localDate();
     const sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
-    const current = `<article class="daily-brief-current"><h3>${briefTitle(new Date(`${latestRecord.date}T12:00:00`))} · ${html(displayDate(latestRecord.date))}</h3>${playerMarkup(latestRecord)}${contextMarkup(latestRecord)}${latestRecord.adlib1 ? `<blockquote>${html(latestRecord.adlib1)}</blockquote>` : ""}${latestRecord.adlib2 ? `<blockquote>${html(latestRecord.adlib2)}</blockquote>` : ""}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}${sources.length ? `<h4>Sources</h4><ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}<details><summary>Full script</summary><p class="minute-script-text">${html(latestRecord.script || "")}</p></details></article>`;
+    const current = `<article class="daily-brief-current"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.adlib1 ? `<blockquote>${html(latestRecord.adlib1)}</blockquote>` : ""}${latestRecord.adlib2 ? `<blockquote>${html(latestRecord.adlib2)}</blockquote>` : ""}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}${sources.length ? `<h4>Sources</h4><ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}<details><summary>Full script</summary><p class="minute-script-text">${html(latestRecord.script || "")}</p></details></article>`;
     const prior = archiveRecords.filter(item => item.date !== latestRecord.date).map(item => `<details class="daily-brief-archive-item"><summary>${html(displayDate(item.date))} · ${html(item.headline1 || "Medicare brief")}</summary>${playerMarkup(item, true)}<p class="minute-script-text">${html(item.script || "")}</p></details>`).join("");
     host.innerHTML = `${current}<section class="daily-brief-archive"><h3>Previous 30 days</h3>${prior || "<p>No earlier briefs in the archive yet.</p>"}</section>`; bindPlayers(host);
   }
@@ -198,3 +194,4 @@
   window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle };
   init();
 })();
+
