@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout66" />
+    <link rel="stylesheet" href="pilot.css?v=layout67" />
     <main class="app">
       <div class="topbar ar-header agent-bar" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1739,9 +1739,10 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         </section>
 
         <section class="fresh-utility-shell fresh-music-shell" aria-label="The Pour music player">
-          <button class="fresh-utility-toggle" id="freshMusicPanelToggle" type="button" aria-expanded="false" aria-controls="freshMusicPanel"><span>The Pour</span><span class="fresh-utility-icon" aria-hidden="true">⌄</span></button>
+          <button class="fresh-utility-toggle fresh-pour-title-toggle" id="freshMusicPanelToggle" type="button" aria-expanded="false" aria-controls="freshMusicPanel"><span>♫ THE POUR</span><span class="fresh-utility-icon" aria-hidden="true">⌄</span></button>
           <div class="fresh-music-player" id="freshMusicPanel" hidden>
-            <div class="fresh-music-heading"><div><h2 id="freshMusicTitle">The Pour</h2><p>Choose a track for your time in Fresh Pour.</p></div><p id="freshMusicStatus" class="fresh-music-status" role="status"></p></div>
+            <div class="fresh-music-panel-actions"><button class="button button-primary" id="saveFreshMusicPanel" type="button">Save</button><button class="button button-secondary" id="exitFreshMusicPanel" type="button">Exit</button></div>
+            <div class="fresh-music-heading"><div><h2 id="freshMusicTitle">♫ THE POUR</h2><p>Choose a track for your time in Fresh Pour.</p></div><p id="freshMusicStatus" class="fresh-music-status" role="status"></p></div>
             <div class="fresh-music-controls">
               <label for="freshMusicTrack">Track<select id="freshMusicTrack"><option value="vocal-1">Rise — Vocal 1</option><option value="vocal-2">Rise — Vocal 2</option><option value="instrumental-1" selected>Rise — Instrumental 1</option><option value="instrumental-2">Rise — Instrumental 2</option><option value="instrumental-3">Rise — Instrumental 3</option><option value="instrumental-4">Rise — Instrumental 4</option></select></label>
               <button class="button button-primary" id="freshMusicPlay" type="button" aria-pressed="false">▶ Play</button>
@@ -4017,7 +4018,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout66" defer></script>
+    <script src="pilot.js?v=layout67" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
