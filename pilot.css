@@ -497,7 +497,6 @@ body[data-theme="plain-light"] .breakroom,body[data-theme="sky-view-day"] .break
 @media(max-width:700px){.minute-form-grid{grid-template-columns:1fr}.minute-player-controls{grid-template-columns:auto 1fr}.minute-player-controls [data-minute-time]{grid-column:1/-1}.signature-phrase-row{grid-template-columns:1fr 1fr}.signature-phrase-row input{grid-column:1/-1}}
 
 /* Calm bay header and Fresh Pour refinement. */
-.agent-bar{background:rgba(155,205,229,.24)!important;backdrop-filter:blur(7px)!important;-webkit-backdrop-filter:blur(7px)!important;border-bottom:1px solid rgba(245,215,122,.72)!important}
 #openBreakroomButton{background:rgba(45,90,110,.55)!important;color:#F5F1EA!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 #openBreakroomButton:hover,#openBreakroomButton:focus-visible{background:rgba(60,115,140,.65)!important;color:#F5F1EA!important}
 #clientJourneyToggle{background:rgba(45,90,110,.55)!important;color:#F5F1EA!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
