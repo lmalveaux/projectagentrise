@@ -154,7 +154,7 @@ function normalizeWorkspaceData(value={}){
   const freshPourMenuOpen=value.freshPourMenuOpen===true;
   const appearanceTheme=value.appearanceTheme===undefined?'':normalizeAppearanceTheme(value.appearanceTheme);
   const savedFreshPourTrack=String(value.freshPourTrack||'');
-  const defaultFreshPourTracks=['vocal-1','vocal-2','instrumental-1','instrumental-2','instrumental-3','instrumental-4'];
+  const defaultFreshPourTracks=['instrumental-1','instrumental-2','instrumental-3','instrumental-4'];
   const freshPourTrack=/^https:\/\//i.test(savedFreshPourTrack)?savedFreshPourTrack:defaultFreshPourTracks.includes(savedFreshPourTrack)?savedFreshPourTrack:'instrumental-1';
   const freshPourMuted=value.freshPourMuted===true;
   return {appearanceTheme,dailyGoal,goalTargets,campaigns:safeArray(value.campaigns),referrals:safeArray(value.referrals),freshPourNotes:notes,agentNotes,agentNotesOpen,musicPanelOpen,freshPourMenuOpen,freshPourTrack,freshPourMuted,tripIncentives:safeArray(value.tripIncentives),agentInfo,scriptProfiles,libraryPreferences,signaturePhrases};
@@ -447,14 +447,12 @@ async function saveAgentNote(event,context='Fresh Pour'){event.preventDefault();
 let agentNoteRecognition=null;
 function startAgentNoteSpeech(context='Fresh Pour'){const dashboard=context==='Dashboard',button=$(dashboard?'dashboardAgentNoteSpeech':'agentNoteSpeech'),field=$(dashboard?'dashboardAgentNoteText':'agentNoteText'),status=$(dashboard?'dashboardAgentNoteStatus':'agentNoteStatus'),SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){status.textContent='Speech-to-text is not available in this browser. You can still type your note.';return;}if(agentNoteRecognition){agentNoteRecognition.stop();return;}const recognition=new SpeechRecognition();agentNoteRecognition=recognition;recognition.lang='en-US';recognition.interimResults=false;recognition.continuous=false;button.setAttribute('aria-pressed','true');button.textContent='■ Stop';status.textContent='Listening…';recognition.onresult=event=>{const transcript=Array.from(event.results).map(result=>result[0]?.transcript||'').join(' ').trim();field.value=[field.value.trim(),transcript].filter(Boolean).join(' ');status.textContent='Speech added. Review it, then save your note.';};recognition.onerror=event=>{status.textContent=event.error==='not-allowed'?'Microphone permission is needed for speech-to-text.':'Speech was not captured. Please try again.';};recognition.onend=()=>{agentNoteRecognition=null;button.setAttribute('aria-pressed','false');button.textContent='🎙 Speak';};recognition.start();}
 const FRESH_POUR_TRACKS={
-  'vocal-1':'assets/audio/rise-vocal-1.mp3',
-  'vocal-2':'assets/audio/rise-vocal-2.mp3',
   'instrumental-1':'assets/audio/rise-instrumental-1.mp3',
   'instrumental-2':'assets/audio/rise-instrumental-2.mp3',
   'instrumental-3':'assets/audio/rise-instrumental-3.mp3',
   'instrumental-4':'assets/audio/rise-instrumental-4.mp3'
 };
-const FRESH_POUR_PLAYLIST=['instrumental-1','instrumental-2','instrumental-3','instrumental-4','vocal-1','vocal-2'];
+const FRESH_POUR_PLAYLIST=['instrumental-1','instrumental-2','instrumental-3','instrumental-4'];
 let freshPourMusicShouldResume=true;
 function freshPourTrackSource(){const choice=pilot.workspaceData.freshPourTrack||'instrumental-1';return FRESH_POUR_TRACKS[choice]||choice;}
 function renderFreshPourMusic(){const audio=breakroomElements?.musicAudio,select=$('freshMusicTrack'),mute=$('freshMusicMute'),headerMute=$('freshHeaderMusicToggle');if(!audio||!select||!mute)return;const choice=pilot.workspaceData.freshPourTrack||'instrumental-1',source=freshPourTrackSource();if(![...select.options].some(option=>option.value===choice)){const custom=document.createElement('option');custom.value=choice;custom.textContent='My track';select.append(custom);}select.value=choice;audio.loop=false;audio.volume=Number($('freshMusicVolume')?.value||.25);audio.muted=pilot.workspaceData.freshPourMuted===true;mute.setAttribute('aria-pressed',String(audio.muted));mute.textContent=audio.muted?'Unmute':'Mute';if(headerMute){headerMute.setAttribute('aria-pressed',String(!audio.muted));headerMute.textContent=audio.muted?'🔇':'🔊';headerMute.title=audio.muted?'Turn music on':'Turn music off';}if(audio.getAttribute('src')!==source){audio.src=source;audio.load();}$('freshMusicPlay').textContent=audio.paused?'▶ Play':'❚❚ Pause';$('freshMusicPlay').setAttribute('aria-pressed',String(!audio.paused));}
