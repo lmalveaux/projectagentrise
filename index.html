@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout65" />
+    <link rel="stylesheet" href="pilot.css?v=layout66" />
     <main class="app">
       <div class="topbar ar-header agent-bar" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1398,7 +1398,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="jitCarriersButton">JIT Carriers <span class="tier-star gold-star" title="Premium">★</span></button>
       </nav>
       <div class="gold-dashboard-divider" aria-hidden="true"></div>
-      <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
+      <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary dashboard-notes-button" type="button" id="dashboardAgentNotesButton" title="Agent Notes" aria-label="Open Agent Notes">📝 <span>Agent Notes</span></button><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
       <section id="prospectsWorkspace" class="prospects-workspace" hidden>
         <div class="prospects-actions prospects-actions-top"><button class="button button-primary" id="prospectsSaveTop" type="button">Save</button><button class="button button-secondary" id="prospectsExitTop" type="button">Exit</button></div>
       <header class="header">
@@ -1622,12 +1622,14 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <div class="breakroom-inner">
         <div class="breakroom-top">
           <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton" onclick="closeBreakroom()">← Back to the desk</button>
+          <strong class="fresh-pour-top-title">Fresh Pour</strong>
           <div class="breakroom-top-actions">
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
               <span id="ambienceLabel">Room sound: not loaded</span>
             </button>
-            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Menu</button>
+            <button class="ambience-toggle fresh-header-icon" type="button" id="freshHeaderMusicToggle" aria-pressed="true" title="Turn music off" aria-label="Music on or off">🔊</button>
+            <button class="ambience-toggle fresh-header-icon" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel" title="Show or hide menu">☰ <span>Menu</span></button>
           </div>
         </div>
 
@@ -1663,32 +1665,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
             <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
           </nav>
-
-          <section class="agent-notes" id="agentNotesPanel" aria-labelledby="agentNotesTitle" hidden>
-              <div class="agent-notes-heading">
-                <div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div>
-                <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
-              </div>
-              <form id="agentNotesForm" class="agent-notes-compose">
-                <label for="agentNoteText">New note<textarea id="agentNoteText" rows="3" placeholder="Type or speak what you want to remember."></textarea></label>
-                <div class="agent-note-actions"><button class="button button-secondary" id="agentNoteSpeech" type="button" aria-pressed="false">🎙 Speak</button><button class="button button-primary" type="submit">Save note</button></div>
-                <p id="agentNoteStatus" class="agent-note-status" role="status"></p>
-              </form>
-              <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
-          </section>
-
-          <section class="fresh-music-player" aria-labelledby="freshMusicTitle">
-            <div class="fresh-music-heading"><div><h2 id="freshMusicTitle">Fresh Pour Music</h2><p>Choose a track for your time in Fresh Pour.</p></div><p id="freshMusicStatus" class="fresh-music-status" role="status"></p></div>
-            <div class="fresh-music-controls">
-              <label for="freshMusicTrack">Track<select id="freshMusicTrack"><option value="vocal-1">Rise — Vocal 1</option><option value="vocal-2">Rise — Vocal 2</option><option value="instrumental-1" selected>Rise — Instrumental 1</option><option value="instrumental-2">Rise — Instrumental 2</option><option value="instrumental-3">Rise — Instrumental 3</option><option value="instrumental-4">Rise — Instrumental 4</option></select></label>
-              <button class="button button-primary" id="freshMusicPlay" type="button" aria-pressed="false">▶ Play</button>
-              <label class="fresh-music-volume" for="freshMusicVolume">Volume<input id="freshMusicVolume" type="range" min="0" max="1" step="0.05" value="0.25" /></label>
-              <button class="button button-primary" id="freshMusicMute" type="button" aria-pressed="false">Mute</button>
-              <button class="button button-primary" id="freshMusicUploadButton" type="button">Use my own track</button>
-              <input id="freshMusicUpload" type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp4,audio/wav" hidden />
-              <button class="button button-primary" id="freshMusicSpotify" type="button">Connect Spotify</button>
-            </div>
-          </section>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Incentives</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
@@ -1745,6 +1721,38 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             </div>
           </section>
         </div>
+
+        <section class="fresh-utility-shell agent-notes-shell" aria-label="Agent Notes">
+          <button class="fresh-utility-toggle" id="freshAgentNotesQuickButton" type="button" aria-expanded="false" aria-controls="agentNotesPanel"><span>📝 Agent Notes</span><span class="fresh-utility-icon" aria-hidden="true">⌄</span></button>
+          <div class="agent-notes" id="agentNotesPanel" hidden>
+            <div class="agent-notes-heading">
+              <div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div>
+              <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
+            </div>
+            <form id="agentNotesForm" class="agent-notes-compose">
+              <label for="agentNoteText">New note<textarea id="agentNoteText" rows="3" placeholder="Type or speak what you want to remember."></textarea></label>
+              <div class="agent-note-actions"><button class="button button-secondary" id="agentNoteSpeech" type="button" aria-pressed="false">🎙 Speak</button><button class="button button-primary" type="submit">Save note</button></div>
+              <p id="agentNoteStatus" class="agent-note-status" role="status"></p>
+            </form>
+            <div id="agentNotesList" class="agent-notes-list" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="fresh-utility-shell fresh-music-shell" aria-label="The Pour music player">
+          <button class="fresh-utility-toggle" id="freshMusicPanelToggle" type="button" aria-expanded="false" aria-controls="freshMusicPanel"><span>The Pour</span><span class="fresh-utility-icon" aria-hidden="true">⌄</span></button>
+          <div class="fresh-music-player" id="freshMusicPanel" hidden>
+            <div class="fresh-music-heading"><div><h2 id="freshMusicTitle">The Pour</h2><p>Choose a track for your time in Fresh Pour.</p></div><p id="freshMusicStatus" class="fresh-music-status" role="status"></p></div>
+            <div class="fresh-music-controls">
+              <label for="freshMusicTrack">Track<select id="freshMusicTrack"><option value="vocal-1">Rise — Vocal 1</option><option value="vocal-2">Rise — Vocal 2</option><option value="instrumental-1" selected>Rise — Instrumental 1</option><option value="instrumental-2">Rise — Instrumental 2</option><option value="instrumental-3">Rise — Instrumental 3</option><option value="instrumental-4">Rise — Instrumental 4</option></select></label>
+              <button class="button button-primary" id="freshMusicPlay" type="button" aria-pressed="false">▶ Play</button>
+              <label class="fresh-music-volume" for="freshMusicVolume">Volume<input id="freshMusicVolume" type="range" min="0" max="1" step="0.05" value="0.25" /></label>
+              <button class="button button-primary" id="freshMusicMute" type="button" aria-pressed="false">Mute</button>
+              <button class="button button-primary" id="freshMusicUploadButton" type="button">Use my own track</button>
+              <input id="freshMusicUpload" type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp4,audio/wav" hidden />
+              <button class="button button-primary" id="freshMusicSpotify" type="button">Connect Spotify</button>
+            </div>
+          </div>
+        </section>
         <audio id="ambienceAudio" preload="metadata" loop data-replaceable="true"></audio>
         <audio id="breakroomMusicAudio" preload="metadata" loop data-replaceable="true"></audio>
         <p class="fresh-pour-watermark">Agentrisepro, client management system — © 2026</p>
@@ -3843,8 +3851,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function toggleBreakroomMenu() {
         const menuWillBeHidden = !breakroomElements.panel.classList.contains("is-hidden");
         breakroomElements.panel.classList.toggle("is-hidden", menuWillBeHidden);
-        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Menu" : "Close menu";
+        pilot.workspaceData.freshPourMenuOpen = !menuWillBeHidden;
+        breakroomElements.toggleMenuButton.innerHTML = menuWillBeHidden ? "☰ <span>Menu</span>" : "◉ <span>Hide</span>";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
+        persistWorkspace();
       }
 
       function openBreakroom() {
@@ -3861,11 +3871,16 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           toggleAmbience();
         }
         breakroomElements.view.hidden = false;
+        pilot.workspaceData.freshPourMenuOpen = false;
+        pilot.workspaceData.agentNotesOpen = false;
+        pilot.workspaceData.musicPanelOpen = false;
+        renderAgentNotesOpen();
+        renderFreshMusicPanel();
         window.AgentRiseFreshPourMusic?.open();
         breakroomElements.seat.classList.add("hidden");
         breakroomElements.panel.classList.remove("is-waiting");
         breakroomElements.panel.classList.add("is-hidden");
-        breakroomElements.toggleMenuButton.textContent = "Menu";
+        breakroomElements.toggleMenuButton.innerHTML = "☰ <span>Menu</span>";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "hidden";
         startBreakroomVisuals();
@@ -4002,7 +4017,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout65" defer></script>
+    <script src="pilot.js?v=layout66" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
