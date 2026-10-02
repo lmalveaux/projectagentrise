@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout69" />
+    <link rel="stylesheet" href="pilot.css?v=layout70" />
     <main class="app">
       <div class="topbar ar-header agent-bar" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -3597,7 +3597,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         loopVideoMobile: "assets/video/fresh-pour-room-loop-mobile.mp4",
         exitVideo: "assets/video/fresh-pour-exit.mp4",
         ambience: "",
-        music: "assets/audio/rise-theme.mp3"
+        music: "assets/audio/rise-instrumental-1.mp3"
       };
       // Entry/exit clips play a bit faster than recorded so the open and close feel snappy.
       // 1 = original speed. Raise toward 1.6–1.8 for an even quicker transition.
@@ -3868,9 +3868,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           demoBanner.hidden = true;
         }
         initializeBreakroomMedia();
-        if (breakroomElements.ambienceToggle.getAttribute("aria-pressed") !== "true") {
-          toggleAmbience();
-        }
         breakroomElements.view.hidden = false;
         pilot.workspaceData.freshPourMenuOpen = false;
         pilot.workspaceData.agentNotesOpen = false;
@@ -3993,6 +3990,14 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         });
         breakroomElements.potButton.addEventListener("click", showPotLine);
         breakroomElements.ambienceToggle.addEventListener("click", toggleAmbience);
+        breakroomElements.musicAudio.addEventListener("play", () => {
+          breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
+          breakroomElements.ambienceLabel.textContent = "Room sound: on";
+        });
+        breakroomElements.musicAudio.addEventListener("pause", () => {
+          breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
+          breakroomElements.ambienceLabel.textContent = "Room sound: off";
+        });
         breakroomElements.entryVideo.addEventListener("ended", () => {
           if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
         });
@@ -4026,7 +4031,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout69" defer></script>
+    <script src="pilot.js?v=layout70" defer></script>
     <script src="medicare-minute.js?v=layout58" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
