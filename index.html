@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout75" />
+    <link rel="stylesheet" href="pilot.css?v=layout76" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1640,7 +1640,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <p class="sign-subtitle">Pull up a chair. Choose a conversation—or hide this menu and simply enjoy the room.</p>
           </div>
 
-          <button class="pot-button" type="button" id="potButton">
+          <nav class="fresh-symbol-strip" aria-label="Fresh Pour shortcuts">
+            <button type="button" id="freshStripNotes" aria-label="Open Agent Notes" title="Agent Notes">📝</button>
+            <button type="button" id="freshStripMusic" aria-label="Open The Pour" title="The Pour">🎵</button>
+            <button type="button" id="freshStripTips" aria-label="Go to Fresh Pour Tips" title="Fresh Pour Tips">💡</button>
+          </nav>
+
+          <button class="pot-button" type="button" id="potButton" aria-label="Fresh Pour Tips">
             <span class="pot-icon" aria-hidden="true">☕</span>
             <span class="pot-text">
               <strong>Grab a quick pour</strong>
@@ -4032,7 +4038,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout73" defer></script>
+    <script src="pilot.js?v=layout74" defer></script>
     <script src="medicare-minute.js?v=layout59" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
