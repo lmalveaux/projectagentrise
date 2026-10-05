@@ -81,6 +81,6 @@ CMS regulations strictly require that a client sign a **Scope of Appointment (SO
 
 ### ⚡ Critical Compliance Notes for the Mobile App:
 
-*   **The 48-Hour Rule**: The SOA must be completed and signed at least **48 hours prior** to the scheduled appointment, unless the client is within the final days of an enrollment period or has walked into an agent's physical office as an unscheduled "walk-in."
+*   **Scope of Appointment timing**: The SOA must be completed prior to the personal marketing appointment. Same-day collection is allowed.
 *   **Product Boundaries**: The agent is legally prohibited from discussing any products that the client did not initial. For example, if the client did not initial Part D, the agent cannot discuss drug copays or formularies during that session [110]. 
 *   **Record Retention**: Under CMS guidelines, independent solopreneurs must retain signed SOAs and enrollment consent documentation for a minimum of **10 years**. The app should automatically archive completed digital forms to secure cloud storage.
