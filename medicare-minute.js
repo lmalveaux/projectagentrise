@@ -187,7 +187,8 @@
   }
   function bindStaticControls() {
     ensureDailyBriefDialog();
-    $m("freshDailyBriefButton").onclick = openDailyBrief;
+    const dailyBriefButton = $m("freshDailyBriefButton");
+    if (dailyBriefButton) dailyBriefButton.onclick = openDailyBrief;
   }
   function syncAccess() { syncOwnerPanel(); renderNotificationBrief(); }
   function init() { bindStaticControls(); syncAccess(); loadBriefs().catch(error => reportError("Medicare Minute could not load", error)); }

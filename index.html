@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout77" />
+    <link rel="stylesheet" href="pilot.css?v=layout78" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1622,16 +1622,14 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       <div class="breakroom-inner">
         <div class="breakroom-top">
           <div class="fresh-pour-selector-row" aria-label="Fresh Pour controls">
-            <button class="button button-primary" type="button" id="freshPourSaveButton">💾 Save</button>
-            <button class="button button-secondary" type="button" id="closeBreakroomMenuButton">✕ Close</button>
+            <button class="button button-secondary" type="button" id="closeBreakroomButton">← Back</button>
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
-              <span id="ambienceLabel">Room Sound: not loaded</span>
+              <span id="ambienceLabel">🎵 Music</span>
             </button>
-            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Show Menu</button>
+            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Menu</button>
           </div>
           <strong class="fresh-pour-top-title">Fresh Pour</strong>
-          <button class="button button-secondary" type="button" id="closeBreakroomButton">Exit</button>
         </div>
 
         <div class="breakroom-panel is-hidden" id="breakroomPanel">
@@ -1647,32 +1645,36 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button type="button" id="freshStripTips" aria-label="Go to Fresh Pour Tips" title="Fresh Pour Tips">💡</button>
           </nav>
 
-          <button class="pot-button" type="button" id="potButton" aria-label="Fresh Pour Tips">
+          <button class="pot-button fresh-brief-preview" type="button" id="potButton" aria-expanded="false" aria-controls="freshPourBriefPanel">
             <span class="pot-icon" aria-hidden="true">☕</span>
             <span class="pot-text">
-              <strong>Grab a quick pour</strong>
-              <span>A short, light sip — funny, honest, or just true</span>
+              <strong>Your Fresh Pour Brief</strong>
+              <span>Medicare Minute + today's notes</span>
             </span>
           </button>
-          <p class="pot-line" id="potLine" aria-live="polite"></p>
+          <section class="fresh-brief-panel" id="freshPourBriefPanel" hidden>
+            <audio id="freshBriefAudio" controls preload="metadata"></audio>
+            <div id="freshBriefText"><p>Open the brief to load the latest Medicare Minute.</p></div>
+            <label for="freshBriefNotes">Extended notes</label>
+            <textarea id="freshBriefNotes" rows="4" placeholder="Add what you want to remember from today's brief."></textarea>
+            <button class="button button-primary" id="saveFreshBriefNotes" type="button">Save notes</button>
+            <div class="fresh-brief-links"><strong>Explore more with ARP</strong><a href="#fresh-library">Library</a><a href="#fresh-blueprint">Medicare Blueprint</a><a href="#fresh-carriers">JIT Carriers</a></div>
+          </section>
+          <p class="pot-line" id="potLine" aria-live="polite" hidden></p>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
-            <button class="button button-secondary" type="button" id="freshInfographicsButton">Infographics</button><button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button><button class="button button-secondary" type="button" id="freshPdpButton">PDP</button><button class="button button-secondary" type="button" id="freshIncentivesButton" data-admin-only hidden>Incentives</button>
-            <button class="button button-secondary" type="button" id="freshResourcesButton">Resources</button>
-            <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
-            <button class="button button-secondary" type="button" id="freshDailyBriefButton">Daily Brief</button>
-            <button class="button button-secondary" type="button" id="freshAgentNotesButton" aria-expanded="false" aria-controls="agentNotesPanel">📝 Agent Notes</button>
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
-            <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="freshPourBriefButton">Fresh Pour Brief</button>
+            <button class="button button-secondary" type="button" id="freshAgentNotesButton" aria-expanded="false" aria-controls="agentNotesPanel">Agent Notes</button>
+            <button class="button button-secondary" type="button" id="freshGptButton">GPT</button>
+            <button class="button button-secondary" type="button" id="freshLaunchKitButton">Medicare Blueprint</button>
+            <button class="button button-secondary" type="button" id="freshMedicareLaunchKitButton">Medicare Kit</button>
+            <button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button>
+            <button class="button button-secondary" type="button" id="freshPdpButton">PDP</button>
             <button class="button button-secondary" type="button" id="freshJitCarriersButton">JIT Carriers</button>
-            <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">More Pro Features</button>
-            <button class="button button-secondary" type="button" id="freshLaunchKitButton">Medicare Agent Blueprint</button>
-            <button class="button button-secondary" type="button" id="freshMedicareLaunchKitButton">Medicare Advantage Launch Kit</button>
-          </nav>
-
-          <nav class="fresh-office-tools" aria-label="Fresh Pour administration" data-admin-only hidden>
-            <button class="button button-secondary" type="button" id="openTrainingButton">Training</button>
-            <button class="button button-secondary" type="button" id="statsButton">Goals &amp; Stats</button>
+            <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">Features</button>
+            <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
           </nav>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
@@ -3647,8 +3649,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       const breakroomElements = {
         view: document.querySelector("#breakroomView"),
         openButton: document.querySelector("#openBreakroomButton"),
-        saveButton: document.querySelector("#freshPourSaveButton"),
-        closeMenuButton: document.querySelector("#closeBreakroomMenuButton"),
         closeButton: document.querySelector("#closeBreakroomButton"),
         panel: document.querySelector("#breakroomPanel"),
         media: document.querySelector(".breakroom-media"),
@@ -3774,9 +3774,30 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         }
       }
 
-      function showPotLine() {
-        const line = POT_LINES[Math.floor(Math.random() * POT_LINES.length)];
-        breakroomElements.potLine.textContent = line;
+      async function toggleFreshPourBrief() {
+        const panel = document.querySelector("#freshPourBriefPanel");
+        const button = document.querySelector("#potButton");
+        const willOpen = panel.hidden;
+        panel.hidden = !willOpen;
+        button.setAttribute("aria-expanded", String(willOpen));
+        if (!willOpen) return;
+        setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
+        const notes = document.querySelector("#freshBriefNotes");
+        notes.value = pilot.workspaceData.freshPourNotes?.dailyBrief || "";
+        try {
+          const response = await fetch("assets/data/news.json", { cache: "no-store" });
+          if (!response.ok) throw new Error("Fresh Pour Brief unavailable");
+          const data = await response.json();
+          const brief = data.medicareMinute || data.archive?.[0] || null;
+          const audio = document.querySelector("#freshBriefAudio");
+          const audioUrl = brief?.audioUrl || brief?.audio_url || brief?.audio || "";
+          audio.hidden = !audioUrl;
+          if (audioUrl) audio.src = audioUrl;
+          const text = brief?.fullText || brief?.full_text || brief?.script || brief?.text || "No Medicare Minute has been posted yet. Add your extended notes below and return when the next brief is ready.";
+          document.querySelector("#freshBriefText").innerHTML = `<h2>${escapeHtml(brief?.title || "Fresh Pour Brief")}</h2>${String(text).split(/\n+/).map(part=>`<p>${escapeHtml(part)}</p>`).join("")}`;
+        } catch (error) {
+          document.querySelector("#freshBriefText").innerHTML = "<p>The latest brief could not be loaded. Your saved notes remain available below.</p>";
+        }
       }
 
       function roomAudioTracks() {
@@ -3794,7 +3815,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function pauseRoomSound() {
         roomAudioTracks().forEach((track) => track.pause());
         breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-        breakroomElements.ambienceLabel.textContent = roomAudioTracks().length ? "Room Sound: Off" : "Room Sound: not loaded";
+        breakroomElements.ambienceLabel.textContent = "🎵 Music";
       }
 
       async function toggleAmbience() {
@@ -3808,10 +3829,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const results = await Promise.allSettled(tracks.map((track) => track.play()));
         if (results.some((result) => result.status === "fulfilled")) {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "Room Sound: On";
+          breakroomElements.ambienceLabel.textContent = "🎵 Music";
         } else {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "Room Sound: unavailable";
+          breakroomElements.ambienceLabel.textContent = "🎵 Music unavailable";
         }
       }
 
@@ -3865,7 +3886,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const menuWillBeHidden = !breakroomElements.panel.classList.contains("is-hidden");
         breakroomElements.panel.classList.toggle("is-hidden", menuWillBeHidden);
         pilot.workspaceData.freshPourMenuOpen = !menuWillBeHidden;
-        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Show Menu" : "Hide Menu";
+        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Menu" : "Hide Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
         persistWorkspace();
       }
@@ -3873,7 +3894,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function hideBreakroomMenu() {
         breakroomElements.panel.classList.add("is-hidden");
         pilot.workspaceData.freshPourMenuOpen = false;
-        breakroomElements.toggleMenuButton.textContent = "Show Menu";
+        breakroomElements.toggleMenuButton.textContent = "Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         persistWorkspace();
       }
@@ -3898,11 +3919,13 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         breakroomElements.seat.classList.add("hidden");
         breakroomElements.panel.classList.remove("is-waiting");
         breakroomElements.panel.classList.add("is-hidden");
-        breakroomElements.toggleMenuButton.textContent = "Show Menu";
+        document.querySelector("#freshPourBriefPanel").hidden = true;
+        document.querySelector("#potButton").setAttribute("aria-expanded", "false");
+        breakroomElements.toggleMenuButton.textContent = "Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "hidden";
         startBreakroomVisuals();
-        breakroomElements.saveButton.focus();
+        breakroomElements.closeButton.focus();
       }
 
       function finishClosingBreakroom() {
@@ -3930,6 +3953,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         renderAgentNotesOpen();
         renderFreshMusicPanel();
         breakroomElements.panel.classList.add("is-hidden");
+        document.querySelector("#freshPourBriefPanel").hidden = true;
+        document.querySelector("#potButton").setAttribute("aria-expanded", "false");
         breakroomElements.view.classList.add("is-closing");
         window.AgentRiseFreshPourMusic?.close();
         stopConversationAudio(true);
@@ -3971,17 +3996,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         restoreRoomMix();
         const hasRoomSound = Boolean(BREAKROOM_MEDIA.ambience || BREAKROOM_MEDIA.music);
         breakroomElements.ambienceToggle.disabled = !hasRoomSound;
-        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "Room Sound: Off" : "Room Sound: not loaded";
+        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "🎵 Music" : "🎵 Music unavailable";
         breakroomMediaInitialized = true;
       }
 
       function bindBreakroomEvents() {
         breakroomElements.openButton.addEventListener("click", openBreakroom);
-        breakroomElements.saveButton.addEventListener("click", async () => {
-          const saved = await persistWorkspace();
-          notify(saved ? "Fresh Pour changes saved." : "Changes remain in this session.");
-        });
-        breakroomElements.closeMenuButton.addEventListener("click", hideBreakroomMenu);
         breakroomElements.closeButton.addEventListener("click", closeBreakroom);
         breakroomElements.ambienceToggle.addEventListener("click", toggleAmbience);
         breakroomElements.toggleMenuButton.addEventListener("click", toggleBreakroomMenu);
@@ -4014,14 +4034,20 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           if(currentBreakroomTable?.resource){breakroomElements.seatResourceLocked.classList.add("hidden");breakroomElements.seatResourceLink.classList.remove("hidden");}
           stopConversationAudio(true);
         });
-        breakroomElements.potButton.addEventListener("click", showPotLine);
+        breakroomElements.potButton.addEventListener("click", toggleFreshPourBrief);
+        document.querySelector("#freshPourBriefButton")?.addEventListener("click", toggleFreshPourBrief);
+        document.querySelector("#saveFreshBriefNotes")?.addEventListener("click", async () => {
+          pilot.workspaceData.freshPourNotes = {...(pilot.workspaceData.freshPourNotes || {}), dailyBrief: document.querySelector("#freshBriefNotes").value};
+          await persistWorkspace();
+          notify("Fresh Pour Brief notes saved.");
+        });
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "Room Sound: On";
+          breakroomElements.ambienceLabel.textContent = "🎵 Music";
         });
         breakroomElements.musicAudio.addEventListener("pause", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "Room Sound: Off";
+          breakroomElements.ambienceLabel.textContent = "🎵 Music";
         });
         breakroomElements.entryVideo.addEventListener("ended", () => {
           if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
@@ -4056,8 +4082,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout77" defer></script>
-    <script src="medicare-minute.js?v=layout59" defer></script>
+    <script src="pilot.js?v=layout78" defer></script>
+    <script src="medicare-minute.js?v=layout60" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">
