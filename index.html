@@ -1368,7 +1368,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout76" />
+    <link rel="stylesheet" href="pilot.css?v=layout77" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1621,16 +1621,17 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       </div>
       <div class="breakroom-inner">
         <div class="breakroom-top">
-          <button class="button button-quiet breakroom-back" type="button" id="closeBreakroomButton" onclick="closeBreakroom()">← Back to the desk</button>
-          <strong class="fresh-pour-top-title">Fresh Pour</strong>
-          <div class="breakroom-top-actions">
+          <div class="fresh-pour-selector-row" aria-label="Fresh Pour controls">
+            <button class="button button-primary" type="button" id="freshPourSaveButton">💾 Save</button>
+            <button class="button button-secondary" type="button" id="closeBreakroomMenuButton">✕ Close</button>
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
-              <span id="ambienceLabel">Room sound: not loaded</span>
+              <span id="ambienceLabel">Room Sound: not loaded</span>
             </button>
-            <button class="ambience-toggle fresh-header-icon" type="button" id="freshHeaderMusicToggle" aria-pressed="true" title="Turn music off" aria-label="Music on or off">🔊</button>
-            <button class="ambience-toggle fresh-header-icon" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel" title="Show or hide menu">☰ <span>Menu</span></button>
+            <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Show Menu</button>
           </div>
+          <strong class="fresh-pour-top-title">Fresh Pour</strong>
+          <button class="button button-secondary" type="button" id="closeBreakroomButton">Exit</button>
         </div>
 
         <div class="breakroom-panel is-hidden" id="breakroomPanel">
@@ -1663,6 +1664,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="freshAgentNotesButton" aria-expanded="false" aria-controls="agentNotesPanel">📝 Agent Notes</button>
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="freshJitCarriersButton">JIT Carriers</button>
+            <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">More Pro Features</button>
             <button class="button button-secondary" type="button" id="freshLaunchKitButton">Medicare Agent Blueprint</button>
             <button class="button button-secondary" type="button" id="freshMedicareLaunchKitButton">Medicare Advantage Launch Kit</button>
           </nav>
@@ -3644,6 +3647,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       const breakroomElements = {
         view: document.querySelector("#breakroomView"),
         openButton: document.querySelector("#openBreakroomButton"),
+        saveButton: document.querySelector("#freshPourSaveButton"),
+        closeMenuButton: document.querySelector("#closeBreakroomMenuButton"),
         closeButton: document.querySelector("#closeBreakroomButton"),
         panel: document.querySelector("#breakroomPanel"),
         media: document.querySelector(".breakroom-media"),
@@ -3789,7 +3794,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function pauseRoomSound() {
         roomAudioTracks().forEach((track) => track.pause());
         breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-        breakroomElements.ambienceLabel.textContent = roomAudioTracks().length ? "Room sound: off" : "Room sound: not loaded";
+        breakroomElements.ambienceLabel.textContent = roomAudioTracks().length ? "Room Sound: Off" : "Room Sound: not loaded";
       }
 
       async function toggleAmbience() {
@@ -3803,10 +3808,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const results = await Promise.allSettled(tracks.map((track) => track.play()));
         if (results.some((result) => result.status === "fulfilled")) {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "Room sound: on";
+          breakroomElements.ambienceLabel.textContent = "Room Sound: On";
         } else {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "Room sound: unavailable";
+          breakroomElements.ambienceLabel.textContent = "Room Sound: unavailable";
         }
       }
 
@@ -3860,8 +3865,16 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const menuWillBeHidden = !breakroomElements.panel.classList.contains("is-hidden");
         breakroomElements.panel.classList.toggle("is-hidden", menuWillBeHidden);
         pilot.workspaceData.freshPourMenuOpen = !menuWillBeHidden;
-        breakroomElements.toggleMenuButton.innerHTML = menuWillBeHidden ? "☰ <span>Menu</span>" : "◉ <span>Hide</span>";
+        breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Show Menu" : "Hide Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
+        persistWorkspace();
+      }
+
+      function hideBreakroomMenu() {
+        breakroomElements.panel.classList.add("is-hidden");
+        pilot.workspaceData.freshPourMenuOpen = false;
+        breakroomElements.toggleMenuButton.textContent = "Show Menu";
+        breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         persistWorkspace();
       }
 
@@ -3885,11 +3898,11 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         breakroomElements.seat.classList.add("hidden");
         breakroomElements.panel.classList.remove("is-waiting");
         breakroomElements.panel.classList.add("is-hidden");
-        breakroomElements.toggleMenuButton.innerHTML = "☰ <span>Menu</span>";
+        breakroomElements.toggleMenuButton.textContent = "Show Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "hidden";
         startBreakroomVisuals();
-        breakroomElements.closeButton.focus();
+        breakroomElements.saveButton.focus();
       }
 
       function finishClosingBreakroom() {
@@ -3958,13 +3971,19 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         restoreRoomMix();
         const hasRoomSound = Boolean(BREAKROOM_MEDIA.ambience || BREAKROOM_MEDIA.music);
         breakroomElements.ambienceToggle.disabled = !hasRoomSound;
-        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "Room sound: off" : "Room sound: not loaded";
+        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "Room Sound: Off" : "Room Sound: not loaded";
         breakroomMediaInitialized = true;
       }
 
       function bindBreakroomEvents() {
         breakroomElements.openButton.addEventListener("click", openBreakroom);
+        breakroomElements.saveButton.addEventListener("click", async () => {
+          const saved = await persistWorkspace();
+          notify(saved ? "Fresh Pour changes saved." : "Changes remain in this session.");
+        });
+        breakroomElements.closeMenuButton.addEventListener("click", hideBreakroomMenu);
         breakroomElements.closeButton.addEventListener("click", closeBreakroom);
+        breakroomElements.ambienceToggle.addEventListener("click", toggleAmbience);
         breakroomElements.toggleMenuButton.addEventListener("click", toggleBreakroomMenu);
         breakroomElements.leaveTableButton.addEventListener("click", () => {
           breakroomElements.seat.classList.add("hidden");
@@ -3996,14 +4015,13 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           stopConversationAudio(true);
         });
         breakroomElements.potButton.addEventListener("click", showPotLine);
-        breakroomElements.ambienceToggle.addEventListener("click", toggleAmbience);
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "Room sound: on";
+          breakroomElements.ambienceLabel.textContent = "Room Sound: On";
         });
         breakroomElements.musicAudio.addEventListener("pause", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "Room sound: off";
+          breakroomElements.ambienceLabel.textContent = "Room Sound: Off";
         });
         breakroomElements.entryVideo.addEventListener("ended", () => {
           if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
@@ -4038,7 +4056,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout75" defer></script>
+    <script src="pilot.js?v=layout77" defer></script>
     <script src="medicare-minute.js?v=layout59" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
