@@ -226,6 +226,13 @@
     const prior = archiveRecords.filter(item => item.date !== latestRecord.date).map(item => `<details class="daily-brief-archive-item"><summary>${html(displayDate(item.date))} · ${html(item.headline1 || "Medicare brief")}</summary>${playerMarkup(item, true)}<p class="minute-script-text">${html(item.script || "")}</p></details>`).join("");
     host.innerHTML = `${current}<section class="daily-brief-archive"><h3>Previous 30 days</h3>${prior || "<p>No earlier briefs in the archive yet.</p>"}</section>`; bindPlayers(host);
   }
+  function renderInto(host) {
+    if (!host) return;
+    if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute archive yet.</p>"; return; }
+    const today = localDate(), sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
+    host.innerHTML = `<article class="discipline-brief-card"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}<details><summary>Full brief text</summary><p class="minute-script-text">${html(latestRecord.script || latestRecord.fullText || latestRecord.text || "")}</p></details><div class="fresh-brief-links"><strong>Explore more with ARP</strong><a href="#fresh-library">Library</a><a href="#fresh-blueprint">Medicare Blueprint</a><a href="#fresh-carriers">JIT Carriers</a></div>${sources.length ? `<ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}</article>`;
+    bindPlayers(host);
+  }
   async function openDailyBrief() {
     const host = $m("dailyBriefContent");
     if (host) host.innerHTML = "<p>Loading the latest brief…</p>";
@@ -244,7 +251,7 @@
   }
   function syncAccess() { syncOwnerPanel(); renderNotificationBrief(); }
   function init() { bindStaticControls(); syncAccess(); }
-  window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle };
+  window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle, renderInto };
   init();
 })();
 
