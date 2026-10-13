@@ -144,19 +144,68 @@
       link.onclick = openDailyBrief;
     });
   }
-  async function fetchRecord(path) {
+  async function fetchJson(path) {
     if (!config.supabaseUrl) return null;
-    const response = await fetch(`${storageUrl(path)}?v=${Date.now()}`, { cache: "no-store" });
+    const response = await fetch(storageUrl(path), { cache: "no-store" });
     if (!response.ok) return null;
-    const data = await response.json(); return data.medicareMinute || null;
+    return response.json();
+  }
+  function archiveEntries(manifest) {
+    const listed = Array.isArray(manifest) ? manifest
+      : Array.isArray(manifest?.dates) ? manifest.dates
+      : Array.isArray(manifest?.archiveDates) ? manifest.archiveDates
+      : Array.isArray(manifest?.medicareMinute?.dates) ? manifest.medicareMinute.dates
+      : manifest?.medicareMinute?.date ? [manifest.medicareMinute.date]
+      : manifest?.date ? [manifest.date]
+      : [];
+    return listed.map(entry => {
+      if (entry && typeof entry === "object") {
+        const date = String(entry.date || "").trim();
+        const path = String(entry.path || entry.file || entry.url || "").trim();
+        return date && path ? { date, path } : date ? { date, path: `public/${date}.json` } : null;
+      }
+      const value = String(entry || "").trim();
+      if (!value) return null;
+      if (/^https?:\/\//i.test(value)) return { date: value.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "", url: value };
+      if (value.endsWith(".json")) return { date: value.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "", path: value };
+      return /^\d{4}-\d{2}-\d{2}$/.test(value) ? { date: value, path: `public/${value}.json` } : null;
+    }).filter(entry => entry?.date);
+  }
+  async function fetchArchiveRecord(entry) {
+    const response = entry.url
+      ? await fetch(entry.url, { cache: "no-store" })
+      : await fetch(storageUrl(entry.path), { cache: "no-store" });
+    if (!response.ok) return null;
+    const data = await response.json();
+    const record = data.medicareMinute || data;
+    return record && typeof record === "object" ? { ...record, date: record.date || entry.date } : null;
   }
   async function loadBriefs() {
-    let latest = await fetchRecord("latest.json");
-    if (!latest) { try { const response = await fetch("assets/data/news.json", { cache: "no-store" }); if (response.ok) latest = (await response.json()).medicareMinute; } catch {} }
-    latestRecord = latest;
-    const dates = Array.from({ length: 30 }, (_, index) => { const date = new Date(); date.setDate(date.getDate() - index); return localDate(date); });
-    archiveRecords = (await Promise.all(dates.map(date => fetchRecord(`daily/${date}.json`)))).filter(Boolean);
-    renderNotificationBrief(); renderDailyBrief();
+    try {
+      const manifest = await fetchJson("public/latest.json");
+      const entries = archiveEntries(manifest);
+      if (!entries.length) {
+        latestRecord = null;
+        archiveRecords = [];
+      } else {
+        archiveRecords = (await Promise.all(entries.map(fetchArchiveRecord))).filter(Boolean);
+        archiveRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+        latestRecord = archiveRecords[0] || null;
+      }
+      renderNotificationBrief();
+      renderDailyBrief();
+    } catch (err) {
+      console.warn("Medicare Minute archive failed to load:", err);
+      latestRecord = null;
+      archiveRecords = [];
+      try {
+        renderNotificationBrief();
+        renderDailyBrief();
+      } catch (renderErr) {
+        console.warn("Medicare Minute empty state failed to render:", renderErr);
+      }
+    }
+    return archiveRecords;
   }
   function renderNotificationBrief() {
     const host = $m("medicareMinuteNotification"); if (!host) return;
@@ -170,15 +219,18 @@
   }
   function renderDailyBrief() {
     const host = $m("dailyBriefContent"); if (!host) return;
-    if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute has been posted yet.</p>"; return; }
+    if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute archive yet.</p>"; return; }
     const today = localDate();
     const sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
     const current = `<article class="daily-brief-current"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.adlib1 ? `<blockquote>${html(latestRecord.adlib1)}</blockquote>` : ""}${latestRecord.adlib2 ? `<blockquote>${html(latestRecord.adlib2)}</blockquote>` : ""}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}${sources.length ? `<h4>Sources</h4><ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}<details><summary>Full script</summary><p class="minute-script-text">${html(latestRecord.script || "")}</p></details></article>`;
     const prior = archiveRecords.filter(item => item.date !== latestRecord.date).map(item => `<details class="daily-brief-archive-item"><summary>${html(displayDate(item.date))} · ${html(item.headline1 || "Medicare brief")}</summary>${playerMarkup(item, true)}<p class="minute-script-text">${html(item.script || "")}</p></details>`).join("");
     host.innerHTML = `${current}<section class="daily-brief-archive"><h3>Previous 30 days</h3>${prior || "<p>No earlier briefs in the archive yet.</p>"}</section>`; bindPlayers(host);
   }
-  function openDailyBrief() {
-    renderDailyBrief(); const dialog = $m("dailyBriefDialog"); if (!dialog.open) dialog.showModal();
+  async function openDailyBrief() {
+    const host = $m("dailyBriefContent");
+    if (host) host.innerHTML = "<p>Loading the latest brief…</p>";
+    const dialog = $m("dailyBriefDialog"); if (!dialog.open) dialog.showModal();
+    await loadBriefs();
   }
   function ensureDailyBriefDialog() {
     if ($m("dailyBriefDialog")) return;
@@ -191,7 +243,7 @@
     if (dailyBriefButton) dailyBriefButton.onclick = openDailyBrief;
   }
   function syncAccess() { syncOwnerPanel(); renderNotificationBrief(); }
-  function init() { bindStaticControls(); syncAccess(); loadBriefs().catch(error => reportError("Medicare Minute could not load", error)); }
+  function init() { bindStaticControls(); syncAccess(); }
   window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle };
   init();
 })();
