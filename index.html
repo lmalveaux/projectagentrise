@@ -3437,7 +3437,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function deleteImportedContact(id) { const p=state.prospects.find(x=>x.id===id); if(!p||p.leadPool!=='Contact Review Pool') return; if(!confirm(`Delete imported contact ${fullName(p)}?`)) return; state.prospects=state.prospects.filter(x=>x.id!==id); saveProspects(); renderList(); }
 
       function bindEvents() {
-        elements.openTrainingButton.addEventListener("click", openTraining);
+        elements.openTrainingButton?.addEventListener("click", openTraining);
         elements.closeTrainingButton.addEventListener("click", closeTraining);
         elements.cancelTrainingButton.addEventListener("click", closeTraining);
         elements.trainingForm.addEventListener("submit", saveTrainingAppointment);
