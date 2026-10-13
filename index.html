@@ -4,9 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Agent Rise — Agent Workspace</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&display=swap" rel="stylesheet" />
     <style>
       /* ---- Base (Palette A: Charcoal / Burgundy / Gold) ---- */
 :root {
@@ -1624,15 +1621,14 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
       </div>
       <div class="breakroom-inner">
         <div class="breakroom-top">
+          <button class="fresh-pour-back" type="button" id="closeBreakroomButton">Back</button>
           <div class="fresh-pour-selector-row" aria-label="Fresh Pour controls">
-            <button class="button button-secondary" type="button" id="closeBreakroomButton">Back</button>
             <button class="ambience-toggle" type="button" id="ambienceToggle" aria-pressed="false" disabled>
               <span class="ambience-dot" aria-hidden="true"></span>
-              <span id="ambienceLabel">🎵 Music</span>
+              <span id="ambienceLabel">Sound</span>
             </button>
             <button class="ambience-toggle" type="button" id="toggleBreakroomMenuButton" aria-expanded="false" aria-controls="breakroomPanel">Menu</button>
           </div>
-          <strong class="fresh-pour-top-title">Fresh Pour</strong>
         </div>
 
         <div class="breakroom-panel is-hidden" id="breakroomPanel">
@@ -1645,7 +1641,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <nav class="fresh-symbol-strip" aria-label="Fresh Pour shortcuts">
             <button type="button" id="freshStripNotes" aria-label="Open Agent Notes" title="Agent Notes">📝</button>
             <button type="button" id="freshStripMusic" aria-label="Open The Pour" title="The Pour">🎵</button>
-            <button type="button" id="freshStripClose" aria-label="Close The Brief" title="Close The Brief">✕</button>
+            <button type="button" id="freshStripClose" aria-label="Close Fresh Pour menu" title="Close menu">✕</button>
           </nav>
 
           <div class="fresh-music-player" id="freshMusicPanel" hidden>
@@ -3822,7 +3818,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       function pauseRoomSound() {
         roomAudioTracks().forEach((track) => track.pause());
         breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-        breakroomElements.ambienceLabel.textContent = "🎵 Music";
+        breakroomElements.ambienceLabel.textContent = "Sound";
       }
 
       async function toggleAmbience() {
@@ -3836,10 +3832,10 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         const results = await Promise.allSettled(tracks.map((track) => track.play()));
         if (results.some((result) => result.status === "fulfilled")) {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "🎵 Music";
+          breakroomElements.ambienceLabel.textContent = "Sound";
         } else {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "🎵 Music unavailable";
+          breakroomElements.ambienceLabel.textContent = "Sound unavailable";
         }
       }
 
@@ -4003,7 +3999,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         restoreRoomMix();
         const hasRoomSound = Boolean(BREAKROOM_MEDIA.ambience || BREAKROOM_MEDIA.music);
         breakroomElements.ambienceToggle.disabled = !hasRoomSound;
-        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "🎵 Music" : "🎵 Music unavailable";
+        breakroomElements.ambienceLabel.textContent = hasRoomSound ? "Sound" : "Sound unavailable";
         breakroomMediaInitialized = true;
       }
 
@@ -4043,16 +4039,16 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         });
         breakroomElements.potButton.addEventListener("click", toggleFreshPourBrief);
         document.querySelector("#freshPourBriefButton")?.addEventListener("click", toggleFreshPourBrief);
-        document.querySelector("#freshStripClose")?.addEventListener("click", closeFreshPourBrief);
+        document.querySelector("#freshStripClose")?.addEventListener("click", hideBreakroomMenu);
         document.querySelector("#exitFreshBrief")?.addEventListener("click", closeFreshPourBrief);
         document.querySelector("#getUpFreshBrief")?.addEventListener("click", closeFreshPourBrief);
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
-          breakroomElements.ambienceLabel.textContent = "🎵 Music";
+          breakroomElements.ambienceLabel.textContent = "Sound";
         });
         breakroomElements.musicAudio.addEventListener("pause", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "false");
-          breakroomElements.ambienceLabel.textContent = "🎵 Music";
+          breakroomElements.ambienceLabel.textContent = "Sound";
         });
         breakroomElements.entryVideo.addEventListener("ended", () => {
           if (!breakroomIsClosing && !breakroomElements.view.hidden) startBreakroomLoop();
