@@ -349,6 +349,9 @@ with check(bucket_id='agent-photos' and (storage.foldername(name))[1]=auth.uid()
 drop policy if exists agent_photos_read on storage.objects;
 create policy agent_photos_read on storage.objects for select to public
 using(bucket_id='agent-photos');
+drop policy if exists agent_photos_delete_own on storage.objects;
+create policy agent_photos_delete_own on storage.objects for delete to authenticated
+using(bucket_id='agent-photos' and (storage.foldername(name))[1]=auth.uid()::text);
 
 -- Fresh Pour user music is publicly playable, while each signed-in user may
 -- only upload or replace files inside their own user-id folder.

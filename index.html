@@ -1752,7 +1752,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <button class="fresh-utility-toggle" id="freshAgentNotesQuickButton" type="button" aria-expanded="false" aria-controls="agentNotesPanel"><span>📝 Agent Notes</span><span class="fresh-utility-icon" aria-hidden="true">⌄</span></button>
           <div class="agent-notes" id="agentNotesPanel" hidden>
             <div class="agent-notes-heading">
-              <div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div>
+              <div class="agent-notes-profile"><span class="account-photo" data-agent-profile-avatar aria-hidden="true">AR</span><div><h2 id="agentNotesTitle">Agent Notes</h2><p>Every note in one searchable place.</p></div></div>
               <label for="agentNotesSearch">Search notes<input id="agentNotesSearch" type="search" placeholder="Search note text or section" /></label>
             </div>
             <form id="agentNotesForm" class="agent-notes-compose">
@@ -1970,6 +1970,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         resourceGroups: [],
         appearanceTheme: "sky-view-day",
         preferredAgentName: "",
+        agentPhoto: "",
         settingsOriginalTheme: "default",
         settingsOpener: null,
         skipRemoveImportWarning: false,
