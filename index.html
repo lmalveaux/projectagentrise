@@ -1388,7 +1388,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><div id="medicareMinuteNotification"></div><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><label class="brief-visibility-toggle"><input id="briefEnabledToggle" type="checkbox" checked> Show Daily Medicare Brief</label><div id="medicareMinuteNotification"></div><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -1672,7 +1672,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div class="fresh-brief-actions"><button class="button button-secondary" id="exitFreshBrief" type="button">Exit</button></div>
             <audio id="freshBriefAudio" controls preload="metadata"></audio>
             <div id="freshBriefText"><p>Open the brief to load the latest Medicare Minute.</p></div>
-            <div class="fresh-brief-links"><strong>Explore more with ARP</strong><a href="#fresh-library">Library</a><a href="#fresh-blueprint">Medicare Blueprint</a><a href="#fresh-carriers">JIT Carriers</a></div>
             <button class="button button-secondary fresh-brief-get-up" id="getUpFreshBrief" type="button">Get Up</button>
           </section>
           <p class="pot-line" id="potLine" aria-live="polite" hidden></p>
@@ -1970,7 +1969,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         resourceGroups: [],
         appearanceTheme: "sky-view-day",
         preferredAgentName: "",
-        agentPhoto: "",
         settingsOriginalTheme: "default",
         settingsOpener: null,
         skipRemoveImportWarning: false,
@@ -3777,26 +3775,18 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       async function toggleFreshPourBrief() {
         const panel = document.querySelector("#freshPourBriefPanel");
         const button = document.querySelector("#potButton");
+        if (pilot.workspaceData.briefEnabled === false) return;
         const willOpen = panel.hidden;
         panel.hidden = !willOpen;
         button.setAttribute("aria-expanded", String(willOpen));
         if (!willOpen) return;
+        const host = document.querySelector("#freshBriefText");
+        if (host) host.innerHTML = "<p>Loading the latest Medicare Brief…</p>";
         await window.AgentRiseMedicareMinute?.loadBriefs?.();
+        window.AgentRiseMedicareMinute?.renderInto?.(host);
+        const legacyAudio = document.querySelector("#freshBriefAudio");
+        if (legacyAudio) { legacyAudio.pause(); legacyAudio.hidden = true; legacyAudio.removeAttribute("src"); }
         setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
-        try {
-          const response = await fetch("assets/data/news.json", { cache: "no-store" });
-          if (!response.ok) throw new Error("Fresh Pour Brief unavailable");
-          const data = await response.json();
-          const brief = data.medicareMinute || data.archive?.[0] || null;
-          const audio = document.querySelector("#freshBriefAudio");
-          const audioUrl = brief?.audioUrl || brief?.audio_url || brief?.audio || "";
-          audio.hidden = !audioUrl;
-          if (audioUrl) audio.src = audioUrl;
-          const text = brief?.fullText || brief?.full_text || brief?.script || brief?.text || "No Medicare Minute has been posted yet. Return when the next brief is ready.";
-          document.querySelector("#freshBriefText").innerHTML = `<h2>${escapeHtml(brief?.title || "The Brief")}</h2>${String(text).split(/\n+/).map(part=>`<p>${escapeHtml(part)}</p>`).join("")}`;
-        } catch (error) {
-          document.querySelector("#freshBriefText").innerHTML = "<p>The latest brief could not be loaded. Please return later.</p>";
-        }
       }
 
       function closeFreshPourBrief() {

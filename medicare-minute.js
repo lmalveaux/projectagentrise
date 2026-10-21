@@ -19,6 +19,10 @@
     const date = new Date(`${value}T12:00:00`);
     return new Intl.DateTimeFormat(undefined, { month: "long", day: "numeric", year: "numeric" }).format(date);
   }
+  function readerDate(value) {
+    const date = new Date(`${value}T12:00:00`);
+    return new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" }).format(date);
+  }
   function storageUrl(path) {
     return `${String(config.supabaseUrl || "").replace(/\/$/, "")}/storage/v1/object/public/medicare-minute/${path}`;
   }
@@ -40,8 +44,7 @@
     };
   }
   function assembleScript(fields = scriptFields()) {
-    const preferred = String(state.preferredAgentName || pilot.user?.user_metadata?.preferred_name || "Agent").trim();
-    const intro = `Medicare brief for ${displayDate(fields.date)}. I'm ${preferred}.`;
+    const intro = `Here's your latest Medicare Brief for ${readerDate(fields.date)}.`;
     return [intro, fields.headline1, fields.adlib1, fields.headline2, fields.adlib2, fields.headline3, fields.fieldTip, fields.close, fields.bumper].filter(Boolean).join("\n\n");
   }
   function updatePreview() {
@@ -168,7 +171,7 @@
       if (!value) return null;
       if (/^https?:\/\//i.test(value)) return { date: value.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "", url: value };
       if (value.endsWith(".json")) return { date: value.match(/\d{4}-\d{2}-\d{2}/)?.[0] || "", path: value };
-      return /^\d{4}-\d{2}-\d{2}$/.test(value) ? { date: value, path: `public/${value}.json` } : null;
+      return /^\d{4}-\d{2}-\d{2}$/.test(value) ? { date: value, path: `daily/${value}.json` } : null;
     }).filter(entry => entry?.date);
   }
   async function fetchArchiveRecord(entry) {
@@ -182,9 +185,13 @@
   }
   async function loadBriefs() {
     try {
-      const manifest = await fetchJson("public/latest.json");
+      const manifest = await fetchJson("latest.json") || await fetchJson("public/latest.json");
+      const directRecord = manifest?.medicareMinute || (manifest?.date && (manifest?.script || manifest?.audioPath || manifest?.audioUrl) ? manifest : null);
       const entries = archiveEntries(manifest);
-      if (!entries.length) {
+      if (directRecord) {
+        latestRecord = directRecord;
+        archiveRecords = [directRecord];
+      } else if (!entries.length) {
         latestRecord = null;
         archiveRecords = [];
       } else {
@@ -193,14 +200,12 @@
         latestRecord = archiveRecords[0] || null;
       }
       renderNotificationBrief();
-      renderDailyBrief();
     } catch (err) {
       console.warn("Medicare Minute archive failed to load:", err);
       latestRecord = null;
       archiveRecords = [];
       try {
         renderNotificationBrief();
-        renderDailyBrief();
       } catch (renderErr) {
         console.warn("Medicare Minute empty state failed to render:", renderErr);
       }
@@ -209,49 +214,37 @@
   }
   function renderNotificationBrief() {
     const host = $m("medicareMinuteNotification"); if (!host) return;
+    if (pilot.workspaceData.briefEnabled === false) { host.hidden = true; host.replaceChildren(); return; }
+    host.hidden = false;
     const today = localDate(), record = latestRecord;
     if (!record) { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No Medicare Minute has been posted yet.</p></section>`; return; }
-    host.innerHTML = `<section class="minute-notification"><h3>${briefTitle()}</h3>${playerMarkup(record, true, today)}</section>`; bindPlayers(host);
+    host.innerHTML = `<section class="minute-notification"><h3>${briefTitle()}</h3>${playerMarkup(record, true, today)}${contextMarkup(record)}<details><summary>Full brief text</summary><p class="minute-script-text">${html(record.script || record.fullText || record.text || "")}</p></details></section>`; bindPlayers(host);
   }
   function contextMarkup(record) {
     const sections = [[record.headline1, record.context1], [record.headline2, record.context2], [record.headline3, record.context3]].filter(([headline]) => headline);
     return sections.map(([headline, context]) => `<section><h4>${html(headline)}</h4>${context ? `<p>${html(context)}</p>` : ""}</section>`).join("");
   }
-  function renderDailyBrief() {
-    const host = $m("dailyBriefContent"); if (!host) return;
-    if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute archive yet.</p>"; return; }
-    const today = localDate();
-    const sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
-    const current = `<article class="daily-brief-current"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.adlib1 ? `<blockquote>${html(latestRecord.adlib1)}</blockquote>` : ""}${latestRecord.adlib2 ? `<blockquote>${html(latestRecord.adlib2)}</blockquote>` : ""}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}${sources.length ? `<h4>Sources</h4><ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}<details><summary>Full script</summary><p class="minute-script-text">${html(latestRecord.script || "")}</p></details></article>`;
-    const prior = archiveRecords.filter(item => item.date !== latestRecord.date).map(item => `<details class="daily-brief-archive-item"><summary>${html(displayDate(item.date))} · ${html(item.headline1 || "Medicare brief")}</summary>${playerMarkup(item, true)}<p class="minute-script-text">${html(item.script || "")}</p></details>`).join("");
-    host.innerHTML = `${current}<section class="daily-brief-archive"><h3>Previous 30 days</h3>${prior || "<p>No earlier briefs in the archive yet.</p>"}</section>`; bindPlayers(host);
-  }
   function renderInto(host) {
     if (!host) return;
     if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute archive yet.</p>"; return; }
     const today = localDate(), sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
-    host.innerHTML = `<article class="discipline-brief-card"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}<details><summary>Full brief text</summary><p class="minute-script-text">${html(latestRecord.script || latestRecord.fullText || latestRecord.text || "")}</p></details><div class="fresh-brief-links"><strong>Explore more with ARP</strong><a href="#fresh-library">Library</a><a href="#fresh-blueprint">Medicare Blueprint</a><a href="#fresh-carriers">JIT Carriers</a></div>${sources.length ? `<ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}</article>`;
-    bindPlayers(host);
+    host.innerHTML = `<article class="discipline-brief-card"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}<details><summary>Full brief text</summary><p class="minute-script-text">${html(latestRecord.script || latestRecord.fullText || latestRecord.text || "")}</p></details><div class="fresh-brief-links"><a href="#fresh-library" data-fresh-brief-target="library"><strong>Explore More with ARP Library</strong></a><a href="#fresh-library" data-fresh-brief-target="library">Library</a><a href="#fresh-blueprint" data-fresh-brief-target="blueprint">Medicare Blueprint</a><a href="#fresh-carriers" data-fresh-brief-target="jit">JIT Carriers</a></div>${sources.length ? `<ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}</article>`;
+    bindPlayers(host); bindExploreLinks(host);
   }
   async function openDailyBrief() {
-    const host = $m("dailyBriefContent");
-    if (host) host.innerHTML = "<p>Loading the latest brief…</p>";
-    const dialog = $m("dailyBriefDialog"); if (!dialog.open) dialog.showModal();
-    await loadBriefs();
-  }
-  function ensureDailyBriefDialog() {
-    if ($m("dailyBriefDialog")) return;
-    dialog("dailyBriefDialog", "Daily Brief", `<div class="fresh-page-top"><button type="button" class="button fresh-get-up" data-close="dailyBriefDialog">Get Up</button></div><div id="dailyBriefContent"><p>Loading the latest brief…</p></div>${closeButton("dailyBriefDialog")}`, true);
-    $m("dailyBriefDialog").addEventListener("close", returnToMainDashboard);
+    if (pilot.workspaceData.briefEnabled === false) return;
+    $m("openBreakroomButton")?.click();
+    setTimeout(() => $m("potButton")?.click(), 250);
   }
   function bindStaticControls() {
-    ensureDailyBriefDialog();
     const dailyBriefButton = $m("freshDailyBriefButton");
     if (dailyBriefButton) dailyBriefButton.onclick = openDailyBrief;
   }
-  function syncAccess() { syncOwnerPanel(); renderNotificationBrief(); }
-  function init() { bindStaticControls(); syncAccess(); }
-  window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle, renderInto };
+  function bindExploreLinks(root = document) { root.querySelectorAll("[data-fresh-brief-target]").forEach(link => { if (link.dataset.bound) return; link.dataset.bound = "true"; link.addEventListener("click", event => { event.preventDefault(); window.AgentRiseOpenFreshBriefTarget?.(link.dataset.freshBriefTarget); }); }); }
+  function syncBriefPreference() { renderNotificationBrief(); const enabled = pilot.workspaceData.briefEnabled !== false; const bar = $m("potButton"), panel = $m("freshPourBriefPanel"); if (bar) bar.hidden = !enabled; if (!enabled && panel) panel.hidden = true; }
+  function syncAccess() { syncOwnerPanel(); syncBriefPreference(); }
+  function init() { bindStaticControls(); bindExploreLinks(document); syncAccess(); }
+  window.AgentRiseMedicareMinute = { init, syncAccess, syncBriefPreference, loadBriefs, briefTitle, renderInto };
   init();
 })();
 
