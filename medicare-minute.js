@@ -5,6 +5,7 @@
   let previewUrl = "";
   let latestRecord = null;
   let archiveRecords = [];
+  let archiveShowOlder = false;
 
   function localDate(date = new Date()) {
     const shifted = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -128,11 +129,13 @@
     } catch (error) { status.textContent = error.message || String(error); reportError("Medicare Minute generation failed", error); }
     finally { generate.disabled = publishButton.disabled = false; }
   }
-  function playerMarkup(record, compact = false, shownDate = record?.date) {
+  function playerMarkup(record, compact = false, shownDate = record?.date, options = {}) {
     if (!record?.audioUrl && !record?.audioPath) return "";
     const url = record.audioUrl || storageUrl(record.audioPath), id = `minute-player-${generateUUID()}`;
     const date = new Date(`${shownDate}T12:00:00`), label = aepActive(date) ? "🎙 AEP Daily Briefing" : "🎙 Medicare brief";
-    return `<div class="minute-player ${compact ? "is-compact" : ""}" data-minute-player><strong>${label} for ${html(displayDate(shownDate))}</strong><audio id="${id}" preload="metadata" src="${html(url)}"></audio><div class="minute-player-controls"><button class="button button-secondary" type="button" data-minute-play>▶ Play</button><input data-minute-seek type="range" min="0" max="100" value="0" aria-label="Seek Medicare brief"><span data-minute-time>0:00 / 0:00</span></div><button class="auth-link minute-full-link" type="button" data-open-daily-brief hidden>Full brief available in Fresh Pour →</button></div>`;
+    const labelMarkup = options.label === false ? "" : `<strong>${html(options.label || `${label} for ${displayDate(shownDate)}`)}</strong>`;
+    const fullLink = options.fullLinkVisible ? `<button class="auth-link minute-full-link is-visible" type="button" data-open-daily-brief>${html(options.fullLinkText || "Read the full brief in Fresh Pour →")}</button>` : `<button class="auth-link minute-full-link" type="button" data-open-daily-brief hidden>Full brief available in Fresh Pour →</button>`;
+    return `<div class="minute-player ${compact ? "is-compact" : ""}" data-minute-player>${labelMarkup}<audio id="${id}" preload="metadata" src="${html(url)}"></audio><div class="minute-player-controls"><button class="button button-secondary" type="button" data-minute-play>▶ Play</button><input data-minute-seek type="range" min="0" max="100" value="0" aria-label="Seek Medicare brief"><span data-minute-time>0:00 / 0:00</span></div>${fullLink}</div>`;
   }
   function bindPlayers(root = document) {
     root.querySelectorAll("[data-minute-player]").forEach(player => {
@@ -143,8 +146,8 @@
       audio.onplay = () => play.textContent = "❚❚ Pause"; audio.onpause = () => play.textContent = "▶ Play";
       audio.ontimeupdate = () => { seek.value = audio.duration ? String(audio.currentTime / audio.duration * 100) : "0"; time.textContent = `${clock(audio.currentTime)} / ${clock(audio.duration)}`; };
       seek.oninput = () => { if (audio.duration) audio.currentTime = Number(seek.value) / 100 * audio.duration; };
-      audio.onended = () => { link.hidden = false; requestAnimationFrame(() => link.classList.add("is-visible")); };
-      link.onclick = openDailyBrief;
+      audio.onended = () => { if (link) { link.hidden = false; requestAnimationFrame(() => link.classList.add("is-visible")); } };
+      if (link) link.onclick = openDailyBrief;
     });
   }
   async function fetchJson(path) {
@@ -156,6 +159,7 @@
   function archiveEntries(manifest) {
     const listed = Array.isArray(manifest) ? manifest
       : Array.isArray(manifest?.dates) ? manifest.dates
+      : Array.isArray(manifest?.archive) ? manifest.archive
       : Array.isArray(manifest?.archiveDates) ? manifest.archiveDates
       : Array.isArray(manifest?.medicareMinute?.dates) ? manifest.medicareMinute.dates
       : manifest?.medicareMinute?.date ? [manifest.medicareMinute.date]
@@ -183,22 +187,35 @@
     const record = data.medicareMinute || data;
     return record && typeof record === "object" ? { ...record, date: record.date || entry.date } : null;
   }
+  async function storageArchiveEntries() {
+    if (!pilot.db?.storage) return [];
+    const { data, error } = await pilot.db.storage.from("medicare-minute").list("daily", { limit: 100, offset: 0, sortBy: { column: "name", order: "desc" } });
+    if (error) { console.warn("Medicare Minute Storage archive list unavailable:", error.message); return []; }
+    return (data || []).map(item => String(item.name || "").match(/^(\d{4}-\d{2}-\d{2})\.json$/)?.[1]).filter(Boolean).map(date => ({ date, path: `daily/${date}.json` }));
+  }
+  async function localNewsData() {
+    try { const response = await fetch("assets/data/news.json", { cache: "no-store" }); return response.ok ? response.json() : null; }
+    catch { return null; }
+  }
+  function embeddedRecords(data) {
+    if (!data || typeof data !== "object") return [];
+    const records = [data.medicareMinute, ...(Array.isArray(data.archive) ? data.archive : [])];
+    return records.filter(record => record && typeof record === "object" && record.date && (record.script || record.fullText || record.text || record.audioPath || record.audioUrl));
+  }
+  function uniqueBriefRecords(records) {
+    const byDate = new Map();
+    records.filter(Boolean).sort((a, b) => String(b.date).localeCompare(String(a.date))).forEach(record => { if (!byDate.has(record.date)) byDate.set(record.date, record); });
+    return [...byDate.values()].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  }
   async function loadBriefs() {
     try {
-      const manifest = await fetchJson("latest.json") || await fetchJson("public/latest.json");
+      const [manifest, listedEntries, localNews] = await Promise.all([fetchJson("latest.json").then(value => value || fetchJson("public/latest.json")), storageArchiveEntries(), localNewsData()]);
       const directRecord = manifest?.medicareMinute || (manifest?.date && (manifest?.script || manifest?.audioPath || manifest?.audioUrl) ? manifest : null);
-      const entries = archiveEntries(manifest);
-      if (directRecord) {
-        latestRecord = directRecord;
-        archiveRecords = [directRecord];
-      } else if (!entries.length) {
-        latestRecord = null;
-        archiveRecords = [];
-      } else {
-        archiveRecords = (await Promise.all(entries.map(fetchArchiveRecord))).filter(Boolean);
-        archiveRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)));
-        latestRecord = archiveRecords[0] || null;
-      }
+      const entriesByDate = new Map([...archiveEntries(manifest), ...archiveEntries(localNews), ...listedEntries].map(entry => [entry.date, entry]));
+      const fetched = (await Promise.all([...entriesByDate.values()].map(fetchArchiveRecord))).filter(Boolean);
+      archiveRecords = uniqueBriefRecords([directRecord, ...embeddedRecords(localNews), ...fetched]);
+      latestRecord = directRecord || archiveRecords[0] || null;
+      archiveShowOlder = false;
       renderNotificationBrief();
     } catch (err) {
       console.warn("Medicare Minute archive failed to load:", err);
@@ -215,24 +232,61 @@
   function renderNotificationBrief() {
     const host = $m("medicareMinuteNotification"); if (!host) return;
     host.hidden = false;
-    const today = localDate(), record = latestRecord;
-    if (!record) { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No Medicare Minute has been posted yet.</p></section>`; return; }
-    host.innerHTML = `<section class="minute-notification"><h3>${briefTitle()}</h3>${playerMarkup(record, true, today)}${contextMarkup(record)}<details><summary>Full brief text</summary><p class="minute-script-text">${html(record.script || record.fullText || record.text || "")}</p></details></section>`; bindPlayers(host);
+    const record = latestRecord;
+    if (!record) { host.innerHTML = '<p class="notification-empty">No Daily Brief has been posted yet.</p>'; return; }
+    host.innerHTML = `<section class="minute-notification minute-notification-audio"><p><strong>Latest Daily Brief — ${html(displayDate(record.date || localDate()))}</strong></p>${playerMarkup(record, true, record.date || localDate(), { label: false, fullLinkVisible: true, fullLinkText: "Read the full brief in Fresh Pour →" })}</section>`; bindPlayers(host);
   }
   function contextMarkup(record) {
     const sections = [[record.headline1, record.context1], [record.headline2, record.context2], [record.headline3, record.context3]].filter(([headline]) => headline);
     return sections.map(([headline, context]) => `<section><h4>${html(headline)}</h4>${context ? `<p>${html(context)}</p>` : ""}</section>`).join("");
   }
+  function recordText(record) { return String(record?.script || record?.fullText || record?.text || "").trim(); }
+  function recordPreview(record) { const first = String(record?.headline1 || recordText(record).split(/\n+/).find(line => line.trim()) || "Daily Brief").trim(); return first.length > 130 ? `${first.slice(0, 127)}…` : first; }
+  function recordAudioUrl(record) { return record?.audioUrl || (record?.audioPath ? storageUrl(record.audioPath) : ""); }
+  function archiveItemMarkup(record) {
+    const text = recordText(record), audioUrl = recordAudioUrl(record), key = html(record.date || generateUUID());
+    return `<article class="daily-brief-archive-item" data-brief-archive-item="${key}"><div class="daily-brief-archive-summary"><div><strong>${html(displayDate(record.date))}</strong><p>${html(recordPreview(record))}</p></div><div class="daily-brief-archive-actions">${audioUrl ? '<button class="button button-secondary" type="button" data-archive-play>▶ Play</button>' : ''}<button class="button button-secondary" type="button" data-archive-read aria-expanded="false">Read</button></div></div>${audioUrl ? `<audio preload="metadata" src="${html(audioUrl)}"></audio>` : ''}<div class="daily-brief-archive-body" hidden><p class="minute-script-text">${html(text || "No text is available for this brief.")}</p><div class="daily-brief-downloads">${audioUrl ? `<a class="button button-secondary" href="${html(audioUrl)}" download="daily-brief-${key}.mp3">Download MP3</a>` : ''}${text ? `<button class="button button-secondary" type="button" data-archive-text-download data-archive-date="${key}">Download text</button>` : ''}</div></div></article>`;
+  }
+  function filteredArchive(query = "") {
+    const latestDate = String(latestRecord?.date || ""), needle = String(query).trim().toLowerCase();
+    return archiveRecords.filter(record => String(record.date) !== latestDate).filter(record => !needle || `${record.date} ${displayDate(record.date)} ${recordPreview(record)} ${recordText(record)}`.toLowerCase().includes(needle));
+  }
+  function renderArchiveList(root, query = "") {
+    const list = root.querySelector("[data-brief-archive-list]"), olderButton = root.querySelector("[data-load-older-briefs]"); if (!list) return;
+    const all = filteredArchive(query), cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 29); cutoff.setHours(0, 0, 0, 0);
+    const recent = all.filter(record => Date.parse(`${record.date}T23:59:59`) >= cutoff.getTime()), shown = archiveShowOlder || query ? all : recent, hasOlder = all.length > recent.length;
+    list.innerHTML = shown.length ? shown.map(archiveItemMarkup).join("") : '<p class="notification-empty">No previous briefs match this view.</p>';
+    if (olderButton) { olderButton.hidden = !hasOlder || archiveShowOlder || Boolean(query); olderButton.textContent = "Load older"; }
+    bindArchiveControls(root);
+  }
+  function bindArchiveControls(root) {
+    root.querySelectorAll("[data-brief-archive-item]").forEach(item => {
+      const audio = item.querySelector("audio"), play = item.querySelector("[data-archive-play]"), read = item.querySelector("[data-archive-read]"), body = item.querySelector(".daily-brief-archive-body"), download = item.querySelector("[data-archive-text-download]");
+      if (play && audio) { play.onclick = () => { root.querySelectorAll("audio").forEach(other => { if (other !== audio) other.pause(); }); if (audio.paused) audio.play().catch(() => undefined); else audio.pause(); }; audio.onplay = () => play.textContent = "❚❚ Pause"; audio.onpause = () => play.textContent = "▶ Play"; }
+      if (read && body) read.onclick = () => { const open = body.hidden; body.hidden = !open; read.setAttribute("aria-expanded", String(open)); read.textContent = open ? "Hide" : "Read"; };
+      if (download) download.onclick = () => { const record = archiveRecords.find(entry => entry.date === download.dataset.archiveDate), blob = new Blob([recordText(record)], { type: "text/plain;charset=utf-8" }), url = URL.createObjectURL(blob), link = document.createElement("a"); link.href = url; link.download = `daily-brief-${download.dataset.archiveDate}.txt`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+    });
+  }
+  function archiveMarkup() { return `<section class="daily-brief-archive" aria-labelledby="previousBriefsTitle"><h3 id="previousBriefsTitle">Previous Briefs</h3><label class="daily-brief-search">Search briefs<input type="search" data-brief-archive-search placeholder="Search by text or date"></label><div data-brief-archive-list></div><button class="button button-secondary" type="button" data-load-older-briefs>Load older</button></section>`; }
+  function bindArchive(root) {
+    const search = root.querySelector("[data-brief-archive-search]"), older = root.querySelector("[data-load-older-briefs]");
+    if (search) search.oninput = () => renderArchiveList(root, search.value);
+    if (older) older.onclick = () => { archiveShowOlder = true; renderArchiveList(root, search?.value || ""); };
+    renderArchiveList(root, "");
+  }
   function renderInto(host) {
     if (!host) return;
     if (!latestRecord) { host.innerHTML = "<p>No Medicare Minute archive yet.</p>"; return; }
     const today = localDate(), sources = Array.isArray(latestRecord.sources) ? latestRecord.sources : [];
-    host.innerHTML = `<article class="discipline-brief-card"><h3>${briefTitle()} · ${html(displayDate(today))}</h3>${playerMarkup(latestRecord, false, today)}${contextMarkup(latestRecord)}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}<details><summary>Full brief text</summary><p class="minute-script-text">${html(latestRecord.script || latestRecord.fullText || latestRecord.text || "")}</p></details><div class="fresh-brief-links"><a href="#fresh-library" data-fresh-brief-target="library"><strong>Explore More with ARP Library</strong></a><a href="#fresh-library" data-fresh-brief-target="library">Library</a><a href="#fresh-blueprint" data-fresh-brief-target="blueprint">Medicare Blueprint</a><a href="#fresh-carriers" data-fresh-brief-target="jit">JIT Carriers</a></div>${sources.length ? `<ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}</article>`;
-    bindPlayers(host); bindExploreLinks(host);
+    host.innerHTML = `<article class="discipline-brief-card"><h3>Daily Brief</h3><p class="daily-brief-date">${html(displayDate(today))}</p>${playerMarkup(latestRecord, false, today, { label: `🎙 Daily Brief for ${displayDate(today)}` })}${contextMarkup(latestRecord)}${latestRecord.fieldTip ? `<p><strong>Field Tip:</strong> ${html(latestRecord.fieldTip)}</p>` : ""}<details><summary>Full brief text</summary><p class="minute-script-text">${html(recordText(latestRecord))}</p></details><div class="fresh-brief-links"><a href="#fresh-library" data-fresh-brief-target="library"><strong>Explore More with ARP Library</strong></a><a href="#fresh-library" data-fresh-brief-target="library">Library</a><a href="#fresh-blueprint" data-fresh-brief-target="blueprint">Medicare Blueprint</a><a href="#fresh-carriers" data-fresh-brief-target="jit">JIT Carriers</a></div>${sources.length ? `<ul>${sources.map(source => `<li><a href="${html(source.url)}" target="_blank" rel="noopener noreferrer">${html(source.label || source.url)}</a></li>`).join("")}</ul>` : ""}</article>${archiveMarkup()}`;
+    bindPlayers(host); bindExploreLinks(host); bindArchive(host);
   }
   async function openDailyBrief() {
     $m("openBreakroomButton")?.click();
-    setTimeout(() => $m("potButton")?.click(), 250);
+    setTimeout(() => {
+      if ($m("breakroomPanel")?.classList.contains("is-hidden")) $m("toggleBreakroomMenuButton")?.click();
+      if ($m("freshPourBriefPanel")?.hidden) $m("potButton")?.click();
+    }, 250);
   }
   function bindStaticControls() {
     const dailyBriefButton = $m("freshDailyBriefButton");
