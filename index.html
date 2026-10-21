@@ -1388,7 +1388,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><label class="brief-visibility-toggle"><input id="briefEnabledToggle" type="checkbox" checked> Show Daily Medicare Brief</label><div id="medicareMinuteNotification"></div><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu" hidden><div id="medicareMinuteNotification"></div><strong>Business reminders</strong><ul><li>Appointments</li><li>Training</li><li>Renewals</li><li>Presentations</li></ul><button class="button button-secondary" type="button" id="openNotificationCalendar">Open calendar</button></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -3775,7 +3775,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
       async function toggleFreshPourBrief() {
         const panel = document.querySelector("#freshPourBriefPanel");
         const button = document.querySelector("#potButton");
-        if (pilot.workspaceData.briefEnabled === false) return;
         const willOpen = panel.hidden;
         panel.hidden = !willOpen;
         button.setAttribute("aria-expanded", String(willOpen));

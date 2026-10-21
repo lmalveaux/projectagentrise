@@ -214,7 +214,6 @@
   }
   function renderNotificationBrief() {
     const host = $m("medicareMinuteNotification"); if (!host) return;
-    if (pilot.workspaceData.briefEnabled === false) { host.hidden = true; host.replaceChildren(); return; }
     host.hidden = false;
     const today = localDate(), record = latestRecord;
     if (!record) { host.innerHTML = `<section class="minute-notification"><strong>${briefTitle()}</strong><p>No Medicare Minute has been posted yet.</p></section>`; return; }
@@ -232,7 +231,6 @@
     bindPlayers(host); bindExploreLinks(host);
   }
   async function openDailyBrief() {
-    if (pilot.workspaceData.briefEnabled === false) return;
     $m("openBreakroomButton")?.click();
     setTimeout(() => $m("potButton")?.click(), 250);
   }
@@ -241,10 +239,9 @@
     if (dailyBriefButton) dailyBriefButton.onclick = openDailyBrief;
   }
   function bindExploreLinks(root = document) { root.querySelectorAll("[data-fresh-brief-target]").forEach(link => { if (link.dataset.bound) return; link.dataset.bound = "true"; link.addEventListener("click", event => { event.preventDefault(); window.AgentRiseOpenFreshBriefTarget?.(link.dataset.freshBriefTarget); }); }); }
-  function syncBriefPreference() { renderNotificationBrief(); const enabled = pilot.workspaceData.briefEnabled !== false; const bar = $m("potButton"), panel = $m("freshPourBriefPanel"); if (bar) bar.hidden = !enabled; if (!enabled && panel) panel.hidden = true; }
-  function syncAccess() { syncOwnerPanel(); syncBriefPreference(); }
+  function syncAccess() { syncOwnerPanel(); renderNotificationBrief(); }
   function init() { bindStaticControls(); bindExploreLinks(document); syncAccess(); }
-  window.AgentRiseMedicareMinute = { init, syncAccess, syncBriefPreference, loadBriefs, briefTitle, renderInto };
+  window.AgentRiseMedicareMinute = { init, syncAccess, loadBriefs, briefTitle, renderInto };
   init();
 })();
 
