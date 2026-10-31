@@ -1398,7 +1398,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star gold-star" title="Premium">★</span></button>
         <button type="button" id="agencyButton" class="locked-control">Agency <span class="tier-star gold-star" title="Premium">★</span></button>
         <button type="button" id="learningLibraryButton">Library</button>
-        <button type="button" id="jitCarriersButton">JIT Carriers <span class="tier-star gold-star" title="Premium">★</span></button>
+        <button type="button" id="medicareComparisonButton">Medicare Comparison</button>
       </nav>
       <div class="gold-dashboard-divider" aria-hidden="true"></div>
       <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary dashboard-notes-button" type="button" id="dashboardAgentNotesButton" title="Agent Notes" aria-label="Open Agent Notes">📝 <span>Agent Notes</span></button><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
@@ -1669,6 +1669,10 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             </span>
           </button>
           <section class="fresh-brief-panel" id="freshPourBriefPanel" hidden>
+            <div class="fresh-brief-tool-icons" role="toolbar" aria-label="Daily Brief tools">
+              <button type="button" id="freshBriefComparisonTool" aria-label="Open Medicare Comparison" title="Medicare Comparison">🧮</button>
+              <button type="button" id="freshBriefCalendarTool" aria-label="Open Today's Calendar" title="Today's Calendar">📅</button>
+            </div>
             <audio id="freshBriefAudio" controls preload="metadata"></audio>
             <div id="freshBriefText"><p>Open the brief to load the latest Medicare Minute.</p></div>
             <button class="button button-secondary fresh-brief-get-up" id="getUpFreshBrief" type="button">Get Up</button>
@@ -1685,6 +1689,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button>
             <button class="button button-secondary" type="button" id="freshPdpButton">PDP</button>
             <button class="button button-secondary" type="button" id="freshJitCarriersButton">JIT Carriers</button>
+            <button class="button button-secondary" type="button" id="freshMedicareComparisonButton">Medicare Comparison</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
             <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">Features</button>
             <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medicare Plan Comparison — Agent Rise Pro</title>
+<style>
+  :root {
+    --accent: #2F3A6B;
+    --accent-dark: #1E2B52;
+    --surface: #FEFCF7;
+    --panel: #F5F1EA;
+    --line: #E8E0D0;
+    --text: #0A0A0A;
+    --muted: #5C4033;
+    --green: #1F3D2B;
+    --green-light: #D9E5D6;
+    --gold: #C9A227;
+    --red: #9f1d2d;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(22,35,52,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--accent);
+    color: #fff;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .header h1 { font-size: 1.2rem; font-weight: 900; }
+  .header p { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
+
+  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: background 120ms;
+  }
+
+  .btn-white { background: #fff; color: var(--accent); }
+  .btn-white:hover { background: #e8edf8; }
+  .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
+  .btn-outline:hover { border-color: #fff; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: #155f39; }
+
+  .client-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .field-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+  }
+
+  .field-inline label {
+    font-size: 0.71rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+
+  .field-inline input, .field-inline select {
+    padding: 7px 10px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    background: var(--panel);
+    color: var(--text);
+  }
+
+  .field-inline input:focus, .field-inline select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .cms-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+    align-self: flex-end;
+    white-space: nowrap;
+  }
+
+  .cms-link:hover { background: #b8e8ce; }
+
+  .comparison-wrap {
+    padding: 20px 24px;
+    overflow-x: auto;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 200px repeat(3, 1fr);
+    gap: 0;
+    min-width: 700px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .grid-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 16px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .grid-header.plan-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .plan-name-input {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 800;
+    padding: 6px 10px;
+    width: 100%;
+  }
+
+  .plan-name-input::placeholder { color: rgba(255,255,255,0.5); font-weight: 400; }
+  .plan-name-input:focus { outline: none; border-color: #fff; }
+
+  .plan-carrier-input {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.78rem;
+    padding: 4px 8px;
+    width: 100%;
+  }
+
+  .plan-carrier-input::placeholder { color: rgba(255,255,255,0.4); }
+  .plan-carrier-input:focus { outline: none; border-color: rgba(255,255,255,0.6); }
+
+  .row-label {
+    background: var(--panel);
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+  }
+
+  .row-label.category {
+    background: #eef1f8;
+    color: var(--accent);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+  }
+
+  .data-cell {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+  }
+
+  .data-cell.category {
+    background: #eef1f8;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .data-cell input, .data-cell select {
+    width: 100%;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.86rem;
+    background: var(--panel);
+    color: var(--text);
+  }
+
+  .data-cell input:focus, .data-cell select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .data-cell.best { background: #f0fdf6; }
+  .data-cell.best input { border-color: var(--green); background: #f0fdf6; font-weight: 700; color: var(--green); }
+
+  .winner-bar {
+    grid-column: 1 / -1;
+    background: var(--green-light);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .winner-text { font-size: 0.9rem; font-weight: 800; color: var(--green); }
+  .winner-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  .notes-section {
+    padding: 20px 24px;
+  }
+
+  .notes-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+
+  .notes-card h3 {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 720px) {
+    .notes-grid { grid-template-columns: 1fr; }
+  }
+
+  .note-col label {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .note-col textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.84rem;
+    background: var(--panel);
+    color: var(--text);
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .note-col textarea:focus { outline: none; border-color: var(--accent); }
+
+  .recommendation-box {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--panel);
+    border-radius: 8px;
+    border: 1.5px solid var(--line);
+  }
+
+  .recommendation-box label {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .recommendation-box textarea {
+    width: 100%;
+    min-height: 60px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.88rem;
+    background: var(--surface);
+    color: var(--text);
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .footer-bar {
+    padding: 14px 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-note {
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  .star-select {
+    appearance: none;
+    text-align: center;
+  }
+
+  @media print {
+    .header-actions, .cms-link, .footer-bar { display: none !important; }
+    body { background: #fff; }
+    .comparison-wrap, .notes-section { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>📊 Medicare Plan Comparison</h1>
+    <p>Agent Rise Pro — Compare up to 3 plans side by side</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="clearAll()">Clear</button>
+    <button class="btn btn-outline" onclick="window.print()">🖨 Print</button>
+    <button class="btn btn-white" onclick="saveComparison()">💾 Save Summary</button>
+  </div>
+</div>
+
+<!-- Client Info Bar -->
+<div class="client-bar">
+  <div class="field-inline">
+    <label>Client Name</label>
+    <input type="text" id="clientName" placeholder="First Last" />
+  </div>
+  <div class="field-inline">
+    <label>Date of Birth</label>
+    <input type="date" id="clientDOB" />
+  </div>
+  <div class="field-inline">
+    <label>Zip Code</label>
+    <input type="text" id="clientZip" maxlength="5" placeholder="70601" />
+  </div>
+  <div class="field-inline">
+    <label>County</label>
+    <input type="text" id="clientCounty" placeholder="Calcasieu" />
+  </div>
+  <div class="field-inline">
+    <label>State</label>
+    <input type="text" id="clientState" maxlength="2" placeholder="LA" style="text-transform:uppercase" />
+  </div>
+  <div class="field-inline">
+    <label>Plan Type</label>
+    <select id="planType">
+      <option value="MA">Medicare Advantage (MA)</option>
+      <option value="PDP">Part D (PDP)</option>
+      <option value="MAPD">MA + Part D (MAPD)</option>
+      <option value="MS">Medigap Supplement</option>
+    </select>
+  </div>
+  <div class="field-inline">
+    <label>Comparison Date</label>
+    <input type="date" id="compDate" />
+  </div>
+  <a class="cms-link" href="https://www.medicare.gov/plan-compare" target="_blank" rel="noopener">
+    🔗 Open Medicare.gov Plan Finder
+  </a>
+</div>
+
+<!-- Comparison Grid -->
+<div class="comparison-wrap">
+  <div class="comparison-grid" id="compGrid">
+
+    <!-- Column Headers -->
+    <div class="grid-header">Field</div>
+
+    <div class="grid-header plan-col">
+      <input class="plan-name-input" id="plan1name" type="text" placeholder="Plan 1 Name" />
+      <input class="plan-carrier-input" id="plan1carrier" type="text" placeholder="Carrier" />
+    </div>
+    <div class="grid-header plan-col">
+      <input class="plan-name-input" id="plan2name" type="text" placeholder="Plan 2 Name" />
+      <input class="plan-carrier-input" id="plan2carrier" type="text" placeholder="Carrier" />
+    </div>
+    <div class="grid-header plan-col">
+      <input class="plan-name-input" id="plan3name" type="text" placeholder="Plan 3 Name" />
+      <input class="plan-carrier-input" id="plan3carrier" type="text" placeholder="Carrier" />
+    </div>
+
+    <!-- COSTS -->
+    <div class="row-label category">💰 Costs</div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+
+    <div class="row-label">Monthly Premium</div>
+    <div class="data-cell"><input type="text" placeholder="$0.00" data-field="premium" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0.00" data-field="premium" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0.00" data-field="premium" data-plan="3" /></div>
+
+    <div class="row-label">Annual Deductible</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="deductible" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="deductible" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="deductible" data-plan="3" /></div>
+
+    <div class="row-label">Max Out-of-Pocket</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="moop" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="moop" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="moop" data-plan="3" /></div>
+
+    <div class="row-label">PCP Copay</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="pcp" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="pcp" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="pcp" data-plan="3" /></div>
+
+    <div class="row-label">Specialist Copay</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="specialist" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="specialist" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="specialist" data-plan="3" /></div>
+
+    <!-- DRUG COVERAGE -->
+    <div class="row-label category">💊 Drug Coverage</div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+
+    <div class="row-label">Drug Deductible</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="drugded" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="drugded" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="drugded" data-plan="3" /></div>
+
+    <div class="row-label">Tier 1 Generic</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier1" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier1" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier1" data-plan="3" /></div>
+
+    <div class="row-label">Tier 2 Preferred</div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier2" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier2" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0" data-field="tier2" data-plan="3" /></div>
+
+    <div class="row-label">Mail Order (90-day)</div>
+    <div class="data-cell"><input type="text" placeholder="Available?" data-field="mailorder" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="Available?" data-field="mailorder" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="Available?" data-field="mailorder" data-plan="3" /></div>
+
+    <!-- EXTRA BENEFITS -->
+    <div class="row-label category">⭐ Extra Benefits</div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+
+    <div class="row-label">Dental</div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="dental" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="dental" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="dental" data-plan="3" /></div>
+
+    <div class="row-label">Vision</div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="vision" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="vision" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="vision" data-plan="3" /></div>
+
+    <div class="row-label">Hearing</div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="hearing" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="hearing" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No / Amount" data-field="hearing" data-plan="3" /></div>
+
+    <div class="row-label">OTC Allowance</div>
+    <div class="data-cell"><input type="text" placeholder="$0/quarter" data-field="otc" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0/quarter" data-field="otc" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="$0/quarter" data-field="otc" data-plan="3" /></div>
+
+    <div class="row-label">Transportation</div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No" data-field="transport" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No" data-field="transport" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="Yes / No" data-field="transport" data-plan="3" /></div>
+
+    <div class="row-label">Fitness Benefit</div>
+    <div class="data-cell"><input type="text" placeholder="SilverSneakers?" data-field="fitness" data-plan="1" /></div>
+    <div class="data-cell"><input type="text" placeholder="SilverSneakers?" data-field="fitness" data-plan="2" /></div>
+    <div class="data-cell"><input type="text" placeholder="SilverSneakers?" data-field="fitness" data-plan="3" /></div>
+
+    <!-- NETWORK -->
+    <div class="row-label category">🏥 Network</div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+
+    <div class="row-label">Network Type</div>
+    <div class="data-cell">
+      <select data-field="network" data-plan="1">
+        <option value="">Select</option>
+        <option>HMO</option><option>PPO</option><option>PFFS</option><option>SNP</option><option>MSA</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="network" data-plan="2">
+        <option value="">Select</option>
+        <option>HMO</option><option>PPO</option><option>PFFS</option><option>SNP</option><option>MSA</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="network" data-plan="3">
+        <option value="">Select</option>
+        <option>HMO</option><option>PPO</option><option>PFFS</option><option>SNP</option><option>MSA</option>
+      </select>
+    </div>
+
+    <div class="row-label">Doctor Accepts Plan</div>
+    <div class="data-cell">
+      <select data-field="docaccepts" data-plan="1">
+        <option value="">—</option><option>Yes</option><option>No</option><option>Verify</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="docaccepts" data-plan="2">
+        <option value="">—</option><option>Yes</option><option>No</option><option>Verify</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="docaccepts" data-plan="3">
+        <option value="">—</option><option>Yes</option><option>No</option><option>Verify</option>
+      </select>
+    </div>
+
+    <div class="row-label">Referral Required</div>
+    <div class="data-cell">
+      <select data-field="referral" data-plan="1">
+        <option value="">—</option><option>Yes</option><option>No</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="referral" data-plan="2">
+        <option value="">—</option><option>Yes</option><option>No</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select data-field="referral" data-plan="3">
+        <option value="">—</option><option>Yes</option><option>No</option>
+      </select>
+    </div>
+
+    <!-- RATINGS -->
+    <div class="row-label category">🌟 Rating</div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+    <div class="data-cell category"></div>
+
+    <div class="row-label">CMS Star Rating</div>
+    <div class="data-cell">
+      <select class="star-select" data-field="stars" data-plan="1">
+        <option value="">—</option>
+        <option>⭐⭐⭐⭐⭐ (5)</option>
+        <option>⭐⭐⭐⭐½ (4.5)</option>
+        <option>⭐⭐⭐⭐ (4)</option>
+        <option>⭐⭐⭐½ (3.5)</option>
+        <option>⭐⭐⭐ (3)</option>
+        <option>New Plan</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select class="star-select" data-field="stars" data-plan="2">
+        <option value="">—</option>
+        <option>⭐⭐⭐⭐⭐ (5)</option>
+        <option>⭐⭐⭐⭐½ (4.5)</option>
+        <option>⭐⭐⭐⭐ (4)</option>
+        <option>⭐⭐⭐½ (3.5)</option>
+        <option>⭐⭐⭐ (3)</option>
+        <option>New Plan</option>
+      </select>
+    </div>
+    <div class="data-cell">
+      <select class="star-select" data-field="stars" data-plan="3">
+        <option value="">—</option>
+        <option>⭐⭐⭐⭐⭐ (5)</option>
+        <option>⭐⭐⭐⭐½ (4.5)</option>
+        <option>⭐⭐⭐⭐ (4)</option>
+        <option>⭐⭐⭐½ (3.5)</option>
+        <option>⭐⭐⭐ (3)</option>
+        <option>New Plan</option>
+      </select>
+    </div>
+
+    <!-- Winner Bar -->
+    <div class="winner-bar">
+      <div>
+        <div class="winner-text" id="winnerText">Complete the comparison to see recommendation</div>
+        <div class="winner-sub">Compares worst-case yearly cost only. Review drugs, network, and extra benefits before recommending.</div>
+      </div>
+      <button class="btn btn-green" onclick="pickWinner()">⚡ Auto-Recommend</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Notes Section -->
+<div class="notes-section">
+  <div class="notes-card">
+    <h3>Agent Notes — Per Plan</h3>
+    <div class="notes-grid">
+      <div class="note-col">
+        <label id="note1label">Plan 1 Notes</label>
+        <textarea id="note1" placeholder="Pros, cons, client fit..."></textarea>
+      </div>
+      <div class="note-col">
+        <label id="note2label">Plan 2 Notes</label>
+        <textarea id="note2" placeholder="Pros, cons, client fit..."></textarea>
+      </div>
+      <div class="note-col">
+        <label id="note3label">Plan 3 Notes</label>
+        <textarea id="note3" placeholder="Pros, cons, client fit..."></textarea>
+      </div>
+    </div>
+    <div class="recommendation-box">
+      <label>Agent Recommendation &amp; Rationale</label>
+      <textarea id="agentRec" placeholder="I recommend Plan ___ because..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer-bar">
+  <span class="footer-note">⚠️ For agent use only. Always verify current plan data on Medicare.gov or through your FMO/IMO before presenting to client. Data entered here does not update automatically.</span>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print Leave-Behind</button>
+    <button class="btn btn-green" onclick="saveComparison()">💾 Save Summary</button>
+  </div>
+</div>
+
+<script>
+  // Set today's date
+  document.getElementById("compDate").value = new Date().toISOString().slice(0,10);
+
+  // Sync plan names to note labels
+  ["plan1name","plan2name","plan3name"].forEach((id, i) => {
+    document.getElementById(id).addEventListener("input", function() {
+      const label = document.getElementById(`note${i+1}label`);
+      label.textContent = (this.value || `Plan ${i+1}`) + " Notes";
+    });
+  });
+
+  function num(field, plan) {
+    const el = document.querySelector(`[data-field="${field}"][data-plan="${plan}"]`);
+    const m = ((el && el.value) || "").replace(/[^0-9.]/g, "");
+    return m === "" ? null : parseFloat(m);   // $0 is a real value, blank is not
+  }
+
+  // Auto-recommend: lowest worst-case yearly cost = 12 months of premium + out-of-pocket max
+  function pickWinner() {
+    const names = [1,2,3].map(i => document.getElementById(`plan${i}name`).value || `Plan ${i}`);
+    const plans = [1,2,3].map(p => ({ i: p - 1, pr: num("premium", p), mo: num("moop", p) }))
+      .filter(x => x.pr !== null && x.mo !== null);
+    document.querySelectorAll(".data-cell").forEach(c => c.classList.remove("best"));
+    if (plans.length < 2) {
+      document.getElementById("winnerText").textContent = "Enter premium and out-of-pocket max for at least two plans";
+      return;
+    }
+    plans.forEach(x => x.cost = x.pr * 12 + x.mo);
+    const best = plans.reduce((a, b) => (b.cost < a.cost ? b : a));
+    document.getElementById("winnerText").textContent =
+      `⭐ Lowest worst-case yearly cost: ${names[best.i]} ($${best.cost.toLocaleString()})`;
+    document.querySelectorAll(`[data-plan="${best.i + 1}"]`).forEach(el => {
+      const cell = el.closest(".data-cell");
+      if (cell) cell.classList.add("best");
+    });
+  }
+
+  function collectRows() {
+    const rows = [];
+    document.querySelectorAll("#compGrid .row-label:not(.category)").forEach(label => {
+      const values = []; let n = label.nextElementSibling;
+      for (let k = 0; k < 3 && n; k++, n = n.nextElementSibling) {
+        const f = n.querySelector("input,select");
+        values.push(f ? f.value : "");
+      }
+      rows.push({ label: label.textContent.trim(), values });
+    });
+    return rows;
+  }
+
+  function buildSummary(data) {
+    const names = data.plans.map((p, i) => (p.name || `Plan ${i+1}`) + (p.carrier ? ` (${p.carrier})` : ""));
+    let t = `Medicare Plan Comparison\n${data.clientName || "Client"} — ${data.zip} ${data.county} ${data.state} — ${data.date}\nPlan type: ${data.planType}\n\n`;
+    t += `Plans: ${names.join(" | ")}\n\n`;
+    data.rows.filter(r => r.values.some(v => v)).forEach(r => { t += `${r.label}: ${r.values.map(v => v || "—").join(" | ")}\n`; });
+    data.notes.forEach((n, i) => { if (n) t += `\nNotes — ${names[i]}: ${n}`; });
+    if (data.recommendation) t += `\n\nRecommendation: ${data.recommendation}`;
+    return t;
+  }
+
+  function saveComparison() {
+    const data = {
+      clientName: document.getElementById("clientName").value,
+      dob: document.getElementById("clientDOB").value,
+      zip: document.getElementById("clientZip").value,
+      county: document.getElementById("clientCounty").value,
+      state: document.getElementById("clientState").value,
+      planType: document.getElementById("planType").value,
+      date: document.getElementById("compDate").value,
+      plans: [1,2,3].map(p => ({
+        name: document.getElementById(`plan${p}name`).value,
+        carrier: document.getElementById(`plan${p}carrier`).value,
+      })),
+      rows: collectRows(),
+      notes: [1,2,3].map(p => document.getElementById(`note${p}`).value),
+      recommendation: document.getElementById("agentRec").value,
+    };
+    data.summary = buildSummary(data);
+
+    // When embedded in Agent Rise Pro, the app supplies this function
+    if (typeof window.agentRiseSaveComparison === "function") {
+      window.agentRiseSaveComparison(data);
+      alert("Comparison saved to the prospect record.");
+      return;
+    }
+    // Standalone: copy the full summary, or download it if the browser blocks copying
+    const download = () => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([data.summary], { type: "text/plain" }));
+      a.download = `plan-comparison-${(data.clientName || "client").replace(/\s+/g, "-")}.txt`;
+      a.click();
+      alert("Summary downloaded. Paste it into the prospect's notes in Agent Rise Pro.");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(data.summary)
+        .then(() => alert("Full summary copied. Paste it into the prospect's notes in Agent Rise Pro."))
+        .catch(download);
+    } else { download(); }
+  }
+
+  function clearAll() {
+    if (!confirm("Clear all comparison data?")) return;
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    document.querySelectorAll("#compGrid select").forEach(el => el.selectedIndex = 0);
+    document.getElementById("planType").selectedIndex = 0;
+    document.querySelectorAll(".data-cell").forEach(c => c.classList.remove("best"));
+    document.getElementById("winnerText").textContent = "Complete the comparison to see recommendation";
+    document.getElementById("compDate").value = new Date().toISOString().slice(0,10);
+    [1,2,3].forEach(i => { document.getElementById(`note${i}label`).textContent = `Plan ${i} Notes`; });
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("clientName") || "";
+  const dob = params.get("clientDOB") || "";
+  const state = params.get("clientState") || "";
+  const county = params.get("clientCounty") || "";
+  if (name) document.getElementById("clientName").value = name;
+  if (dob) document.getElementById("clientDOB").value = dob;
+  if (state) document.getElementById("clientState").value = state;
+  if (county) document.getElementById("clientCounty").value = county;
+</script>
+</body>
+</html>
