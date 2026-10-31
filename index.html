@@ -1371,7 +1371,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout83" />
+    <link rel="stylesheet" href="pilot.css?v=layout84" />
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
@@ -1682,8 +1682,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshAgentNotesButton" aria-expanded="false" aria-controls="agentNotesPanel">Agent Notes</button>
-            <button class="button button-secondary" type="button" id="freshGptButton">GPT</button>
-            <button class="button button-secondary" type="button" id="freshBookBusinessButton">Book of Business</button>
+            <button class="button button-secondary" type="button" id="freshGptButton">GPT <span class="tier-star gold-star" title="Pro">★</span></button>
+            <button class="button button-secondary" type="button" id="freshBookBusinessButton">Book of Business <span class="tier-star gold-star" title="Pro">★</span></button>
             <button class="button button-secondary" type="button" id="freshLaunchKitButton">Medicare Blueprint</button>
             <button class="button button-secondary" type="button" id="freshMedicareLaunchKitButton">Medicare Kit</button>
             <button class="button button-secondary" type="button" id="freshTurning65Button">Turning 65</button>
@@ -3888,7 +3888,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         pilot.workspaceData.freshPourMenuOpen = !menuWillBeHidden;
         breakroomElements.toggleMenuButton.textContent = menuWillBeHidden ? "Menu" : "Hide Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", String(!menuWillBeHidden));
-        persistWorkspace();
+        if (!pilot.demo) persistWorkspace();
       }
 
       function hideBreakroomMenu() {
@@ -3896,18 +3896,13 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         pilot.workspaceData.freshPourMenuOpen = false;
         breakroomElements.toggleMenuButton.textContent = "Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
-        persistWorkspace();
+        if (!pilot.demo) persistWorkspace();
       }
 
       function openBreakroom() {
         breakroomOpener = document.activeElement;
         breakroomIsClosing = false;
         document.body.classList.add("fresh-pour-open");
-        const demoBanner = document.querySelector("#demoBanner");
-        if (demoBanner && !demoBanner.hidden) {
-          demoBanner.dataset.hiddenForFreshPour = "true";
-          demoBanner.hidden = true;
-        }
         initializeBreakroomMedia();
         breakroomElements.view.hidden = false;
         pilot.workspaceData.freshPourMenuOpen = false;
@@ -3935,11 +3930,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         breakroomElements.view.classList.remove("is-closing");
         breakroomIsClosing = false;
         document.body.classList.remove("fresh-pour-open");
-        const demoBanner = document.querySelector("#demoBanner");
-        if (demoBanner?.dataset.hiddenForFreshPour === "true") {
-          delete demoBanner.dataset.hiddenForFreshPour;
-          demoBanner.hidden = false;
-        }
         document.body.style.overflow = "";
         window.AgentRiseReturnToDashboard?.();
         breakroomOpener = null;
@@ -4080,7 +4070,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout83" defer></script>
+    <script src="pilot.js?v=layout84" defer></script>
     <script src="medicare-minute.js?v=layout64" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
@@ -4130,6 +4120,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
 
 
 
