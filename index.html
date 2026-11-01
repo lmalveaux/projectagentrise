@@ -6,7 +6,7 @@
     <title>Agent Rise — Agent Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
       /* ---- Base (Palette A: Charcoal / Burgundy / Gold) ---- */
 :root {
@@ -1718,10 +1718,24 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           </div>
 
           <nav class="fresh-symbol-strip" aria-label="Fresh Pour shortcuts">
-            <button type="button" id="freshStripNotes" aria-label="Open Agent Notes" title="Agent Notes">📝</button>
             <button type="button" id="freshStripMusic" aria-label="Open The Pour" title="The Pour">🎵</button>
+            <button class="daily-pour-trigger" type="button" id="freshStripDailyPour" aria-label="Open The Daily Pour" title="The Daily Pour">
+              <svg class="daily-pour-flower" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path class="daily-pour-stem" d="M24 27v15M24 35c-5-1-8-4-9-8 5 0 8 2 9 5M24 37c5-1 8-4 9-8-5 0-8 2-9 5"/><g class="daily-pour-petals"><ellipse cx="24" cy="12" rx="6" ry="9"/><ellipse cx="35" cy="20" rx="6" ry="9" transform="rotate(60 35 20)"/><ellipse cx="13" cy="20" rx="6" ry="9" transform="rotate(-60 13 20)"/><ellipse cx="31" cy="30" rx="6" ry="9" transform="rotate(120 31 30)"/><ellipse cx="17" cy="30" rx="6" ry="9" transform="rotate(-120 17 30)"/></g><circle class="daily-pour-gem" cx="24" cy="23" r="6"/></svg>
+            </button>
+            <button type="button" id="freshStripNotes" aria-label="Open Agent Notes" title="Agent Notes">📝</button>
             <button type="button" id="freshStripClose" aria-label="Close Fresh Pour menu" title="Close menu">✕</button>
           </nav>
+
+          <section class="daily-pour-panel" id="dailyPourPanel" aria-labelledby="dailyPourTitle" hidden>
+            <div class="daily-pour-heading"><div><p class="daily-pour-kicker">A thoughtful pause for the independent agent</p><h2 id="dailyPourTitle">The Daily Pour</h2></div><button class="button button-secondary" id="closeDailyPour" type="button">Close</button></div>
+            <div class="daily-pour-feed">
+              <article><span>Perspective</span><blockquote>“The best way to predict the future is to create it.”</blockquote><cite>Peter Drucker</cite></article>
+              <article><span>Sales practice</span><h3>Consistency makes confidence visible.</h3><p>One thoughtful follow-up today is worth more than ten perfect plans postponed until tomorrow.</p></article>
+              <article><span>Life</span><h3>Protect the pace that protects you.</h3><p>A calm schedule is not a lack of ambition. It is the structure that lets good work compound.</p></article>
+              <article><span>Financial lens</span><h3>Revenue follows remembered relationships.</h3><p>Review the people already in your book before chasing the next unfamiliar lead. Service is a growth strategy.</p></article>
+              <article><span>Field note</span><h3>Make the next action obvious.</h3><p>Before you leave a client record, write the next call, date, or document needed. Momentum loves clarity.</p></article>
+            </div>
+          </section>
 
           <div class="fresh-music-player" id="freshMusicPanel" hidden>
             <div class="fresh-music-panel-actions"><button class="button button-primary" id="saveFreshMusicPanel" type="button">Save</button><button class="button button-secondary" id="exitFreshMusicPanel" type="button">Exit</button></div>
@@ -1736,24 +1750,6 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
               <button class="button button-primary" id="freshMusicSpotify" type="button">Connect Spotify</button>
             </div>
           </div>
-
-          <button class="pot-button fresh-brief-preview" type="button" id="potButton" aria-expanded="false" aria-controls="freshPourBriefPanel">
-            <span class="pot-icon" aria-hidden="true">☕</span>
-            <span class="pot-text">
-              <strong>The Brief</strong>
-              <span>Medicare Minute + today's notes</span>
-            </span>
-          </button>
-          <section class="fresh-brief-panel" id="freshPourBriefPanel" hidden>
-            <div class="fresh-brief-tool-icons" role="toolbar" aria-label="Daily Brief tools">
-              <button type="button" id="freshBriefComparisonTool" aria-label="Open Medicare Comparison" title="Medicare Comparison">🧮</button>
-              <button type="button" id="freshBriefCalendarTool" aria-label="Open Today's Calendar" title="Today's Calendar">📅</button>
-            </div>
-            <audio id="freshBriefAudio" controls preload="metadata"></audio>
-            <div id="freshBriefText"><p>Open the brief to load the latest Medicare Minute.</p></div>
-            <button class="button button-secondary fresh-brief-get-up" id="getUpFreshBrief" type="button">Get Up</button>
-          </section>
-          <p class="pot-line" id="potLine" aria-live="polite" hidden></p>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
@@ -3749,8 +3745,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         seatResource: document.querySelector("#seatResource"),
         seatResourceLocked: document.querySelector("#seatResourceLocked"),
         seatResourceLink: document.querySelector("#seatResourceLink"),
-        potButton: document.querySelector("#potButton"),
-        potLine: document.querySelector("#potLine"),
         ambienceToggle: document.querySelector("#ambienceToggle"),
         ambienceLabel: document.querySelector("#ambienceLabel"),
         ambienceAudio: document.querySelector("#ambienceAudio"),
@@ -3969,6 +3963,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       function hideBreakroomMenu() {
         breakroomElements.panel.classList.add("is-hidden");
+        const dailyPour = document.querySelector("#dailyPourPanel");
+        if (dailyPour) dailyPour.hidden = true;
         pilot.workspaceData.freshPourMenuOpen = false;
         breakroomElements.toggleMenuButton.textContent = "Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
@@ -3990,8 +3986,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         breakroomElements.seat.classList.add("hidden");
         breakroomElements.panel.classList.remove("is-waiting");
         breakroomElements.panel.classList.add("is-hidden");
-        document.querySelector("#freshPourBriefPanel").hidden = true;
-        document.querySelector("#potButton").setAttribute("aria-expanded", "false");
+        const dailyPour = document.querySelector("#dailyPourPanel");
+        if (dailyPour) dailyPour.hidden = true;
         breakroomElements.toggleMenuButton.textContent = "Menu";
         breakroomElements.toggleMenuButton.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "hidden";
@@ -4019,8 +4015,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         renderAgentNotesOpen();
         renderFreshMusicPanel();
         breakroomElements.panel.classList.add("is-hidden");
-        document.querySelector("#freshPourBriefPanel").hidden = true;
-        document.querySelector("#potButton").setAttribute("aria-expanded", "false");
+        const dailyPour = document.querySelector("#dailyPourPanel");
+        if (dailyPour) dailyPour.hidden = true;
         breakroomElements.view.classList.add("is-closing");
         window.AgentRiseFreshPourMusic?.close();
         stopConversationAudio(true);
@@ -4100,10 +4096,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           if(currentBreakroomTable?.resource){breakroomElements.seatResourceLocked.classList.add("hidden");breakroomElements.seatResourceLink.classList.remove("hidden");}
           stopConversationAudio(true);
         });
-        breakroomElements.potButton.addEventListener("click", toggleFreshPourBrief);
-        document.querySelector("#freshPourBriefButton")?.addEventListener("click", toggleFreshPourBrief);
         document.querySelector("#freshStripClose")?.addEventListener("click", hideBreakroomMenu);
-        document.querySelector("#getUpFreshBrief")?.addEventListener("click", closeFreshPourBrief);
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
           breakroomElements.ambienceLabel.textContent = "Sound";
