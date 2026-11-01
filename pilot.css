@@ -428,8 +428,9 @@ body[data-theme="plain-light"] .breakroom,body[data-theme="sky-view-day"] .break
 .dashboard-secondary-actions>button:hover,.dashboard-secondary-actions>button:focus,.dashboard-secondary-actions>button.is-active{background:var(--navy)!important;color:var(--cream)!important}
 .tier-star{position:absolute;right:6px;top:3px;color:#C9A227}
 .prospects-toggle{width:100%;min-height:46px;margin:8px 0 12px}
-.gold-dashboard-divider{height:8px;width:50%;margin:13px auto;background:var(--soft-gold);border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.14)}
-.agent-dashboard-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border:1px solid var(--navy);border-radius:12px;background:var(--surface)}.agent-dashboard-bar>div{display:flex;gap:10px;flex-wrap:wrap}.agent-dashboard-bar button{min-height:44px}
+.gold-dashboard-divider{height:6.4px;width:auto;margin:12px 0;background:var(--soft-gold);border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.14)}
+.agent-dashboard-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border:1px solid var(--navy);border-radius:0;background:transparent}.agent-dashboard-bar>div{display:flex;gap:10px;flex-wrap:wrap}.agent-dashboard-bar button{min-height:44px}
+body[data-theme="sky-view-day"] .agent-dashboard-bar,body[data-theme="sky-view-night"] .agent-dashboard-bar{background:rgba(10,10,10,.2)!important;color:#F5F1EA!important}
 .prospects-workspace{display:block}.prospects-workspace[hidden]{display:none!important}
 .prospects-workspace.scripts-overlay-only>:not(#scriptsBackdrop){display:none!important}
 #scriptsBackdrop.is-visible{z-index:99999!important;pointer-events:auto!important}
