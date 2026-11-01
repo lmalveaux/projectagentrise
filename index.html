@@ -3906,6 +3906,12 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         }
       }
 
+      window.AgentRisePauseRoomSoundForSpeech = () => {
+        if (breakroomElements.ambienceToggle.getAttribute("aria-pressed") === "true") {
+          pauseRoomSound();
+        }
+      };
+
       function allBreakroomVideos() {
         return [breakroomElements.entryVideo, breakroomElements.loopVideo, breakroomElements.exitVideo];
       }
