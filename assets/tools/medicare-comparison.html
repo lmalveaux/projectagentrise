@@ -351,14 +351,46 @@
     text-align: center;
   }
 
+  .comparison-action-pair {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    width: min(1200px, calc(100% - 32px));
+    margin: 12px auto;
+    padding: 0;
+    background: transparent;
+  }
+
+  .comparison-action-pair .btn {
+    min-height: 44px;
+    min-width: 86px;
+  }
+
+  .comparison-action-pair .comparison-save {
+    background: var(--accent);
+    color: #F5F1EA;
+    border-color: var(--accent);
+  }
+
+  .comparison-action-pair .comparison-exit {
+    background: #F5F1EA;
+    color: var(--text);
+    border: 1px solid var(--accent);
+  }
+
   @media print {
-    .header-actions, .cms-link, .footer-bar { display: none !important; }
+    .header-actions, .cms-link, .footer-bar, .comparison-action-pair { display: none !important; }
     body { background: #fff; }
     .comparison-wrap, .notes-section { padding: 10px; }
   }
 </style>
 </head>
 <body>
+
+<div class="comparison-action-pair comparison-action-top" aria-label="Comparison actions">
+  <button class="btn comparison-save" type="button" onclick="saveComparison()">Save</button>
+  <button class="btn comparison-exit" type="button" onclick="exitComparison()">Exit</button>
+</div>
 
 <div class="header">
   <div>
@@ -672,6 +704,11 @@
   </div>
 </div>
 
+<div class="comparison-action-pair comparison-action-bottom" aria-label="Comparison actions">
+  <button class="btn comparison-save" type="button" onclick="saveComparison()">Save</button>
+  <button class="btn comparison-exit" type="button" onclick="exitComparison()">Exit</button>
+</div>
+
 <script>
   // Set today's date
   document.getElementById("compDate").value = new Date().toISOString().slice(0,10);
@@ -771,6 +808,13 @@
         .then(() => alert("Full summary copied. Paste it into the prospect's notes in Agent Rise Pro."))
         .catch(download);
     } else { download(); }
+  }
+
+  function exitComparison() {
+    window.close();
+    setTimeout(() => {
+      if (!window.closed && window.history.length > 1) window.history.back();
+    }, 80);
   }
 
   function clearAll() {
