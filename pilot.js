@@ -904,7 +904,7 @@ function bindPilot(){
   installDemoWriteGuard();
   initFreshPourMusic();
   document.addEventListener('click',event=>{const control=event.target.closest(FRESH_POUR_DOWNLOAD_SELECTOR);if(!control||hasFreshPourDownloadAccess())return;event.preventDefault();event.stopImmediatePropagation();requestFreshPourDownloadAccess();},true);
-  document.addEventListener('click',event=>{const locked=event.target.closest('[data-premium-locked="true"]');if(!locked)return;event.preventDefault();event.stopImmediatePropagation();premiumGate();},true);
+  document.addEventListener('click',event=>{const locked=event.target.closest('[data-premium-locked="true"]');if(!locked)return;event.preventDefault();event.stopImmediatePropagation();if(locked.id==='marketingButton'){notify('This is a Pro feature. Upgrade to unlock.');return;}premiumGate();},true);
   document.addEventListener('click',event=>{if(!event.target.closest('[data-blueprint-signin]'))return;event.preventDefault();premiumGate();});
   ['openBreakroomButton','leadDeskButton','clientJourneyButton','openTrainingButton','statsButton','openScriptsButton','carriersButton','learningLibraryButton','contactSliderButton','lettersMarketingButton'].forEach(id=>{
     const control=$(id);
