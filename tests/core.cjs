@@ -22,6 +22,10 @@ assert.equal(run("scrubErrorText('key sb_secret_example123')"),'key [redacted Su
 assert.equal(run("scrubErrorText('Authorization: Bearer abc.def.ghi')"),'Authorization: Bearer [redacted]');
 assert.match(run("errorDetail({message:'save failed',code:'PGRST205'})"),/message: save failed[\s\S]*code: PGRST205/);
 assert.equal(run("normalizeWorkspaceData({}).dailyGoal"),5);assert.equal(run("normalizeWorkspaceData({dailyGoal:-2}).dailyGoal"),0);
+run("pilot.demo=true;pilot.user=null");assert.equal(run("hasDownloadAccess()"),false);
+run("pilot.demo=false;pilot.user={app_metadata:{subscription_status:'trialing'}}");assert.equal(run("hasDownloadAccess()"),false);
+run("pilot.user={app_metadata:{subscription_status:'active'}}");assert.equal(run("hasDownloadAccess()"),true);
+assert.equal(run("TRIAL_DOWNLOAD_MESSAGE"),'Downloads are locked during the 3-day trial. Upgrade to unlock your library.');
 run("pilot.workspaceData=normalizeWorkspaceData({dailyGoal:7,campaigns:[{name:'Fall Fair'}],referrals:[{name:'Lee'}],freshPourNotes:{medicare:'Remember IRMAA'}})");
 assert.equal(run("snapshot().profile.workspaceData.dailyGoal"),7);assert.equal(run("snapshot().profile.workspaceData.freshPourNotes.medicare"),'Remember IRMAA');
 assert.ok(fs.readFileSync(path.join(root,'supabase','schema.sql'),'utf8').includes("'workspaceData',a.workspace_data"));
