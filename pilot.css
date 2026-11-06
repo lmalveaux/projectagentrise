@@ -712,3 +712,54 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   }
 }
 
+/* Landing polish: a contained hero title and image-led feature cards. */
+.marketing-hero h1{
+  max-width:min(860px,100%);
+  font-size:clamp(2.6rem,6.3vw,5.95rem);
+  overflow-wrap:normal;
+}
+.marketing-subheadline{
+  width:100%;
+  margin-inline:auto;
+  text-align:center;
+  justify-self:center;
+}
+.marketing-deep-feature-list{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
+}
+.marketing-deep-feature,
+.marketing-deep-feature:nth-child(even){
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  min-width:0;
+  padding:0;
+  overflow:hidden;
+}
+.marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
+.marketing-feature-visual{
+  display:block;
+  width:100%;
+  min-height:0;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  border:0;
+  border-bottom:1px solid rgba(10,10,10,.26);
+  border-radius:0;
+  background:#0F3F63;
+}
+.marketing-feature-visual img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.marketing-deep-feature>div:last-child{padding:26px}
+@media(max-width:720px){
+  .marketing-hero h1{font-size:clamp(2.3rem,12.6vw,3.6rem)}
+  .marketing-deep-feature-list{grid-template-columns:1fr}
+  .marketing-deep-feature>div:last-child{padding:22px}
+}
+
