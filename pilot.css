@@ -715,7 +715,8 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 /* Landing polish: a contained hero and full-width alternating feature rows. */
 .marketing-hero h1{
   max-width:min(860px,100%);
-  font-size:clamp(2.0774rem,5.0337vw,4.7564rem);
+  font-size:clamp(1.952756rem,4.731678vw,4.471016rem);
+  text-align:center;
   overflow-wrap:normal;
 }
 .marketing-subheadline{
@@ -761,8 +762,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   object-position:center;
 }
 .marketing-deep-feature:first-child .marketing-feature-visual img{
-  object-fit:contain;
-  object-position:center bottom;
+  width:100%;
+  height:auto;
+  object-fit:cover;
 }
 .marketing-deep-feature>div:last-child{
   width:100%;
@@ -770,7 +772,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   align-self:center;
 }
 @media(max-width:720px){
-  .marketing-hero h1{font-size:clamp(1.8424rem,10.0674vw,2.8764rem)}
+  .marketing-hero h1{font-size:clamp(1.731856rem,9.463356vw,2.703816rem)}
   .marketing-subheadline{font-size:.85rem}
   .marketing-deep-feature,
   .marketing-deep-feature:nth-child(even){
