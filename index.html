@@ -1413,8 +1413,8 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           <h2 id="marketingFeaturesTitle">Everything you need. Nothing you don't.</h2>
           <div class="marketing-deep-feature-list">
             <article class="marketing-deep-feature">
-              <div class="marketing-feature-visual"><img src="assets/images/landing/daily-brief-driving.gif?v=5" alt="Agent driving with the Agent Rise Pro Morning Brief playing on a mounted phone" /></div>
-              <div><p class="marketing-feature-kicker">The Daily Brief · Your Voice</p><h3>Your morning briefing, in your voice.</h3><p>Start every day knowing exactly what's happening in Medicare. The app uses AI voice cloning to deliver a customized 60-second audio brief in <em>your</em> voice. No one else has this. It saves you time and keeps you sharp.</p></div>
+              <div class="marketing-feature-visual"><img src="assets/images/landing/daily-brief-driving.gif?v=5" alt="Your private morning notes, in your own voice." /></div>
+              <div><p class="marketing-feature-kicker">The Daily Brief · Your Voice</p><h3>The Daily Brief — Your voice, your notes, your way.</h3><p>Start every day knowing exactly what's on your schedule and in your book. Record your own audio notes each evening in your own voice, and hear them back each morning so you know where to begin. Your own private daily brief, built for focus. Plus: Subscribe and you also receive The 121 Brief — a daily 60-second audio brief recorded by the founder of Agent Rise Pro, keeping you sharp on industry news.</p></div>
             </article>
             <article class="marketing-deep-feature">
               <div class="marketing-feature-visual"><img src="assets/images/landing/lead-manager-dashboard.gif" alt="Agent driving beside an Agent Rise Pro dashboard showing leads, calls, follow-ups, policies, and notes" /></div>
@@ -1464,7 +1464,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><section class="notification-section" aria-labelledby="notificationBriefTitle"><h3 id="notificationBriefTitle">Daily Brief</h3><div id="medicareMinuteNotification"></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><section class="notification-section" aria-labelledby="notificationBriefTitle"><h3 id="notificationBriefTitle">The 121 Brief</h3><div id="medicareMinuteNotification"></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -3854,7 +3854,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         button.setAttribute("aria-expanded", String(willOpen));
         if (!willOpen) return;
         const host = document.querySelector("#freshBriefText");
-        if (host) host.innerHTML = "<p>Loading the latest Medicare Brief…</p>";
+        if (host) host.innerHTML = "<p>Loading The 121 Brief…</p>";
         await window.AgentRiseMedicareMinute?.loadBriefs?.();
         window.AgentRiseMedicareMinute?.renderInto?.(host);
         const legacyAudio = document.querySelector("#freshBriefAudio");
