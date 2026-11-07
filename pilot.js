@@ -404,7 +404,8 @@ function loadDemoWorkspace(){
     pilot.carriers=[{id:uid(),carrierName:'Sample Health',products:'Medicare Advantage',statesAvailable:'TX',contractingPath:'Direct',writingNumber:'DEMO-100',commissionInitial:694,commissionRenewal:347,appointmentDeadline:'',jitAvailable:'Yes',portalLink:'',notes:'Sample carrier for demonstration.'}];
     trainingAppointments=[{id:uid(),createdAt:iso(),type:'Product Training',title:'Medicare Advantage Launch Workshop',date:todayIsoDate(),time:'10:00',duration:60,location:'Agent Rise Training Room',notes:'Sample training appointment.'}];
     pilot.events=[{id:uid(),prospectId:state.prospects[2].id,type:'appointment-set',occurredAt:day(0)},{id:uid(),prospectId:state.prospects[3].id,type:'application',occurredAt:day(-1)},{id:uid(),prospectId:state.prospects[4].id,type:'close',occurredAt:day(-1)}];
-    pilot.workspaceData=normalizeWorkspaceData({dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'Demo Carrier Coastal Retreat',incentiveCloses:5}});
+    pilot.workspaceData=normalizeWorkspaceData({appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'Demo Carrier Coastal Retreat',incentiveCloses:5}});
+    state.appearanceTheme=pilot.workspaceData.appearanceTheme;
     state.preferredAgentName='Demo Agent';pilot.dirty=false;previousProspects=new Map(state.prospects.map(p=>[p.id,structuredClone(p)]));
     if($('accountDialog')?.open)$('accountDialog').close();
     document.body.classList.add('is-demo');document.body.classList.remove('is-signed-in');
