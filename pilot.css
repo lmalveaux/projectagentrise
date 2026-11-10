@@ -843,6 +843,14 @@ body[data-theme^="sky-view"] .dashboard-secondary-actions>button{
   backdrop-filter:blur(var(--ar-glass-blur));
   -webkit-backdrop-filter:blur(var(--ar-glass-blur));
 }
+body[data-theme^="sky-view"] .dashboard-main-actions button {
+  background-color: rgba(45, 90, 150, 0.45) !important; /* Lowered from 0.7 to 0.45 */
+  border-radius: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important; /* Slightly brighter border */
+  backdrop-filter: blur(12px) !important; /* Increased blur slightly for better glass effect */
+  -webkit-backdrop-filter: blur(12px) !important;
+  margin: 0 !important;
+}
 body[data-theme^="sky-view"] .dashboard-main-actions button:hover,
 body[data-theme^="sky-view"] .dashboard-main-actions button:focus-visible,
 body[data-theme^="sky-view"] .dashboard-secondary-actions>button:hover,
