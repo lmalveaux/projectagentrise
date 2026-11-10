@@ -250,7 +250,7 @@ function normalizeWorkspaceData(value={}){
   const agentNotesOpen=value.agentNotesOpen===true;
   const musicPanelOpen=value.musicPanelOpen===true;
   const freshPourMenuOpen=value.freshPourMenuOpen===true;
-  const appearanceTheme=value.appearanceTheme===undefined?'':normalizeAppearanceTheme(value.appearanceTheme);
+  const appearanceTheme=value.appearanceTheme===undefined?'sky-view-day':normalizeAppearanceTheme(value.appearanceTheme);
   const savedFreshPourTrack=String(value.freshPourTrack||'');
   const defaultFreshPourTracks=['instrumental-1','instrumental-2','instrumental-3','instrumental-4'];
   const freshPourTrack=/^https:\/\//i.test(savedFreshPourTrack)?savedFreshPourTrack:defaultFreshPourTracks.includes(savedFreshPourTrack)?savedFreshPourTrack:'instrumental-1';
@@ -898,13 +898,9 @@ function bindAuthenticationControls(){
   const signInForm=$('connectionForm');
   const signupForm=$('signupForm');
   const showSignup=$('showSignup');
-  const signInButton=$('signInSubmit');
-  const signupButton=$('createAccountSubmit');
   const submitAuth=kind=>event=>{event.preventDefault();Promise.resolve(authenticate(kind)).catch(showAccountError);};
   if(signInForm)signInForm.onsubmit=submitAuth('signin');
   if(signupForm)signupForm.onsubmit=submitAuth('signup');
-  if(signInButton)signInButton.onclick=submitAuth('signin');
-  if(signupButton)signupButton.onclick=submitAuth('signup');
   if(showSignup)showSignup.onclick=event=>{event.preventDefault();showAuthView('signup');};
 }
 function installDemoWriteGuard(){
