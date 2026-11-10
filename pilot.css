@@ -800,3 +800,69 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   .marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
 }
 
+/* Sky View glass system. Plain Dark and Plain Light intentionally remain untouched. */
+body[data-theme^="sky-view"]{
+  --ar-tab-rgb:45,90,150;
+  --ar-tab-alpha:.70;
+  --ar-tab-hover-alpha:.88;
+  --ar-glass-rgb:40,45,55;
+  --ar-glass-alpha:.85;
+  --ar-glass-blur:12px;
+  --ar-glass-border:rgba(245,241,234,.38);
+  --ar-glass-text:#F5F1EA;
+  --ar-monogram-gold:#C9A227;
+}
+body[data-theme="sky-view-day"]{
+  --ar-header-rgb:166,207,229;
+  --ar-header-alpha:.30;
+}
+body[data-theme="sky-view-night"]{
+  --ar-header-rgb:18,26,38;
+  --ar-header-alpha:.72;
+  --ar-tab-rgb:36,69,112;
+  --ar-tab-alpha:.78;
+}
+body[data-theme^="sky-view"] .topbar,
+body[data-theme^="sky-view"] .ar-header{
+  background:rgba(var(--ar-header-rgb),var(--ar-header-alpha))!important;
+  border-color:var(--ar-glass-border)!important;
+  backdrop-filter:blur(var(--ar-glass-blur));
+  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+}
+body[data-theme^="sky-view"] .dashboard-main-actions{
+  margin-bottom:0!important;
+}
+body[data-theme^="sky-view"] .dashboard-secondary-actions{
+  margin-top:0!important;
+}
+body[data-theme^="sky-view"] .dashboard-main-actions button,
+body[data-theme^="sky-view"] .dashboard-secondary-actions>button{
+  background:rgba(var(--ar-tab-rgb),var(--ar-tab-alpha))!important;
+  color:var(--ar-glass-text)!important;
+  border-color:var(--ar-glass-border)!important;
+  backdrop-filter:blur(var(--ar-glass-blur));
+  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+}
+body[data-theme^="sky-view"] .dashboard-main-actions button:hover,
+body[data-theme^="sky-view"] .dashboard-main-actions button:focus-visible,
+body[data-theme^="sky-view"] .dashboard-secondary-actions>button:hover,
+body[data-theme^="sky-view"] .dashboard-secondary-actions>button:focus-visible,
+body[data-theme^="sky-view"] .dashboard-secondary-actions>button.is-active{
+  background:rgba(var(--ar-tab-rgb),var(--ar-tab-hover-alpha))!important;
+}
+body[data-theme^="sky-view"] .agent-dashboard-bar{
+  background:rgba(var(--ar-glass-rgb),var(--ar-glass-alpha))!important;
+  color:var(--ar-glass-text)!important;
+  border-color:var(--ar-glass-border)!important;
+  backdrop-filter:blur(var(--ar-glass-blur));
+  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+}
+body[data-theme^="sky-view"] #settingsButton{
+  background:var(--ar-monogram-gold)!important;
+  color:#1A1A20!important;
+  border-color:rgba(10,10,10,.42)!important;
+  font-family:"Great Vibes","Segoe Script",cursive!important;
+  font-size:1.45rem!important;
+  font-weight:400!important;
+}
+

@@ -8,7 +8,7 @@
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
       /* ---- Base (Palette A: Charcoal / Burgundy / Gold) ---- */
 :root {
@@ -129,7 +129,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
         padding: 20px 16px 28px;
       }
 
-      .topbar {.topbar {
+      body[data-theme^="sky-view"] .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,22 +141,22 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
   box-shadow: 0 4px 18px #0A0A0A;
 }
 
-.topbar .brand {
+body[data-theme^="sky-view"] .topbar .brand {
   color: #F5F1EA;
 }
 
-.topbar .brand span {
+body[data-theme^="sky-view"] .topbar .brand span {
   color: #F5F1EA;
 }
 
-.topbar .import-row-actions {
+body[data-theme^="sky-view"] .topbar .import-row-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.topbar .button {
+body[data-theme^="sky-view"] .topbar .button {
   min-height: 38px;
   padding: 0 14px;
   background: #F5F1EA;
@@ -168,44 +168,44 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
   transition: all 140ms ease;
 }
 
-.topbar .button:hover {
+body[data-theme^="sky-view"] .topbar .button:hover {
   background: #F5F1EA;
   border-color: #7BC0CA;
   box-shadow: 0 0 0 2px #7BC0CA;
   transform: translateY(-1px);
 }
 
-.topbar .button-secondary {
+body[data-theme^="sky-view"] .topbar .button-secondary {
   background: #F5F1EA;
   color: #0A0A0A;
 }
 
-.topbar .button-secondary:hover {
+body[data-theme^="sky-view"] .topbar .button-secondary:hover {
   background: #F5F1EA;
 }
 
-.topbar .button-primary {
+body[data-theme^="sky-view"] .topbar .button-primary {
   background: #2F3A6B;
   color: #F5F1EA;
   border-color: #2F3A6B;
 }
 
-.topbar .button-primary:hover {
+body[data-theme^="sky-view"] .topbar .button-primary:hover {
   background: #2F3A6B;
   border-color: #7BC0CA;
 }
 
-.topbar .button-quiet {
+body[data-theme^="sky-view"] .topbar .button-quiet {
   background: #F5F1EA;
   color: #0A0A0A;
 }
 
-.topbar .button-quiet:hover {
+body[data-theme^="sky-view"] .topbar .button-quiet:hover {
   background: #F5F1EA;
   border-color: #7BC0CA;
 }
 
-.topbar .date {
+body[data-theme^="sky-view"] .topbar .date {
   color: #7BC0CA;
   font-size: 0.8rem;
   font-weight: 700;
@@ -213,13 +213,11 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
 }
 
 @media (max-width: 720px) {
-  .topbar {
+  body[data-theme^="sky-view"] .topbar {
     margin: -20px -16px 20px;
     padding: 12px 14px;
   }
 }
-
-      }
 
       .brand {
         display: flex;
@@ -1373,7 +1371,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout95" />
+    <link rel="stylesheet" href="pilot.css?v=layout96" />
     <div id="marketingLanding" class="marketing-landing" hidden>
       <section class="marketing-hero" aria-labelledby="marketingHeroTitle">
         <div class="marketing-hero-content">
@@ -1512,7 +1510,11 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view-day" checked /> Sky-view Day</label>
             <label class="theme-option"><input type="radio" name="appearanceTheme" value="sky-view-night" /> Sky-view Night</label>
           </div></div>
-          <div class="settings-section"><strong>3. Workspace</strong><p class="import-help">More workspace preferences will be added here as the pilot grows.</p></div>
+          <div class="settings-section">
+            <strong>3. Cancel Subscription / Billing</strong>
+            <p class="import-help">Manage the subscription where you purchased Agent Rise Pro, or contact billing support for cancellation help. Canceling billing does not erase your workspace.</p>
+            <div class="form-actions"><a class="button button-primary" href="https://payhip.com/AgentRisePro" target="_blank" rel="noopener noreferrer">Open Billing</a><a class="button button-secondary" href="mailto:support@agentrisepro.com?subject=Agent%20Rise%20Pro%20billing">Contact Billing Support</a></div>
+          </div>
           <div class="settings-section">
             <strong>4. Data cleanup</strong>
             <p class="import-help">Permanently remove every saved contact and Resource Group from this account. Your preferred name and appearance will remain.</p>
@@ -1528,7 +1530,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <div><h2 class="import-title" id="scriptsTitle">Quick Script Desk</h2><p class="import-help">Choose a product and situation. Your preloaded script appears immediately.</p></div>
             <button class="button button-quiet import-close" type="button" id="closeScriptsButton">Exit</button>
           </div>
-          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptTop" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptTop" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
+          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptTop" type="button">Save script</button><button class="button button-secondary" id="exitScriptTop" type="button">Exit</button></div>
           <div class="settings-section script-quick-grid">
             <div class="field">
               <label for="scriptProduct">Product</label>
@@ -1576,7 +1578,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             </div>
           </div>
           <div class="form-actions"><button class="button button-secondary" type="button" id="cancelScriptsButton">Exit</button></div>
-          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptBottom" type="button" onclick="window.AgentRiseSaveScriptNow?.()">Save script</button><button class="button button-secondary" id="exitScriptBottom" type="button" onclick="document.getElementById('closeScriptsButton').click()">Exit</button></div>
+          <div class="edit-action-pair"><button class="button button-primary" id="saveScriptBottom" type="button">Save script</button><button class="button button-secondary" id="exitScriptBottom" type="button">Exit</button></div>
         </section>
       </div>
 
@@ -1752,6 +1754,7 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
           </div>
 
           <nav class="fresh-office-tools" aria-label="Fresh Pour library">
+            <button class="button button-secondary" type="button" id="freshPourBriefButton" aria-expanded="false" aria-controls="freshPourBriefPanel">The 121 Brief</button>
             <button class="button button-secondary" type="button" id="freshGoalTrackerButton" aria-expanded="false">Goal Tracker</button>
             <button class="button button-secondary" type="button" id="freshAgentNotesButton" aria-expanded="false" aria-controls="agentNotesPanel">Agent Notes</button>
             <button class="button button-secondary" type="button" id="freshGptButton">GPT <span class="tier-star gold-star" title="Pro">★</span></button>
@@ -1765,7 +1768,13 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
             <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">Features</button>
             <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
+            <button class="button button-secondary" type="button" id="openTrainingButton">Training Appointments</button>
           </nav>
+
+          <section class="fresh-brief-panel" id="freshPourBriefPanel" aria-labelledby="freshPourBriefTitle" hidden>
+            <div class="fresh-brief-heading"><h2 id="freshPourBriefTitle">The 121 Brief</h2><button class="button button-secondary" id="closeFreshPourBriefButton" type="button">Get Up</button></div>
+            <div id="freshBriefText"><p>Open The 121 Brief to load the latest audio and text.</p></div>
+          </section>
 
           <section class="trip-incentives" aria-labelledby="tripIncentivesTitle" data-admin-only hidden>
             <div class="trip-incentives-head"><h2 id="tripIncentivesTitle">Incentives</h2><button class="button button-primary" id="addTripIncentive" type="button">Add</button></div>
@@ -1807,12 +1816,12 @@ body[data-theme="dark-charcoal"] .brand-mark { background:#2A2A32; color:#7BC0CA
                 <span id="seatPlayIcon">▶</span>
               </button>
               <div class="player-meta">
-                <span class="player-title" id="seatTrackTitle">Two hosts, one topic — audio not loaded yet</span>
+                <span class="player-title" id="seatTrackTitle">Choose a conversation to view its available audio.</span>
                 <div class="player-bar"><div class="player-bar-fill" id="seatPlayFill"></div></div>
               </div>
               <audio id="seatAudio" preload="metadata" data-replaceable="true"></audio>
             </div>
-            <p class="seat-note" id="seatNote">This conversation will become available when its audio is added.</p>
+            <p class="seat-note" id="seatNote">Conversation audio and resources appear here when available.</p>
             <div class="seat-resource hidden" id="seatResource">
               <p class="seat-resource-locked" id="seatResourceLocked">🔒 Finish listening to unlock this table's download.</p>
               <a class="button button-primary hidden" id="seatResourceLink" download>Download</a>
@@ -3848,7 +3857,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       async function toggleFreshPourBrief() {
         const panel = document.querySelector("#freshPourBriefPanel");
-        const button = document.querySelector("#potButton");
+        const button = document.querySelector("#freshPourBriefButton");
+        if (!panel || !button) return;
         const willOpen = panel.hidden;
         panel.hidden = !willOpen;
         button.setAttribute("aria-expanded", String(willOpen));
@@ -3864,7 +3874,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
 
       function closeFreshPourBrief() {
         const panel = document.querySelector("#freshPourBriefPanel");
-        const button = document.querySelector("#potButton");
+        const button = document.querySelector("#freshPourBriefButton");
         if (panel) panel.hidden = true;
         if (button) button.setAttribute("aria-expanded", "false");
         document.querySelector("#breakroomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -4103,6 +4113,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           stopConversationAudio(true);
         });
         document.querySelector("#freshStripClose")?.addEventListener("click", hideBreakroomMenu);
+        document.querySelector("#freshPourBriefButton")?.addEventListener("click", toggleFreshPourBrief);
+        document.querySelector("#closeFreshPourBriefButton")?.addEventListener("click", closeFreshPourBrief);
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
           breakroomElements.ambienceLabel.textContent = "Sound";
@@ -4145,8 +4157,8 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout90" defer></script>
-    <script src="medicare-minute.js?v=layout64" defer></script>
+    <script src="pilot.js?v=layout91" defer></script>
+    <script src="medicare-minute.js?v=layout65" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
         <div class="ar-error-head">

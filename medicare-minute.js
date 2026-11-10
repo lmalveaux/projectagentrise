@@ -285,7 +285,7 @@
     $m("openBreakroomButton")?.click();
     setTimeout(() => {
       if ($m("breakroomPanel")?.classList.contains("is-hidden")) $m("toggleBreakroomMenuButton")?.click();
-      if ($m("freshPourBriefPanel")?.hidden) $m("potButton")?.click();
+      if ($m("freshPourBriefPanel")?.hidden) $m("freshPourBriefButton")?.click();
     }, 250);
   }
   function bindStaticControls() {

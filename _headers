@@ -1,3 +1,11 @@
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'sha256-zZIwHy2liwn+dL34W07bdwJBk/DiJC9mU+CaJEwBNgk=' 'sha256-G6myE8ZjI0hfAyZ27110BGXAzEjm4ai3+JJmmN9EkT0=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; media-src 'self' blob: https://*.supabase.co; connect-src 'self' https: wss:; frame-src 'self' blob: https://apps.ringcentral.com https://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+
 /manifest.webmanifest
   Content-Type: application/manifest+json; charset=UTF-8
 
