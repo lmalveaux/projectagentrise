@@ -429,12 +429,13 @@ body[data-theme="sky-view-day"] #settingsButton{background:var(--wine)!important
 .dashboard-main-actions>button,.dashboard-main-actions>.dash-notification-wrap>button{width:100%;min-height:48px;position:relative}
 body[data-theme="sky-view-day"] .dashboard-main-actions button,body[data-theme="sky-view-night"] .dashboard-main-actions button{background:var(--theme-primary)!important;color:#F5F1EA!important;border-color:var(--theme-primary)!important}
 .dashboard-secondary-actions>button{min-height:40px;position:relative;background:transparent!important;border:1px solid var(--navy)!important;color:var(--navy)!important}
+body[data-theme="sky-view-day"] .dashboard-secondary-actions>button{background:rgba(45,90,150,.7)!important}
 .dashboard-secondary-actions>button:hover,.dashboard-secondary-actions>button:focus,.dashboard-secondary-actions>button.is-active{background:var(--navy)!important;color:var(--cream)!important}
 .tier-star{position:absolute;right:6px;top:3px;color:#C9A227}
 .prospects-toggle{width:100%;min-height:46px;margin:8px 0 12px}
 .gold-dashboard-divider{height:6.4px;width:auto;margin:12px 0;background:var(--soft-gold);border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.14)}
 .agent-dashboard-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border:1px solid var(--navy);border-radius:0;background:transparent}.agent-dashboard-bar>div{display:flex;gap:10px;flex-wrap:wrap}.agent-dashboard-bar button{min-height:44px}
-body[data-theme="sky-view-day"] .agent-dashboard-bar{background:rgba(255,255,255,.84)!important;color:#0A0A0A!important;border-color:var(--navy)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body[data-theme="sky-view-day"] .agent-dashboard-bar{background:rgba(40,45,55,.85)!important;color:#F5F1EA!important;border-color:var(--navy)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 body[data-theme="sky-view-night"] .agent-dashboard-bar{background:rgba(26,26,32,.88)!important;color:#F5F1EA!important;border-color:rgba(245,241,234,.3)!important}
 .prospects-workspace{display:block}.prospects-workspace[hidden]{display:none!important}
 .prospects-workspace.scripts-overlay-only>:not(#scriptsBackdrop){display:none!important}
