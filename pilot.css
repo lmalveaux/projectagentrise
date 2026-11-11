@@ -920,25 +920,42 @@ body[data-theme^="sky-view"] #settingsButton{
   background: #2563EB !important;
   border-color: #2563EB !important;
 }
-
-body[data-theme^="sky-view"] .header-greeting {
+body[data-theme="sky-view-day"] .header-greeting {
   box-sizing: border-box;
   padding: 8px 14px;
-  border: 1px solid #C9A227;
+  border: 1px solid rgba(200, 200, 200, 0.4);
   border-radius: 10px;
   text-align: center;
 }
-body[data-theme^="sky-view"] .header-greeting .welcome-line,
-body[data-theme^="sky-view"] .header-greeting .date {
+body[data-theme="sky-view-day"] .header-greeting .welcome-line,
+body[data-theme="sky-view-day"] .header-greeting .date {
   color: #E2DCC8 !important;
-  font-family: "Great Vibes", "Snell Roundhand", cursive !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-style: normal !important;
+  font-weight: 400 !important;
   text-align: center;
   text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important;
 }
-body[data-theme^="sky-view"] .dashboard-main-actions button,
-body[data-theme^="sky-view"] .dashboard-secondary-actions > button {
+body[data-theme="sky-view-day"] .dashboard-main-actions,
+body[data-theme="sky-view-day"] .dashboard-secondary-actions {
+  gap: 12px !important;
+}
+body[data-theme="sky-view-day"] .dashboard-main-actions button {
   box-sizing: border-box;
   padding-inline: 14px !important;
+  border: 1px solid rgba(201, 162, 39, 0.6) !important;
   text-align: center;
+}
+body[data-theme="sky-view-day"] .dashboard-secondary-actions > button {
+  box-sizing: border-box;
+  padding-inline: 14px !important;
+  background: transparent !important;
+  border: 1px solid rgba(201, 162, 39, 0.6) !important;
+  border-radius: 8px !important;
+  text-align: center;
+}
+body[data-theme="sky-view-day"] .dashboard-secondary-actions > button:hover,
+body[data-theme="sky-view-day"] .dashboard-secondary-actions > button:focus-visible,
+body[data-theme="sky-view-day"] .dashboard-secondary-actions > button.is-active {
+  background: transparent !important;
 }
