@@ -391,17 +391,22 @@ async function askGPT(userQuery){
 window.askGPT=askGPT;
 async function submitAskGPT(event){
   event.preventDefault();
-  const input=$('askGptQuery'),button=$('askGptButton'),output=$('askGptResponse');
+  const form=event.currentTarget;
+  const input=form?.querySelector('[data-ask-gpt-query],#askGptQuery');
+  const button=form?.querySelector('[data-ask-gpt-button],#askGptButton');
+  const output=form?.parentElement?.querySelector('[data-ask-gpt-response],#askGptResponse');
   if(!input||!button||!output)return;
   const query=input.value.trim();
   if(!query){input.focus();output.textContent='Enter a question first.';return;}
-  button.disabled=true;
-  button.textContent='Thinking…';
-  output.textContent='Asking Agent Rise AI…';
+  button.disabled=true;button.textContent='Thinking…';output.textContent='Asking Agent Rise AI…';
   try{output.textContent=await askGPT(query);}
   catch(error){output.textContent=error.message||'Ask AI is temporarily unavailable.';}
   finally{button.disabled=false;button.textContent='Ask AI';}
 }
+function notificationAskGptMarkup(){
+  return `<section class="notification-section" aria-labelledby="notificationAskGptHeading"><h3 id="notificationAskGptHeading">Ask Agent Rise AI</h3><form id="notificationAskGptForm"><label for="notificationAskGptQuery">Question<input id="notificationAskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Ask a question about your workday"></label><button class="button button-primary" id="notificationAskGptButton" data-ask-gpt-button type="submit">Ask AI</button></form><div id="notificationAskGptResponse" data-ask-gpt-response class="pilot-muted" role="status" aria-live="polite"></div></section>`;
+}
+function installNotificationAskGpt(){const menu=$('notificationsMenu');if(!menu||$('notificationAskGptForm'))return;menu.insertAdjacentHTML('afterbegin',notificationAskGptMarkup());$('notificationAskGptForm').onsubmit=submitAskGPT;}
 const passwordChecks={length:value=>value.length>=12,upper:value=>/[A-Z]/.test(value),lower:value=>/[a-z]/.test(value),number:value=>/\d/.test(value),symbol:value=>/[!@#$%^&*]/.test(value)};
 function validPassword(value){return Object.values(passwordChecks).every(check=>check(value));}
 function updatePasswordRules(input,scope){const value=input.value;document.querySelectorAll(`[data-password-rules="${scope}"] [data-rule]`).forEach(item=>item.classList.toggle('is-valid',passwordChecks[item.dataset.rule](value)));}
@@ -968,6 +973,7 @@ function bindPilot(){
     const control=$(id);
     if(control) control.addEventListener('click',()=>window.scrollTo(0,0));
   });
+  installNotificationAskGpt();
   $('notificationsButton').setAttribute('aria-expanded','false');
   guardClick($('notificationsButton')).onclick=e=>{e.stopPropagation();const opening=$('notificationsMenu').hidden;closeNotifications();$('notificationsMenu').hidden=!opening;$('notificationsButton').classList.toggle('is-active',opening);$('notificationsButton').setAttribute('aria-expanded',String(opening));if(opening){notificationViewLastChecked=Date.parse(pilot.workspaceData.notificationsLastChecked||'')||0;renderNotificationsPanel();markNotificationsChecked();void Promise.resolve(window.AgentRiseMedicareMinute?.loadBriefs?.()).then(()=>{sync121BriefVisibility();rename121BriefText($('medicareMinuteNotification'));});void loadSavedCalendars().catch(error=>console.warn('Calendar feeds could not refresh:',error));}};
   guardClick($('notificationLeadDesk')).onclick=()=>{closeNotifications();renderLeadDesk();$('leadDeskDialog').showModal();};
@@ -1028,6 +1034,10 @@ function bindPilot(){
   guardClick($('leadDeskDialog')).onclick=async e=>{const tab=e.target.closest('[data-lead-tab]');if(tab){showLeadTab(tab.dataset.leadTab);return;}const action=e.target.closest('[data-lead-action]');if(action){const p=state.prospects.find(x=>x.id===action.dataset.id);if(!p)return;if(action.dataset.leadAction==='open'){$('leadDeskDialog').close();openModal('edit',p.id);}else if(action.dataset.leadAction==='qualified'){if(moveToNewLeadPool(p.id)!==false)renderLeadDesk();}else if(action.dataset.leadAction==='nurture'){if(String(p.leadPool??'')==='Needs Nurture')return;Object.assign(p,{leadPool:'Needs Nurture',qualificationStatus:'Potential Prospect',marketingEligibility:'Review Needed'});await persistWorkspace();redraw();}else if(action.dataset.leadAction==='dnc'){if(String(p.leadPool??'')==='Do Not Contact')return;if(confirm(`Mark ${fullName(p)} Do Not Contact?`)){markDoNotMarket(p.id);renderLeadDesk();}}return;}const campaignEdit=e.target.closest('[data-campaign-edit]');if(campaignEdit){const c=pilot.workspaceData.campaigns.find(x=>x.id===campaignEdit.dataset.campaignEdit);if(c){$('campaignName').value=c.name;$('campaignChannel').value=c.channel;$('campaignForm').dataset.editingId=c.id;$('campaignName').focus();}return;}const campaignDelete=e.target.closest('[data-campaign-delete]');if(campaignDelete&&confirm('Delete this campaign reference?')){pilot.workspaceData.campaigns=pilot.workspaceData.campaigns.filter(c=>c.id!==campaignDelete.dataset.campaignDelete);await persistWorkspace();renderLeadDesk();return;}const referralDelete=e.target.closest('[data-referral-delete]');if(referralDelete&&confirm('Delete this referral tracker entry?')){pilot.workspaceData.referrals=pilot.workspaceData.referrals.filter(r=>r.id!==referralDelete.dataset.referralDelete);await persistWorkspace();renderLeadDesk();}};
   guardClick($('saveFreshPourNote')).onclick=saveFreshPourNote;guardClick($('downloadFreshPourNote')).onclick=()=>{const id=freshPourTableId();download(`agent-rise-${id}-notes.txt`,$('freshPourNote').value,'text/plain;charset=utf-8');};
   const openDiscipline=async context=>{const dialog=$('agentNotesDialog');dialog.dataset.noteContext=context;dialog.showModal();await renderDailyDiscipline();renderDash();};
+  const openAskGptInAgentNotes=async()=>{if(premiumGate())return;await openDiscipline('GPT');$('askGptQuery')?.focus();};
+  const dashboardGptButton=document.querySelector('[data-coming-soon="Agent Rise GPT"]');
+  if(dashboardGptButton)dashboardGptButton.onclick=openAskGptInAgentNotes;
+  guardClick($('freshGptButton')).onclick=openAskGptInAgentNotes;
   guardClick($('openCalendarSetup')).onclick=event=>{event.preventDefault();event.stopPropagation();openCalendarSetup();};
   guardClick($('calendarHelpToggle')).onclick=()=>{const panel=$('calendarHelpPanel'),button=$('calendarHelpToggle'),open=panel.hidden;panel.hidden=!open;button.setAttribute('aria-expanded',String(open));};
   $('calendarSetupForm').onsubmit=saveCalendarUrls;
