@@ -813,9 +813,18 @@
   function exitComparison() {
     window.close();
     setTimeout(() => {
-      if (!window.closed && window.history.length > 1) window.history.back();
-    }, 80);
+      if (window.closed) return;
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+      window.location.replace(new URL('../../', window.location.href).href);
+    }, 120);
   }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') exitComparison();
+  });
 
   function clearAll() {
     if (!confirm("Clear all comparison data?")) return;
