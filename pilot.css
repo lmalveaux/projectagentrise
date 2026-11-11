@@ -873,27 +873,72 @@ body[data-theme^="sky-view"] #settingsButton{
   font-size:1.45rem!important;
   font-weight:400!important;
 }
-
-/* Sky-view greeting contrast and A.I. Assistant emphasis. */
-.ask-ai-surface h3 {
-  color: #3B82F6 !important;
+/* Sky-view greeting restoration and A.I. Assistant emphasis. */
+.ask-ai-surface {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10px 0;
+  padding: 16px;
+  border: 1px solid rgba(59,130,246,0.72);
+  border-radius: 10px;
+  background: rgba(59,130,246,0.08);
+  text-align: center;
 }
-.ask-ai-surface #askGptButton,
-.ask-ai-surface [data-ask-gpt-button] {
+.ask-ai-surface form,
+.ask-ai-surface label {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+}
+.ask-ai-surface input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: center;
+}
+.ask-ai-surface .ask-ai-heading {
+  margin: 0 0 4px;
+  color: #3B82F6 !important;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+.ask-ai-surface .ask-ai-submit {
+  min-width: 132px;
+  padding: 10px 18px !important;
   background: #3B82F6 !important;
   border-color: #3B82F6 !important;
   color: #FFFFFF !important;
+  font-weight: 800;
+  text-align: center;
 }
-.ask-ai-surface #askGptButton:hover,
-.ask-ai-surface #askGptButton:focus-visible,
-.ask-ai-surface [data-ask-gpt-button]:hover,
-.ask-ai-surface [data-ask-gpt-button]:focus-visible {
+.ask-ai-surface .ask-ai-submit:hover,
+.ask-ai-surface .ask-ai-submit:focus-visible {
   background: #2563EB !important;
   border-color: #2563EB !important;
 }
 
+body[data-theme^="sky-view"] .header-greeting {
+  box-sizing: border-box;
+  padding: 8px 14px;
+  border: 1px solid #C9A227;
+  border-radius: 10px;
+  text-align: center;
+}
 body[data-theme^="sky-view"] .header-greeting .welcome-line,
 body[data-theme^="sky-view"] .header-greeting .date {
-  color: #C9A227 !important;
+  color: #E2DCC8 !important;
+  font-family: "Great Vibes", "Snell Roundhand", cursive !important;
+  font-style: normal !important;
+  text-align: center;
   text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important;
+}
+body[data-theme^="sky-view"] .dashboard-main-actions button,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button {
+  box-sizing: border-box;
+  padding-inline: 14px !important;
+  text-align: center;
 }
