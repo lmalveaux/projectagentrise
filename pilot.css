@@ -800,77 +800,202 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   .marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
 }
 
-/* Sky View glass system. Plain Dark and Plain Light intentionally remain untouched. */
+@font-face{
+  font-family:"Great Vibes AR";
+  src:url("assets/fonts/great-vibes-regular.ttf") format("truetype");
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+}
+
+/* Sky View dashboard glass system. Plain Dark and Plain Light remain untouched. */
 body[data-theme^="sky-view"]{
-  --ar-tab-rgb:45,90,150;
-  --ar-tab-alpha:.70;
-  --ar-tab-hover-alpha:.88;
-  --ar-glass-rgb:40,45,55;
-  --ar-glass-alpha:.85;
-  --ar-glass-blur:12px;
-  --ar-glass-border:rgba(245,241,234,.38);
-  --ar-glass-text:#F5F1EA;
-  --ar-monogram-gold:#C9A227;
+  --ar-ink:#EFE3C2;
+  --ar-tab:47,184,199;
+  --ar-marine:14,90,122;
+  --ar-tab-a:.20;
+  --ar-tab-hover-a:.32;
+  --ar-window:rgba(255,255,255,.10);
+  --ar-window-border:rgba(255,255,255,.28);
+  --ar-window-blur:6px;
+  overflow-x:hidden;
 }
-body[data-theme="sky-view-day"]{
-  --ar-header-rgb:166,207,229;
-  --ar-header-alpha:.30;
+body[data-theme="sky-view-day"]:before{
+  background:#EDE7DC url("assets/images/sky-view-light-bars.jpg") center/cover no-repeat fixed!important;
+  filter:none!important;
 }
-body[data-theme="sky-view-night"]{
-  --ar-header-rgb:18,26,38;
-  --ar-header-alpha:.72;
-  --ar-tab-rgb:36,69,112;
-  --ar-tab-alpha:.78;
+body[data-theme="sky-view-night"]:before{
+  background:#101820 url("assets/images/sky-view-light-bars-night.jpg") center/cover no-repeat fixed!important;
+  filter:none!important;
+}
+body[data-theme^="sky-view"] main.app{
+  width:min(1415px,calc(100% - 32px))!important;
+  max-width:1415px!important;
+  padding:20px 0 28px!important;
+  box-sizing:border-box;
+}
+body[data-theme^="sky-view"] .topbar,
+body[data-theme^="sky-view"] .dashboard-main-actions,
+body[data-theme^="sky-view"] .dashboard-secondary-actions,
+body[data-theme^="sky-view"] .gold-dashboard-divider,
+body[data-theme^="sky-view"] .agent-dashboard-bar{
+  width:100%;
+  max-width:1415px;
+  box-sizing:border-box;
 }
 body[data-theme^="sky-view"] .topbar,
 body[data-theme^="sky-view"] .ar-header{
-  background:rgba(var(--ar-header-rgb),var(--ar-header-alpha))!important;
-  border-color:var(--ar-glass-border)!important;
-  backdrop-filter:blur(var(--ar-glass-blur));
-  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+  margin:0!important;
+  background:var(--ar-window)!important;
+  color:var(--ar-ink)!important;
+  border:1px solid var(--ar-window-border)!important;
+  border-radius:18px 18px 0 0!important;
+  backdrop-filter:blur(var(--ar-window-blur));
+  -webkit-backdrop-filter:blur(var(--ar-window-blur));
+  text-shadow:0 1px 3px rgba(0,0,0,.35)!important;
+}
+body[data-theme^="sky-view"] .topbar .welcome-line,
+body[data-theme^="sky-view"] .topbar .date,
+body[data-theme^="sky-view"] .topbar .agent-credentials,
+body[data-theme^="sky-view"] .topbar .complete-profile-link{
+  color:var(--ar-ink)!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.35)!important;
+}
+body[data-theme^="sky-view"] .dashboard-main-actions,
+body[data-theme^="sky-view"] .dashboard-secondary-actions{
+  position:relative;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-auto-rows:56px;
+  gap:0 15px!important;
+  margin:0!important;
+  padding:0!important;
 }
 body[data-theme^="sky-view"] .dashboard-main-actions{
-  margin-bottom:0!important;
+  z-index:20;
 }
 body[data-theme^="sky-view"] .dashboard-secondary-actions{
-  margin-top:0!important;
+  z-index:10;
 }
-body[data-theme^="sky-view"] .dashboard-main-actions button,
+body[data-theme^="sky-view"] .dashboard-main-actions>button,
+body[data-theme^="sky-view"] .dashboard-main-actions>.dash-notification-wrap,
+body[data-theme^="sky-view"] .dashboard-main-actions>.dash-notification-wrap>button,
 body[data-theme^="sky-view"] .dashboard-secondary-actions>button{
-  background:rgba(var(--ar-tab-rgb),var(--ar-tab-alpha))!important;
-  color:var(--ar-glass-text)!important;
-  border-color:var(--ar-glass-border)!important;
-  backdrop-filter:blur(var(--ar-glass-blur));
-  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+  width:100%;
+  height:56px;
+  min-height:56px!important;
+  margin:0!important;
+  border-radius:0!important;
+  box-sizing:border-box;
+  font-size:.92rem!important;
+  font-weight:700!important;
 }
-body[data-theme^="sky-view"] .dashboard-main-actions button {
-  background-color: rgba(45, 90, 150, 0.45) !important; /* Lowered from 0.7 to 0.45 */
-  border-radius: 0 !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important; /* Slightly brighter border */
-  backdrop-filter: blur(12px) !important; /* Increased blur slightly for better glass effect */
-  -webkit-backdrop-filter: blur(12px) !important;
-  margin: 0 !important;
+body[data-theme^="sky-view"] .dashboard-main-actions button{
+  background:rgba(var(--ar-tab),var(--ar-tab-a))!important;
+  color:var(--ar-ink)!important;
+  border:1px solid rgba(var(--ar-tab),.55)!important;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  text-shadow:0 1px 3px rgba(0,0,0,.55);
+}
+body[data-theme^="sky-view"] .dashboard-main-actions #openBreakroomButton{
+  background:rgba(var(--ar-marine),var(--ar-tab-a))!important;
+  border-color:rgba(var(--ar-marine),.70)!important;
+}
+body[data-theme^="sky-view"] .dashboard-secondary-actions>button{
+  background:transparent!important;
+  color:var(--ar-ink)!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  text-shadow:0 1px 3px rgba(0,0,0,.55);
 }
 body[data-theme^="sky-view"] .dashboard-main-actions button:hover,
 body[data-theme^="sky-view"] .dashboard-main-actions button:focus-visible,
 body[data-theme^="sky-view"] .dashboard-secondary-actions>button:hover,
 body[data-theme^="sky-view"] .dashboard-secondary-actions>button:focus-visible,
 body[data-theme^="sky-view"] .dashboard-secondary-actions>button.is-active{
-  background:rgba(var(--ar-tab-rgb),var(--ar-tab-hover-alpha))!important;
+  background:rgba(var(--ar-tab),var(--ar-tab-hover-a))!important;
+  color:var(--ar-ink)!important;
+}
+body[data-theme^="sky-view"] .dashboard-main-actions #openBreakroomButton:hover,
+body[data-theme^="sky-view"] .dashboard-main-actions #openBreakroomButton:focus-visible{
+  background:rgba(var(--ar-marine),var(--ar-tab-hover-a))!important;
+}
+body[data-theme^="sky-view"] .gold-star{
+  color:rgba(239,227,194,.78)!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.30);
+}
+body[data-theme^="sky-view"] .gold-dashboard-divider{
+  height:1px!important;
+  margin:0!important;
+  background:rgba(239,227,194,.45)!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
 }
 body[data-theme^="sky-view"] .agent-dashboard-bar{
-  background:rgba(var(--ar-glass-rgb),var(--ar-glass-alpha))!important;
-  color:var(--ar-glass-text)!important;
-  border-color:var(--ar-glass-border)!important;
-  backdrop-filter:blur(var(--ar-glass-blur));
-  -webkit-backdrop-filter:blur(var(--ar-glass-blur));
+  min-height:56px;
+  margin-top:0!important;
+  padding:6px 14px;
+  background:var(--ar-window)!important;
+  color:var(--ar-ink)!important;
+  border:1px solid var(--ar-window-border)!important;
+  border-radius:0 0 18px 18px!important;
+  backdrop-filter:blur(var(--ar-window-blur));
+  -webkit-backdrop-filter:blur(var(--ar-window-blur));
+  text-shadow:0 1px 3px rgba(0,0,0,.35);
 }
-body[data-theme^="sky-view"] #settingsButton{
-  background:var(--ar-monogram-gold)!important;
-  color:#1A1A20!important;
-  border-color:rgba(10,10,10,.42)!important;
-  font-family:"Great Vibes","Segoe Script",cursive!important;
-  font-size:1.45rem!important;
+body[data-theme^="sky-view"] .agent-dashboard-bar .button{
+  background:rgba(var(--ar-tab),var(--ar-tab-a))!important;
+  color:var(--ar-ink)!important;
+  border:1px solid rgba(var(--ar-tab),.55)!important;
+  border-radius:0!important;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  text-shadow:0 1px 3px rgba(0,0,0,.55);
+}
+body[data-theme^="sky-view"] #settingsButton:not(.has-photo){
+  background:rgba(239,227,194,.22)!important;
+  color:#FFFDF6!important;
+  border:1px solid rgba(239,227,194,.55)!important;
+  font-family:"Great Vibes AR","Great Vibes","Segoe Script",cursive!important;
+  font-size:1.55rem!important;
   font-weight:400!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.35);
+}
+body[data-theme^="sky-view"] .dash-notification-wrap{
+  position:relative;
+  z-index:40;
+  overflow:visible;
+}
+body[data-theme^="sky-view"] .notifications-menu{
+  z-index:1000!important;
+}
+body.is-demo[data-theme^="sky-view"] .demo-banner{
+  margin:0!important;
+  border-radius:0!important;
+}
+body[data-theme^="sky-view"] .settings-backdrop:not(.is-visible),
+body[data-theme^="sky-view"] #importPanel:not(.is-visible),
+body[data-theme^="sky-view"] #breakroomPanel.is-hidden,
+body[data-theme^="sky-view"] #prospectsWorkspace[hidden]{
+  display:none!important;
+}
+@media(max-width:720px){
+  body[data-theme^="sky-view"] main.app{
+    width:calc(100% - 16px)!important;
+    padding-top:8px!important;
+  }
+  body[data-theme^="sky-view"] .topbar{
+    margin:0!important;
+  }
+  body[data-theme^="sky-view"] .dashboard-main-actions,
+  body[data-theme^="sky-view"] .dashboard-secondary-actions{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:0 15px!important;
+  }
+  body[data-theme^="sky-view"] .agent-dashboard-bar{
+    margin-bottom:48px;
+  }
 }
 
