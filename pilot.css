@@ -874,3 +874,26 @@ body[data-theme^="sky-view"] #settingsButton{
   font-weight:400!important;
 }
 
+/* Sky-view greeting contrast and A.I. Assistant emphasis. */
+.ask-ai-surface h3 {
+  color: #3B82F6 !important;
+}
+.ask-ai-surface #askGptButton,
+.ask-ai-surface [data-ask-gpt-button] {
+  background: #3B82F6 !important;
+  border-color: #3B82F6 !important;
+  color: #FFFFFF !important;
+}
+.ask-ai-surface #askGptButton:hover,
+.ask-ai-surface #askGptButton:focus-visible,
+.ask-ai-surface [data-ask-gpt-button]:hover,
+.ask-ai-surface [data-ask-gpt-button]:focus-visible {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+}
+
+body[data-theme^="sky-view"] .header-greeting .welcome-line,
+body[data-theme^="sky-view"] .header-greeting .date {
+  color: #C9A227 !important;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important;
+}
