@@ -1064,6 +1064,21 @@ body[data-theme^="sky-view"] .dashboard-secondary-actions.premium-actions {
   }
 }
 
+body[data-theme^='sky-view'] .dashboard-secondary-actions button {
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  margin: 0 !important;
+}
+
+body[data-theme^='sky-view'] .dashboard-secondary-actions {
+  background-color: rgba(40, 45, 55, 0.4) !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  display: flex;
+  gap: 4px !important;
+  overflow: hidden;
+}
 
 
 
