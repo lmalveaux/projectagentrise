@@ -1065,7 +1065,16 @@ body[data-theme^="sky-view"] .dashboard-secondary-actions.premium-actions {
 }
 
 body[data-theme^='sky-view'] .dashboard-secondary-actions button {
-  border-radius: 8px !important;
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  padding: 0 14px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 0 !important;
   background-color: transparent !important;
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
   margin: 0 !important;
@@ -1073,10 +1082,11 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button {
 
 body[data-theme^='sky-view'] .dashboard-secondary-actions {
   background-color: rgba(40, 45, 55, 0.4) !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   padding: 4px !important;
   display: flex;
-  gap: 4px !important;
+  align-items: stretch;
+  gap: 12px !important;
   overflow: hidden;
 }
 
