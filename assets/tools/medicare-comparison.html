@@ -388,8 +388,8 @@
 <body>
 
 <div class="comparison-action-pair comparison-action-top" aria-label="Comparison actions">
-  <button class="btn comparison-save" type="button" onclick="saveComparison()">Save</button>
-  <button class="btn comparison-exit" type="button" onclick="exitComparison()">Exit</button>
+  <button class="btn comparison-save" type="button" data-comparison-action="save">Save</button>
+  <button class="btn comparison-exit" type="button" data-comparison-action="exit">Exit</button>
 </div>
 
 <div class="header">
@@ -398,9 +398,9 @@
     <p>Agent Rise Pro — Compare up to 3 plans side by side</p>
   </div>
   <div class="header-actions">
-    <button class="btn btn-outline" onclick="clearAll()">Clear</button>
-    <button class="btn btn-outline" onclick="window.print()">🖨 Print</button>
-    <button class="btn btn-white" onclick="saveComparison()">💾 Save Summary</button>
+    <button class="btn btn-outline" type="button" data-comparison-action="clear">Clear</button>
+    <button class="btn btn-outline" type="button" data-comparison-action="print">🖨 Print</button>
+    <button class="btn btn-white" type="button" data-comparison-action="save">💾 Save Summary</button>
   </div>
 </div>
 
@@ -664,7 +664,7 @@
         <div class="winner-text" id="winnerText">Complete the comparison to see recommendation</div>
         <div class="winner-sub">Compares worst-case yearly cost only. Review drugs, network, and extra benefits before recommending.</div>
       </div>
-      <button class="btn btn-green" onclick="pickWinner()">⚡ Auto-Recommend</button>
+      <button class="btn btn-green" type="button" data-comparison-action="recommend">⚡ Auto-Recommend</button>
     </div>
 
   </div>
@@ -699,153 +699,17 @@
 <div class="footer-bar">
   <span class="footer-note">⚠️ For agent use only. Always verify current plan data on Medicare.gov or through your FMO/IMO before presenting to client. Data entered here does not update automatically.</span>
   <div style="display:flex;gap:8px">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Print Leave-Behind</button>
-    <button class="btn btn-green" onclick="saveComparison()">💾 Save Summary</button>
+    <button class="btn btn-primary" type="button" data-comparison-action="print">🖨 Print Leave-Behind</button>
+    <button class="btn btn-green" type="button" data-comparison-action="save">💾 Save Summary</button>
   </div>
 </div>
 
 <div class="comparison-action-pair comparison-action-bottom" aria-label="Comparison actions">
-  <button class="btn comparison-save" type="button" onclick="saveComparison()">Save</button>
-  <button class="btn comparison-exit" type="button" onclick="exitComparison()">Exit</button>
+  <button class="btn comparison-save" type="button" data-comparison-action="save">Save</button>
+  <button class="btn comparison-exit" type="button" data-comparison-action="exit">Exit</button>
 </div>
 
-<script>
-  // Set today's date
-  document.getElementById("compDate").value = new Date().toISOString().slice(0,10);
-
-  // Sync plan names to note labels
-  ["plan1name","plan2name","plan3name"].forEach((id, i) => {
-    document.getElementById(id).addEventListener("input", function() {
-      const label = document.getElementById(`note${i+1}label`);
-      label.textContent = (this.value || `Plan ${i+1}`) + " Notes";
-    });
-  });
-
-  function num(field, plan) {
-    const el = document.querySelector(`[data-field="${field}"][data-plan="${plan}"]`);
-    const m = ((el && el.value) || "").replace(/[^0-9.]/g, "");
-    return m === "" ? null : parseFloat(m);   // $0 is a real value, blank is not
-  }
-
-  // Auto-recommend: lowest worst-case yearly cost = 12 months of premium + out-of-pocket max
-  function pickWinner() {
-    const names = [1,2,3].map(i => document.getElementById(`plan${i}name`).value || `Plan ${i}`);
-    const plans = [1,2,3].map(p => ({ i: p - 1, pr: num("premium", p), mo: num("moop", p) }))
-      .filter(x => x.pr !== null && x.mo !== null);
-    document.querySelectorAll(".data-cell").forEach(c => c.classList.remove("best"));
-    if (plans.length < 2) {
-      document.getElementById("winnerText").textContent = "Enter premium and out-of-pocket max for at least two plans";
-      return;
-    }
-    plans.forEach(x => x.cost = x.pr * 12 + x.mo);
-    const best = plans.reduce((a, b) => (b.cost < a.cost ? b : a));
-    document.getElementById("winnerText").textContent =
-      `⭐ Lowest worst-case yearly cost: ${names[best.i]} ($${best.cost.toLocaleString()})`;
-    document.querySelectorAll(`[data-plan="${best.i + 1}"]`).forEach(el => {
-      const cell = el.closest(".data-cell");
-      if (cell) cell.classList.add("best");
-    });
-  }
-
-  function collectRows() {
-    const rows = [];
-    document.querySelectorAll("#compGrid .row-label:not(.category)").forEach(label => {
-      const values = []; let n = label.nextElementSibling;
-      for (let k = 0; k < 3 && n; k++, n = n.nextElementSibling) {
-        const f = n.querySelector("input,select");
-        values.push(f ? f.value : "");
-      }
-      rows.push({ label: label.textContent.trim(), values });
-    });
-    return rows;
-  }
-
-  function buildSummary(data) {
-    const names = data.plans.map((p, i) => (p.name || `Plan ${i+1}`) + (p.carrier ? ` (${p.carrier})` : ""));
-    let t = `Medicare Plan Comparison\n${data.clientName || "Client"} — ${data.zip} ${data.county} ${data.state} — ${data.date}\nPlan type: ${data.planType}\n\n`;
-    t += `Plans: ${names.join(" | ")}\n\n`;
-    data.rows.filter(r => r.values.some(v => v)).forEach(r => { t += `${r.label}: ${r.values.map(v => v || "—").join(" | ")}\n`; });
-    data.notes.forEach((n, i) => { if (n) t += `\nNotes — ${names[i]}: ${n}`; });
-    if (data.recommendation) t += `\n\nRecommendation: ${data.recommendation}`;
-    return t;
-  }
-
-  function saveComparison() {
-    const data = {
-      clientName: document.getElementById("clientName").value,
-      dob: document.getElementById("clientDOB").value,
-      zip: document.getElementById("clientZip").value,
-      county: document.getElementById("clientCounty").value,
-      state: document.getElementById("clientState").value,
-      planType: document.getElementById("planType").value,
-      date: document.getElementById("compDate").value,
-      plans: [1,2,3].map(p => ({
-        name: document.getElementById(`plan${p}name`).value,
-        carrier: document.getElementById(`plan${p}carrier`).value,
-      })),
-      rows: collectRows(),
-      notes: [1,2,3].map(p => document.getElementById(`note${p}`).value),
-      recommendation: document.getElementById("agentRec").value,
-    };
-    data.summary = buildSummary(data);
-
-    // When embedded in Agent Rise Pro, the app supplies this function
-    if (typeof window.agentRiseSaveComparison === "function") {
-      window.agentRiseSaveComparison(data);
-      alert("Comparison saved to the prospect record.");
-      return;
-    }
-    // Standalone: copy the full summary, or download it if the browser blocks copying
-    const download = () => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([data.summary], { type: "text/plain" }));
-      a.download = `plan-comparison-${(data.clientName || "client").replace(/\s+/g, "-")}.txt`;
-      a.click();
-      alert("Summary downloaded. Paste it into the prospect's notes in Agent Rise Pro.");
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(data.summary)
-        .then(() => alert("Full summary copied. Paste it into the prospect's notes in Agent Rise Pro."))
-        .catch(download);
-    } else { download(); }
-  }
-
-  function exitComparison() {
-    window.close();
-    setTimeout(() => {
-      if (window.closed) return;
-      if (window.history.length > 1) {
-        window.history.back();
-        return;
-      }
-      window.location.replace(new URL('../../', window.location.href).href);
-    }, 120);
-  }
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') exitComparison();
-  });
-
-  function clearAll() {
-    if (!confirm("Clear all comparison data?")) return;
-    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
-    document.querySelectorAll("#compGrid select").forEach(el => el.selectedIndex = 0);
-    document.getElementById("planType").selectedIndex = 0;
-    document.querySelectorAll(".data-cell").forEach(c => c.classList.remove("best"));
-    document.getElementById("winnerText").textContent = "Complete the comparison to see recommendation";
-    document.getElementById("compDate").value = new Date().toISOString().slice(0,10);
-    [1,2,3].forEach(i => { document.getElementById(`note${i}label`).textContent = `Plan ${i} Notes`; });
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("clientName") || "";
-  const dob = params.get("clientDOB") || "";
-  const state = params.get("clientState") || "";
-  const county = params.get("clientCounty") || "";
-  if (name) document.getElementById("clientName").value = name;
-  if (dob) document.getElementById("clientDOB").value = dob;
-  if (state) document.getElementById("clientState").value = state;
-  if (county) document.getElementById("clientCounty").value = county;
-</script>
+<script src="medicare-comparison.js"></script>
 </body>
 </html>
+
