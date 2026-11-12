@@ -1042,11 +1042,22 @@ body[data-theme="sky-view-day"] .dashboard-secondary-actions > button.is-active 
 body[data-theme^="sky-view"] .dashboard-secondary-actions > button {
   border-radius: 8px !important;
 }
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button:hover,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button:focus,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button:focus-visible,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button:active,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button.is-active,
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button[aria-pressed="true"],
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button[aria-current="page"] {
+  border-radius: 8px !important;
+  background-clip: padding-box;
+}
 @media (max-width: 768px) {
   .dashboard-main-actions,
   .dashboard-secondary-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
 
 
