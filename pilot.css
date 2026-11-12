@@ -873,52 +873,86 @@ body[data-theme^="sky-view"] #settingsButton{
   font-size:1.45rem!important;
   font-weight:400!important;
 }
-/* Sky-view greeting restoration and A.I. Assistant emphasis. */
+/* Sky-view greeting restoration and compact A.I. Assistant. */
 .ask-ai-surface {
   box-sizing: border-box;
   width: 100%;
-  margin: 10px 0;
-  padding: 16px;
-  border: 1px solid rgba(59,130,246,0.72);
-  border-radius: 10px;
-  background: rgba(59,130,246,0.08);
-  text-align: center;
+  margin: 8px 0;
+  border: 1px solid rgba(92,64,51,.34);
+  border-radius: 8px;
+  background: transparent;
 }
-.ask-ai-surface form,
-.ask-ai-surface label {
-  display: grid;
+.ask-ai-surface > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+.ask-ai-surface > summary::-webkit-details-marker { display: none; }
+.ask-ai-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.ask-ai-body {
+  padding: 0 12px 12px;
+  border-top: 1px solid rgba(92,64,51,.2);
+}
+.ask-ai-surface form {
+  display: flex;
+  align-items: end;
   width: 100%;
-  gap: 10px;
-  justify-items: center;
-  text-align: center;
+  gap: 8px;
+  padding-top: 10px;
+}
+.ask-ai-input-line {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+  font-size: .78rem;
+  font-weight: 600;
 }
 .ask-ai-surface input {
   box-sizing: border-box;
   width: 100%;
-  padding: 10px 12px;
-  text-align: center;
+  padding: 8px 2px;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
 }
-.ask-ai-surface .ask-ai-heading {
-  margin: 0 0 4px;
-  color: #3B82F6 !important;
-  font-size: 1.3rem;
-  font-weight: 800;
-  line-height: 1.25;
-  text-align: center;
+.ask-ai-actions { display: flex; gap: 6px; }
+.ask-ai-surface .ask-ai-submit,
+.ask-ai-surface .ask-ai-mic {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 10px !important;
 }
-.ask-ai-surface .ask-ai-submit {
-  min-width: 132px;
-  padding: 10px 18px !important;
-  background: #3B82F6 !important;
-  border-color: #3B82F6 !important;
-  color: #FFFFFF !important;
-  font-weight: 800;
-  text-align: center;
+.agent-notes-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+  margin-bottom: 12px;
 }
-.ask-ai-surface .ask-ai-submit:hover,
-.ask-ai-surface .ask-ai-submit:focus-visible {
-  background: #2563EB !important;
-  border-color: #2563EB !important;
+.agent-notes-mode-tabs button {
+  min-height: 44px;
+  border: 1px solid rgba(92,64,51,.34);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+}
+.agent-notes-mode-tabs button[aria-selected="true"] {
+  border-color: currentColor;
+  background: rgba(92,64,51,.08);
 }
 body[data-theme="sky-view-day"] .header-greeting {
   box-sizing: border-box;
@@ -1005,10 +1039,14 @@ body[data-theme="sky-view-day"] .dashboard-secondary-actions > button.is-active 
 .dashboard-secondary-actions > button.is-active {
   background: transparent !important;
 }
+body[data-theme^="sky-view"] .dashboard-secondary-actions > button {
+  border-radius: 8px !important;
+}
 @media (max-width: 768px) {
   .dashboard-main-actions,
   .dashboard-secondary-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
 
