@@ -959,3 +959,56 @@ body[data-theme="sky-view-day"] .dashboard-secondary-actions > button:focus-visi
 body[data-theme="sky-view-day"] .dashboard-secondary-actions > button.is-active {
   background: transparent !important;
 }
+
+/* Phase 2: uniform front-dashboard tabs. */
+.dashboard-main-actions,
+.dashboard-secondary-actions {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px !important;
+}
+.dashboard-main-actions > button,
+.dashboard-main-actions > .dash-notification-wrap,
+.dashboard-main-actions > .dash-notification-wrap > button,
+.dashboard-secondary-actions > button {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  min-height: 56px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(201, 162, 39, 0.6) !important;
+  border-radius: 8px !important;
+  font-family: var(--arp-body-font) !important;
+  font-size: .92rem !important;
+  font-weight: 700 !important;
+}
+.dashboard-main-actions > button,
+.dashboard-main-actions > .dash-notification-wrap > button,
+.dashboard-secondary-actions > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px !important;
+  line-height: 1.2;
+  text-align: center;
+}
+.dashboard-main-actions > .dash-notification-wrap {
+  position: relative;
+}
+.dashboard-main-actions > button,
+.dashboard-main-actions > .dash-notification-wrap > button {
+  background: rgba(45, 90, 150, 0.45) !important;
+}
+.dashboard-secondary-actions > button,
+.dashboard-secondary-actions > button:hover,
+.dashboard-secondary-actions > button:focus-visible,
+.dashboard-secondary-actions > button.is-active {
+  background: transparent !important;
+}
+@media (max-width: 768px) {
+  .dashboard-main-actions,
+  .dashboard-secondary-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
