@@ -1592,6 +1592,71 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button:focus-visible {
   }
 }
 
+/* Sleek dashboard frame refinement: soft Sky View glass with rounded controls. */
+body[data-theme^='sky-view'] .dashboard-frame {
+  --dashboard-frame-content-start: 150px;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  border: 0;
+  border-radius: 16px !important;
+  outline: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: var(--dashboard-frame-content-start);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  border-radius: 16px !important;
+  background: rgba(45, 90, 150, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame::after {
+  content: none !important;
+  display: none !important;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame:has(> .demo-banner:not([hidden])) {
+  --dashboard-frame-content-start: 192px;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame > .ar-header,
+body[data-theme^='sky-view'] .dashboard-frame > .jazz-command-bar,
+body[data-theme^='sky-view'] .dashboard-frame > .agent-dashboard-bar {
+  border-radius: 12px !important;
+  background: rgba(45, 90, 150, 0.5) !important;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > button,
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > .dash-notification-wrap,
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > .dash-notification-wrap > button,
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-secondary-actions > button,
+body[data-theme^='sky-view'] .dashboard-frame .agent-dashboard-bar button {
+  border-radius: 8px !important;
+}
+
+@media (max-width: 760px) {
+  body[data-theme^='sky-view'] .dashboard-frame {
+    --dashboard-frame-content-start: 138px;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-frame:has(> .demo-banner:not([hidden])) {
+    --dashboard-frame-content-start: 180px;
+  }
+}
+
 
 
 
