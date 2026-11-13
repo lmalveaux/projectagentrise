@@ -901,6 +901,22 @@ body[data-theme^="sky-view"] #settingsButton{
   border: 1px solid currentColor;
   border-radius: 50%;
 }
+.ask-ai-status-light {
+  width: 10px;
+  height: 10px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #8A8A92;
+  box-shadow: 0 0 0 2px rgba(138,138,146,.2);
+}
+.ask-ai-status-light[data-state="listening"] {
+  background: #D52B3F;
+  box-shadow: 0 0 0 3px rgba(213,43,63,.22),0 0 9px rgba(213,43,63,.7);
+}
+.ask-ai-status-light[data-state="thinking"] {
+  background: #C9A227;
+  box-shadow: 0 0 0 3px rgba(201,162,39,.2);
+}
 .ask-ai-body {
   padding: 0 12px 12px;
   border-top: 1px solid rgba(92,64,51,.2);
@@ -927,6 +943,22 @@ body[data-theme^="sky-view"] #settingsButton{
   border-bottom: 1px solid currentColor;
   border-radius: 0;
   background: transparent;
+}
+.ask-ai-pause {
+  display: grid;
+  gap: 4px;
+  min-width: 92px;
+  font-size: .72rem;
+  font-weight: 600;
+}
+.ask-ai-pause select {
+  min-height: 34px;
+  padding: 4px 8px;
+  border: 1px solid rgba(92,64,51,.34);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
 }
 .ask-ai-actions { display: flex; gap: 6px; }
 .ask-ai-surface .ask-ai-submit,
