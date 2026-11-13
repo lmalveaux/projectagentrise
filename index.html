@@ -1449,13 +1449,20 @@ body[data-theme^="sky-view"] .topbar .date {
     <main class="app">
       <div class="topbar ar-header" aria-label="Workspace header">
         <div class="arp-logo-block"><img src="assets/images/arp-logo.png" alt="Agent Rise Pro" /></div>
-        <div class="header-breathing-space"><button class="premium-phone-orb" type="button" id="premiumPhoneButton" aria-label="Premium phone" title="Premium phone">☎<span class="tier-star gold-star" aria-hidden="true">★</span></button></div>
+        <div class="header-breathing-space" aria-hidden="true"></div>
         <div class="header-account-zone">
           <div class="header-greeting"><p class="welcome-line" id="workspaceGreeting">Welcome back, Agent!</p><time class="date" id="todayDate"></time><span class="agent-credentials" hidden></span></div>
           <div class="agent-avatar-choice" id="agentAvatarChoice" aria-hidden="true" hidden>AR</div>
+          <button class="premium-phone-orb" type="button" id="premiumPhoneButton" aria-label="Premium phone" title="Premium phone">☎<span class="tier-star gold-star" aria-hidden="true">★</span></button>
           <button class="account-avatar settings-target" type="button" id="settingsButton" aria-label="Account settings" title="Account settings" aria-expanded="false">A</button>
         </div>
       </div>
+
+      <section class="jazz-command-bar" aria-label="Jazz assistant">
+        <div class="jazz-command-identity"><span class="jazz-command-mark" aria-hidden="true">♪</span><strong>Jazz</strong></div>
+        <label class="jazz-command-field" for="jazzCommandInput"><span class="sr-only">Ask or tell Jazz</span><input id="jazzCommandInput" type="text" maxlength="4000" autocomplete="off" placeholder="Ask or tell Jazz" /></label>
+        <button class="jazz-command-mic" type="button" id="jazzCommandMic" aria-label="Speak to Jazz">🎙</button>
+      </section>
 
       <section class="dashboard-main-actions" aria-label="First line of business">
         <button type="button" id="openScriptsButton">Scripts</button>
@@ -4207,6 +4214,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     </script>
   </body>
 </html>
+
 
 
 
