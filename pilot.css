@@ -922,14 +922,20 @@ body[data-theme^="sky-view"] #settingsButton{
   border-top: 1px solid rgba(92,64,51,.2);
 }
 .ask-ai-surface form {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  padding-top: 10px;
+}
+.ask-ai-input-row {
   display: flex;
   align-items: end;
-  width: 100%;
   gap: 8px;
-  padding-top: 10px;
+  width: 100%;
 }
 .ask-ai-input-line {
   flex: 1;
+  min-width: 0;
   display: grid;
   gap: 4px;
   font-size: .78rem;
@@ -944,15 +950,21 @@ body[data-theme^="sky-view"] #settingsButton{
   border-radius: 0;
   background: transparent;
 }
+.ask-ai-status {
+  min-height: 1.3em;
+  margin: 0;
+  font-size: .78rem;
+}
 .ask-ai-pause {
-  display: grid;
-  gap: 4px;
-  min-width: 92px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
   font-size: .72rem;
   font-weight: 600;
 }
 .ask-ai-pause select {
-  min-height: 34px;
+  min-height: 32px;
   padding: 4px 8px;
   border: 1px solid rgba(92,64,51,.34);
   border-radius: 6px;
@@ -960,11 +972,30 @@ body[data-theme^="sky-view"] #settingsButton{
   color: inherit;
   font: inherit;
 }
-.ask-ai-actions { display: flex; gap: 6px; }
-.ask-ai-surface .ask-ai-submit,
 .ask-ai-surface .ask-ai-mic {
   min-width: 44px;
   min-height: 44px;
+  padding: 6px 10px !important;
+}
+.ask-ai-response {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(92,64,51,.2);
+}
+.ask-ai-response[hidden] { display: none; }
+.ask-ai-response p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.ask-ai-response-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ask-ai-response-actions .button {
+  min-height: 40px;
   padding: 6px 10px !important;
 }
 .agent-notes-mode-tabs {

@@ -401,20 +401,21 @@ async function submitAskGPT(event){
   const form=event.currentTarget;
   const surface=form?.closest('.ask-ai-surface');
   const input=form?.querySelector('[data-ask-gpt-query],#askGptQuery');
-  const button=form?.querySelector('[data-ask-gpt-button],#askGptButton');
-  const output=form?.parentElement?.querySelector('[data-ask-gpt-response],#askGptResponse');
-  if(!input||!button||!output)return;
+  const status=surface?.querySelector('[data-ask-gpt-status]');
+  const responsePanel=surface?.querySelector('[data-ask-gpt-response-panel]');
+  const responseText=surface?.querySelector('[data-ask-gpt-response]');
+  if(!input||!status||!responsePanel||!responseText||form.dataset.submitting==='true')return;
   const query=input.value.trim();
-  if(!query){input.focus();output.textContent='Enter a question first.';return;}
-  setAskGptState(surface,'thinking');button.disabled=true;button.textContent='Thinking…';output.textContent='Thinking…';
-  try{output.textContent=await askGPT(query);}
-  catch(error){output.textContent=error.message||'Ask AI is temporarily unavailable.';}
-  finally{button.disabled=false;button.textContent=button.dataset.defaultLabel||'Ask';setAskGptState(surface,'idle');}
+  if(!query){input.focus();status.textContent='Enter a question first.';return;}
+  form.dataset.submitting='true';setAskGptState(surface,'thinking');status.textContent='Thinking…';
+  try{const response=await askGPT(query);surface._lastAskGpt={question:query,response};responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);status.textContent='Response ready.';}
+  catch(error){status.textContent=error.message||'Ask AI is temporarily unavailable.';}
+  finally{delete form.dataset.submitting;setAskGptState(surface,'idle');}
 }
 function compactAskGptMarkup(scope){
   const prefix=scope==='notifications'?'notification':'agentNotes';
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
-  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><span class="ask-ai-icon" aria-hidden="true">✿</span><span>A.I. Assistant</span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span></summary><div class="ask-ai-body"><form id="${prefix}AskGptForm"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="What would you like help with?"></label><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select></label><div class="ask-ai-actions"><button class="button button-primary ask-ai-submit" id="${prefix}AskGptButton" data-ask-gpt-button data-default-label="Ask" type="submit">Ask</button><button class="button button-secondary ask-ai-mic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button></div></form><div id="${prefix}AskGptResponse" data-ask-gpt-response class="pilot-muted" role="status" aria-live="polite"></div></div></details>`;
+  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><span class="ask-ai-icon" aria-hidden="true">✿</span><span>A.I. Assistant</span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span></summary><div class="ask-ai-body"><form id="${prefix}AskGptForm"><div class="ask-ai-input-row"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Type a question and press Enter"></label><button class="button button-secondary ask-ai-mic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button></div><div class="ask-ai-status pilot-muted" data-ask-gpt-status role="status" aria-live="polite">Ready for your question.</div><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select><span>of silence</span></label></form><section class="ask-ai-response" data-ask-gpt-response-panel hidden><p data-ask-gpt-response></p><div class="ask-ai-response-actions"><button class="button button-secondary" data-ask-gpt-play type="button">▶ Play Audio</button><button class="button button-secondary" data-ask-gpt-save type="button">Save to Notes</button></div><audio data-ask-gpt-audio preload="none" hidden></audio></section></div></details>`;
 }
 function notificationAskGptMarkup(){return `<section class="notification-section">${compactAskGptMarkup('notifications')}</section>`;}
 function installNotificationAskGpt(){const menu=$('notificationsMenu');if(!menu||$('notificationAskGptForm'))return;menu.insertAdjacentHTML('afterbegin',notificationAskGptMarkup());$('notificationAskGptForm').onsubmit=submitAskGPT;}
@@ -425,13 +426,46 @@ async function saveAskGptPause(event){
   document.querySelectorAll('[data-ask-gpt-pause]').forEach(select=>{select.value=String(seconds);});
   await persistWorkspace();
 }
+function resetAskGptAudio(surface){
+  if(!surface)return;
+  const audio=surface.querySelector('[data-ask-gpt-audio]'),button=surface.querySelector('[data-ask-gpt-play]');
+  if(audio){audio.pause();audio.removeAttribute('src');audio.load();audio.hidden=true;}
+  if(surface._askGptAudioUrl)URL.revokeObjectURL(surface._askGptAudioUrl);
+  surface._askGptAudioUrl='';surface._askGptAudioResponse='';
+  if(button){button.disabled=false;button.textContent='▶ Play Audio';}
+}
+async function playAskGptAudio(button){
+  const surface=button.closest('.ask-ai-surface'),audio=surface?.querySelector('[data-ask-gpt-audio]'),status=surface?.querySelector('[data-ask-gpt-status]'),text=String(surface?._lastAskGpt?.response||'').trim();
+  if(!surface||!audio||!status||!text)return;
+  if(!audio.paused){audio.pause();button.textContent='▶ Play Audio';status.textContent='Audio paused.';return;}
+  if(surface._askGptAudioUrl&&surface._askGptAudioResponse===text){button.textContent='■ Stop Audio';status.textContent='Playing response…';await audio.play();return;}
+  button.disabled=true;status.textContent='Generating audio…';
+  try{
+    const client=await ensureClient(),{data,error}=await client.auth.getSession();
+    if(error||!data.session)throw error||Error('Sign in again to play audio.');
+    const response=await fetch(`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({script:text,publish:false})});
+    if(!response.ok){let message=`Audio request failed (${response.status}).`;try{message=(await response.json()).error||message;}catch{}throw Error(message);}
+    const blob=await response.blob();resetAskGptAudio(surface);surface._askGptAudioUrl=URL.createObjectURL(blob);surface._askGptAudioResponse=text;audio.src=surface._askGptAudioUrl;audio.hidden=false;audio.onended=()=>{button.textContent='▶ Play Audio';status.textContent='Audio finished.';};button.disabled=false;button.textContent='■ Stop Audio';status.textContent='Playing response…';await audio.play();
+  }catch(error){button.disabled=false;button.textContent='▶ Play Audio';status.textContent=error.message||'Audio playback is unavailable right now.';}
+}
+async function saveAskGptToNotes(button){
+  const surface=button.closest('.ask-ai-surface'),status=surface?.querySelector('[data-ask-gpt-status]'),entry=surface?._lastAskGpt;
+  if(!surface||!status||!entry)return;
+  if(pilot.demo){requestDemoSignIn();return;}
+  const text=`Question: ${entry.question}\n\nA.I. Assistant:\n${entry.response}`,now=iso();
+  ['agentNoteText','dashboardAgentNoteText'].forEach(id=>{const field=$(id);if(field)field.value=[field.value.trim(),text].filter(Boolean).join('\n\n');});
+  button.disabled=true;status.textContent='Saving to Agent Notes…';
+  try{pilot.workspaceData.agentNotes.unshift({id:uid(),text,appTitle:'A.I. Assistant',createdAt:now,updatedAt:now});const saved=await persistWorkspace();renderAgentNotes();status.textContent=saved?'Saved to Agent Notes.':'Note remains in this session until the account reconnects.';}
+  catch(error){status.textContent=error.message||'The response could not be saved.';}
+  finally{button.disabled=false;}
+}
 async function captureAskGptQuestion(button){
-  const surface=button.closest('.ask-ai-surface'),form=surface?.querySelector('form'),input=surface?.querySelector('[data-ask-gpt-query]'),output=surface?.querySelector('[data-ask-gpt-response]'),pause=Number(surface?.querySelector('[data-ask-gpt-pause]')?.value)||5;
-  if(!form||!input||!output)return;
+  const surface=button.closest('.ask-ai-surface'),form=surface?.querySelector('form'),input=surface?.querySelector('[data-ask-gpt-query]'),status=surface?.querySelector('[data-ask-gpt-status]'),pause=Number(surface?.querySelector('[data-ask-gpt-pause]')?.value)||5;
+  if(!form||!input||!status)return;
   if(activeVoiceCapture){stopVoiceInput();return;}
-  setAskGptState(surface,'listening');button.setAttribute('aria-pressed','true');button.textContent='■';output.textContent='Listening…';
-  try{const transcript=await captureVoiceInput({silenceMs:pause*1000,onTranscript:value=>{if(value){input.value=value;output.textContent=`Listening… responding after ${pause} seconds of silence.`;}}});if(transcript){input.value=transcript;setAskGptState(surface,'thinking');output.textContent='Thinking…';form.requestSubmit();}else output.textContent='No speech was captured.';}
-  catch(error){output.textContent=error.message||'Speech-to-text is unavailable right now.';}
+  setAskGptState(surface,'listening');button.setAttribute('aria-pressed','true');button.textContent='■';status.textContent='Listening…';
+  try{const transcript=await captureVoiceInput({silenceMs:pause*1000,onTranscript:value=>{if(value){input.value=value;status.textContent=`Listening… responding after ${pause} seconds of silence.`;}}});if(transcript){input.value=transcript;setAskGptState(surface,'thinking');status.textContent='Thinking…';form.requestSubmit();}else status.textContent='No speech was captured.';}
+  catch(error){status.textContent=error.message||'Speech-to-text is unavailable right now.';}
   finally{button.setAttribute('aria-pressed','false');button.textContent='🎙';if(surface.dataset.aiState!=='thinking')setAskGptState(surface,'idle');}
 }
 const passwordChecks={length:value=>value.length>=12,upper:value=>/[A-Z]/.test(value),lower:value=>/[a-z]/.test(value),number:value=>/\d/.test(value),symbol:value=>/[!@#$%^&*]/.test(value)};
@@ -1075,6 +1109,9 @@ function bindPilot(){
   guardClick($('disciplineCalendar')).onchange=async event=>{const visible=event.target.closest('[data-calendar-visible]'),category=event.target.closest('[data-calendar-category]');if(visible){pilot.workspaceData.hiddenCalendarEvents=[...new Set([...(pilot.workspaceData.hiddenCalendarEvents||[]),visible.dataset.calendarVisible])];await persistWorkspace();renderDisciplineCalendar();return;}if(category){const item=(pilot.workspaceData.calendarEvents||[]).find(entry=>entry.id===category.dataset.calendarCategory);if(!item)return;item.category=category.value;item.categoryManual=true;await persistWorkspace();renderDisciplineCalendar();}};
   guardClick($('disciplineCalendar')).onclick=async event=>{if(!event.target.closest('[data-calendar-restore]'))return;pilot.workspaceData.hiddenCalendarEvents=[];await persistWorkspace();renderDisciplineCalendar();};
   $('agentNotesForm').onsubmit=event=>saveAgentNote(event,'Fresh Pour');$('dashboardAgentNotesForm').onsubmit=event=>saveAgentNote(event,$('agentNotesDialog').dataset.noteContext||'Dashboard');$('agentNotesSearch').oninput=renderAgentNotes;$('dashboardAgentNotesSearch').oninput=renderAgentNotes;guardClick($('agentNoteSpeech')).onclick=()=>startAgentNoteSpeech('Fresh Pour');guardClick($('dashboardAgentNoteSpeech')).onclick=()=>startAgentNoteSpeech($('agentNotesDialog').dataset.noteContext||'Dashboard');guardClick($('agentNoteStop')).onclick=stopVoiceInput;guardClick($('dashboardAgentNoteStop')).onclick=stopVoiceInput;guardClick($('freshAgentNotesQuickButton')).onclick=()=>setAgentNotesTabOpen(!pilot.workspaceData.agentNotesOpen);guardClick($('freshAgentNotesButton')).onclick=()=>openDiscipline('Fresh Pour');['agentNotesList','dashboardAgentNotesList'].forEach(id=>guardClick($(id)).onclick=event=>{const button=event.target.closest('[data-agent-note-delete]');if(button)deleteAgentNote(button.dataset.agentNoteDelete);});guardClick($('dashboardAgentNotesButton')).onclick=()=>{showAgentNotesMode('daily');openDiscipline('Dashboard');};guardClick($('agentNotesModeTabs')).onclick=event=>{const button=event.target.closest('[data-agent-notes-tab]');if(button)showAgentNotesMode(button.dataset.agentNotesTab);};$('show121BriefToggle').onchange=async event=>{pilot.workspaceData.show121Brief=event.target.checked;sync121BriefVisibility();await persistWorkspace();if(event.target.checked)await renderDisciplineBrief();};const agentNotesAskGptForm=$('agentNotesAskGptForm');if(agentNotesAskGptForm)agentNotesAskGptForm.onsubmit=submitAskGPT;document.querySelectorAll('[data-ask-gpt-mic]').forEach(button=>guardClick(button).onclick=()=>captureAskGptQuestion(button));document.querySelectorAll('[data-ask-gpt-pause]').forEach(select=>select.onchange=saveAskGptPause);guardClick($('addRssFeed')).onclick=openRssFeedDialog;$('rssFeedForm').onsubmit=saveRssFeed;guardClick($('rssFeedManager')).onclick=event=>{const button=event.target.closest('[data-remove-rss]');if(button)removeRssFeed(button.dataset.removeRss);};renderAgentNotesOpen();sync121BriefVisibility();
+  document.querySelectorAll('[data-ask-gpt-query]').forEach(input=>input.onkeydown=event=>{if(event.key==='Enter'&&!event.isComposing){event.preventDefault();input.form?.requestSubmit();}});
+  document.querySelectorAll('[data-ask-gpt-play]').forEach(button=>guardClick(button).onclick=()=>playAskGptAudio(button));
+  document.querySelectorAll('[data-ask-gpt-save]').forEach(button=>guardClick(button).onclick=()=>saveAskGptToNotes(button));
   guardClick($('freshStripNotes')).onclick=()=>openDiscipline('Fresh Pour');guardClick($('freshStripMusic')).onclick=async()=>{await setFreshMusicPanelOpen(true);$('freshMusicPanel').scrollIntoView({behavior:'smooth',block:'center'});};guardClick($('freshStripDailyPour')).onclick=()=>{const panel=$('dailyPourPanel');if(!panel)return;panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'start'});};guardClick($('closeDailyPour')).onclick=()=>{const panel=$('dailyPourPanel');if(panel)panel.hidden=true;};
   $('dailyTaskForm').onsubmit=async event=>{event.preventDefault();const text=$('dailyTaskText').value.trim();if(!text)return $('dailyTaskText').focus();pilot.workspaceData.dailyTasks.push({id:uid(),text,date:todayIsoDate(),completed:false,createdAt:iso()});$('dailyTaskText').value='';await persistWorkspace();renderDailyTasks();};guardClick($('dailyTaskRows')).onclick=async event=>{const toggle=event.target.closest('[data-task-toggle]'),del=event.target.closest('[data-task-delete]');if(!toggle&&!del)return;const id=(toggle||del).dataset[toggle?'taskToggle':'taskDelete'];if(del)pilot.workspaceData.dailyTasks=pilot.workspaceData.dailyTasks.filter(item=>item.id!==id);else{const item=pilot.workspaceData.dailyTasks.find(entry=>entry.id===id);if(item)item.completed=toggle.checked;}await persistWorkspace();renderDailyTasks();};
   $('tomorrowPlanForm').onsubmit=async event=>{event.preventDefault();const text=$('tomorrowPlanText').value.trim(),date=tomorrowIsoDate();pilot.workspaceData.tomorrowPlans=(pilot.workspaceData.tomorrowPlans||[]).filter(item=>item.date!==date);if(text)pilot.workspaceData.tomorrowPlans.push({id:uid(),date,text,createdAt:iso()});await persistWorkspace();renderTomorrowPlan();notify('Tomorrow’s plan saved.');};
