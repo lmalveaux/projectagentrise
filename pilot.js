@@ -443,7 +443,7 @@ async function playAskGptAudio(button){
   try{
     const client=await ensureClient(),{data,error}=await client.auth.getSession();
     if(error||!data.session)throw error||Error('Sign in again to play audio.');
-    const response=await fetch(`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({script:text,publish:false})});
+    const response=await fetch(`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,publish:false})});
     if(!response.ok){let message=`Audio request failed (${response.status}).`;try{message=(await response.json()).error||message;}catch{}throw Error(message);}
     const blob=await response.blob();resetAskGptAudio(surface);surface._askGptAudioUrl=URL.createObjectURL(blob);surface._askGptAudioResponse=text;audio.src=surface._askGptAudioUrl;audio.hidden=false;audio.onended=()=>{button.textContent='▶ Play Audio';status.textContent='Audio finished.';};button.disabled=false;button.textContent='■ Stop Audio';status.textContent='Playing response…';await audio.play();
   }catch(error){button.disabled=false;button.textContent='▶ Play Audio';status.textContent=error.message||'Audio playback is unavailable right now.';}

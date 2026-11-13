@@ -1,6 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const OWNER_EMAILS = new Set(["lisasjazz@gmail.com", "121media.info@gmail.com"]);
 const ELEVENLABS_MODEL_ID = "eleven_turbo_v2_5";
 const ELEVENLABS_CHARACTER_LIMIT = 40_000;
 const corsHeaders = {
@@ -31,7 +30,7 @@ Deno.serve(async (request) => {
     if (!elevenLabsKey) throw new Error("Missing ELEVENLABS_API_KEY");
     if (!voiceId) throw new Error("Missing ELEVENLABS_VOICE_ID");
     // These two values are supplied automatically by the Supabase Edge runtime.
-    // They remain required for owner verification and Storage publishing.
+    // They remain required for entitlement verification and Storage publishing.
     if (!supabaseUrl) throw new Error("Supabase runtime is missing SUPABASE_URL");
     if (!serviceKey) throw new Error("Supabase runtime is missing SUPABASE_SERVICE_ROLE_KEY");
 
@@ -44,12 +43,24 @@ Deno.serve(async (request) => {
     });
     const { data: userData, error: userError } = await admin.auth.getUser(token);
     if (userError || !userData.user) return json({ error: "Your session has expired." }, 401);
-    const email = String(userData.user.email ?? "").trim().toLowerCase();
-    if (!OWNER_EMAILS.has(email)) return json({ error: "Owner access is required." }, 403);
+
+    const [adminResult, entitlementResult] = await Promise.all([
+      admin.from("admins").select("user_id").eq("user_id", userData.user.id).maybeSingle(),
+      admin.from("account_entitlements").select("tier,status,current_period_end").eq("user_id", userData.user.id).maybeSingle(),
+    ]);
+    if (adminResult.error) throw adminResult.error;
+    if (entitlementResult.error) throw entitlementResult.error;
+
+    const entitlement = entitlementResult.data;
+    const periodActive = !entitlement?.current_period_end || Date.parse(entitlement.current_period_end) > Date.now();
+    const paidTier = ["pro", "pro-plus", "agency", "owner"].includes(entitlement?.tier ?? "");
+    const allowed = Boolean(adminResult.data || (entitlement?.status === "active" && paidTier && periodActive));
+    if (!allowed) return json({ error: "Voice generation requires an active Pro subscription." }, 403);
 
     const body = await request.json();
-    const script = String(body?.script ?? "").trim();
-    if (!script) return json({ error: "A script is required." }, 400);
+    const script = String(body?.text ?? body?.script ?? "").trim();
+    if (!script) return json({ error: "Text is required." }, 400);
+    if (body?.publish === true && !adminResult.data) return json({ error: "Owner access is required to publish The 121 Brief." }, 403);
     if (script.length > ELEVENLABS_CHARACTER_LIMIT) {
       throw new Error(`Script exceeds ${ELEVENLABS_CHARACTER_LIMIT} character limit. Current length: ${script.length}`);
     }
