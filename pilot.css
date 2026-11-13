@@ -1650,3 +1650,17 @@ body[data-theme^='sky-view'] .ar-header {
   background: rgba(45, 90, 150, 0.35) !important;
 }
 
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > button,
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > .dash-notification-wrap > button {
+  border-color: var(--soft-gold) !important;
+  background: rgba(45, 90, 150, 0.2) !important;
+}
+
+body[data-theme^='sky-view'] .dashboard-frame .dashboard-main-actions > .dash-notification-wrap {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
