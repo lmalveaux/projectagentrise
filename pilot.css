@@ -922,20 +922,26 @@ body[data-theme^="sky-view"] #settingsButton{
   box-shadow: 0 0 0 3px rgba(59,130,246,.2),0 0 9px rgba(59,130,246,.55);
 }
 .ask-ai-body {
+  box-sizing: border-box;
+  min-width: 0;
   padding: 0 12px 12px;
   border-top: 1px solid rgba(92,64,51,.2);
 }
-.ask-ai-settings-control {
-  display: grid;
-  justify-items: end;
-  gap: 4px;
+.ask-ai-panel-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
   padding-top: 6px;
+}
+.ask-ai-settings-control {
+  position: relative;
 }
 .ask-ai-settings-toggle {
   display: inline-grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: 1px solid rgba(92,64,51,.3);
   border-radius: 50%;
@@ -944,12 +950,31 @@ body[data-theme^="sky-view"] #settingsButton{
   cursor: pointer;
 }
 .ask-ai-settings-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 4;
+  min-width: 180px;
   padding: 6px 8px;
   border: 1px solid rgba(92,64,51,.2);
   border-radius: 6px;
   background: rgba(245,241,234,.88);
 }
 .ask-ai-settings-panel[hidden] { display: none; }
+.ask-ai-close {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(92,64,51,.36);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
 .ask-ai-surface form {
   display: grid;
   width: 100%;
@@ -957,7 +982,8 @@ body[data-theme^="sky-view"] #settingsButton{
   padding-top: 10px;
 }
 .ask-ai-input-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 44px;
   align-items: end;
   gap: 8px;
   width: 100%;
@@ -1002,9 +1028,16 @@ body[data-theme^="sky-view"] #settingsButton{
   font: inherit;
 }
 .ask-ai-surface .ask-ai-mic {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 6px 10px !important;
+  box-sizing: border-box;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  align-self: end;
+  font-size: 1rem !important;
+  line-height: 1 !important;
 }
 .ask-ai-response {
   display: grid;
@@ -1015,7 +1048,12 @@ body[data-theme^="sky-view"] #settingsButton{
 }
 .ask-ai-response[hidden] { display: none; }
 .ask-ai-response p {
+  box-sizing: border-box;
+  max-height: min(42vh,360px);
   margin: 0;
+  padding-right: 6px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 .ask-ai-response-actions {
