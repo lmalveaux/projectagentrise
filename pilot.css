@@ -105,7 +105,7 @@ body[data-theme="dark"]:after{
   opacity:1!important;
 }
 body[data-theme="sky-view"]:before{
-  background:#173A52 url("assets/images/sky-view.jpg") center/cover no-repeat fixed!important;
+  background:#173A52 url("assets/images/sky-view-clean.jpg") center center/cover no-repeat fixed!important;
   filter:none!important;
   opacity:1!important;
 }
@@ -391,8 +391,8 @@ body[data-theme="sky-view-day"]{--theme-bg:#EDE7DC;--theme-surface:#FFFFFF;--the
 body[data-theme="sky-view-night"]{--theme-bg:#1A1A20;--theme-surface:#2A2A32;--theme-text:#F5F1EA;--theme-secondary:#A8A29A;--theme-primary:#4A5AC0;--theme-primary-hover:#5969CF;color-scheme:dark}
 body[data-theme="plain-dark"]:before{background:#1A1A20!important;filter:none!important;opacity:1!important}
 body[data-theme="plain-light"]:before{background:#F5F1EA!important;filter:none!important;opacity:1!important}
-body[data-theme="sky-view-day"]:before{background:#EDE7DC url("assets/images/sky-view.jpg") center center/cover no-repeat fixed!important;filter:none!important;opacity:1!important}
-body[data-theme="sky-view-night"]:before{background:#1A1A20 url("assets/images/sky-view.jpg") center center/cover no-repeat fixed!important;filter:brightness(.5) saturate(.7)!important;opacity:1!important}
+body[data-theme="sky-view-day"]:before{background:#EDE7DC url("assets/images/sky-view-clean.jpg") center center/cover no-repeat fixed!important;filter:none!important;opacity:1!important}
+body[data-theme="sky-view-night"]:before{background:#1A1A20 url("assets/images/sky-view-clean.jpg") center center/cover no-repeat fixed!important;filter:brightness(.5) saturate(.7)!important;opacity:1!important}
 body[data-theme="plain-dark"]:after,body[data-theme="plain-light"]:after,body[data-theme="sky-view-day"]:after,body[data-theme="sky-view-night"]:after{background:none!important;opacity:0!important}
 
 /* Fresh Pour keeps the source media sharp and uses the selected theme as its fallback. */
@@ -403,8 +403,8 @@ body[data-theme="plain-dark"]:after,body[data-theme="plain-light"]:after,body[da
 .breakroom-wash{display:none!important;background:none!important;filter:none!important;opacity:0!important}
 body[data-theme="plain-dark"] .breakroom-fallback{background:#1A1A20!important;filter:none!important;opacity:1}
 body[data-theme="plain-light"] .breakroom-fallback{background:#F5F1EA!important;filter:none!important;opacity:1}
-body[data-theme="sky-view-day"] .breakroom-fallback{background:#EDE7DC url("assets/images/sky-view.jpg") center center/cover no-repeat!important;filter:none!important;opacity:1}
-body[data-theme="sky-view-night"] .breakroom-fallback{background:#1A1A20 url("assets/images/sky-view.jpg") center center/cover no-repeat!important;filter:brightness(.5) saturate(.7)!important;opacity:1}
+body[data-theme="sky-view-day"] .breakroom-fallback{background:#EDE7DC url("assets/images/sky-view-clean.jpg") center center/cover no-repeat!important;filter:none!important;opacity:1}
+body[data-theme="sky-view-night"] .breakroom-fallback{background:#1A1A20 url("assets/images/sky-view-clean.jpg") center center/cover no-repeat!important;filter:brightness(.5) saturate(.7)!important;opacity:1}
 body[data-theme="plain-dark"] .breakroom,body[data-theme="sky-view-night"] .breakroom{color:#F5F1EA}
 body[data-theme="plain-light"] .breakroom,body[data-theme="sky-view-day"] .breakroom{color:#0A0A0A}
 .demo-banner{background:var(--wine)!important;color:#FFFFFF!important}
@@ -1620,11 +1620,6 @@ body[data-theme^='sky-view'] .dashboard-frame::before {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: none;
-}
-
-body[data-theme^='sky-view'] .dashboard-frame::after {
-  content: none !important;
-  display: none !important;
 }
 
 body[data-theme^='sky-view'] .ar-header,
