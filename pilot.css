@@ -1594,7 +1594,6 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button:focus-visible {
 
 /* Sleek dashboard frame refinement: soft Sky View glass with rounded controls. */
 body[data-theme^='sky-view'] .dashboard-frame {
-  --dashboard-frame-content-start: 150px;
   position: relative;
   isolation: isolate;
   overflow: visible;
@@ -1611,7 +1610,7 @@ body[data-theme^='sky-view'] .dashboard-frame::before {
   content: '';
   position: absolute;
   z-index: -1;
-  top: var(--dashboard-frame-content-start);
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
@@ -1628,11 +1627,7 @@ body[data-theme^='sky-view'] .dashboard-frame::after {
   display: none !important;
 }
 
-body[data-theme^='sky-view'] .dashboard-frame:has(> .demo-banner:not([hidden])) {
-  --dashboard-frame-content-start: 192px;
-}
-
-body[data-theme^='sky-view'] .dashboard-frame > .ar-header,
+body[data-theme^='sky-view'] .ar-header,
 body[data-theme^='sky-view'] .dashboard-frame > .jazz-command-bar,
 body[data-theme^='sky-view'] .dashboard-frame > .agent-dashboard-bar {
   border-radius: 12px !important;
@@ -1646,17 +1641,4 @@ body[data-theme^='sky-view'] .dashboard-frame .dashboard-secondary-actions > but
 body[data-theme^='sky-view'] .dashboard-frame .agent-dashboard-bar button {
   border-radius: 8px !important;
 }
-
-@media (max-width: 760px) {
-  body[data-theme^='sky-view'] .dashboard-frame {
-    --dashboard-frame-content-start: 138px;
-  }
-
-  body[data-theme^='sky-view'] .dashboard-frame:has(> .demo-banner:not([hidden])) {
-    --dashboard-frame-content-start: 180px;
-  }
-}
-
-
-
 
