@@ -1637,3 +1637,16 @@ body[data-theme^='sky-view'] .dashboard-frame .agent-dashboard-bar button {
   border-radius: 8px !important;
 }
 
+body[data-theme^='sky-view'] .ar-header,
+body[data-theme^='sky-view'] .dashboard-frame {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1400px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+body[data-theme^='sky-view'] .ar-header {
+  background: rgba(45, 90, 150, 0.35) !important;
+}
+
