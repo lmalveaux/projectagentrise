@@ -917,10 +917,39 @@ body[data-theme^="sky-view"] #settingsButton{
   background: #C9A227;
   box-shadow: 0 0 0 3px rgba(201,162,39,.2);
 }
+.ask-ai-status-light[data-state="speaking"] {
+  background: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.2),0 0 9px rgba(59,130,246,.55);
+}
 .ask-ai-body {
   padding: 0 12px 12px;
   border-top: 1px solid rgba(92,64,51,.2);
 }
+.ask-ai-settings-control {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  padding-top: 6px;
+}
+.ask-ai-settings-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(92,64,51,.3);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.ask-ai-settings-panel {
+  padding: 6px 8px;
+  border: 1px solid rgba(92,64,51,.2);
+  border-radius: 6px;
+  background: rgba(245,241,234,.88);
+}
+.ask-ai-settings-panel[hidden] { display: none; }
 .ask-ai-surface form {
   display: grid;
   width: 100%;
@@ -997,6 +1026,17 @@ body[data-theme^="sky-view"] #settingsButton{
 .ask-ai-response-actions .button {
   min-height: 40px;
   padding: 6px 10px !important;
+}
+.ask-ai-response-actions .ask-ai-save {
+  border: 1px solid #1E2B52 !important;
+  background: #2F3A6B !important;
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+.ask-ai-response audio[controls] {
+  display: block;
+  width: 100%;
+  min-height: 40px;
 }
 .agent-notes-mode-tabs {
   display: grid;
