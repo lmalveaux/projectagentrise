@@ -428,22 +428,32 @@ async function saveAskGptPause(event){
 }
 function resetAskGptAudio(surface){
   if(!surface)return;
-  const audio=surface.querySelector('[data-ask-gpt-audio]');
-  if(audio){audio.pause();audio.removeAttribute('src');audio.removeAttribute('controls');audio.load();audio.hidden=true;}
+  const fallbackAudio=surface.querySelector('[data-ask-gpt-audio]');
+  if(surface._askGptAudio){surface._askGptAudio.pause();surface._askGptAudio.removeAttribute('src');surface._askGptAudio.load();surface._askGptAudio=null;}
+  if(fallbackAudio){fallbackAudio.pause();fallbackAudio.removeAttribute('src');fallbackAudio.removeAttribute('controls');fallbackAudio.load();fallbackAudio.hidden=true;}
   if(surface._askGptAudioUrl)URL.revokeObjectURL(surface._askGptAudioUrl);
   surface._askGptAudioUrl='';surface._askGptAudioResponse='';
 }
 async function playAskGptAudio(surface){
-  const audio=surface?.querySelector('[data-ask-gpt-audio]'),status=surface?.querySelector('[data-ask-gpt-status]'),text=String(surface?._lastAskGpt?.response||'').trim();
-  if(!surface||!audio||!status||!text)return;
+  const fallbackAudio=surface?.querySelector('[data-ask-gpt-audio]'),status=surface?.querySelector('[data-ask-gpt-status]'),text=String(surface?._lastAskGpt?.response||'').trim();
+  if(!surface||!fallbackAudio||!status||!text)return;
   status.textContent='Preparing voice response…';
   try{
     const client=await ensureClient(),{data,error}=await client.auth.getSession();
     if(error||!data.session)throw error||Error('Sign in again to play audio.');
+    console.log('[Agent Rise AI voice] Sending text to generate-medicare-minute:',text);
     const response=await fetch(`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,publish:false})});
-    if(!response.ok){let message=`Audio request failed (${response.status}).`;try{message=(await response.json()).error||message;}catch{}throw Error(message);}
-    const blob=await response.blob();resetAskGptAudio(surface);surface._askGptAudioUrl=URL.createObjectURL(blob);surface._askGptAudioResponse=text;audio.src=surface._askGptAudioUrl;audio.onplaying=()=>{setAskGptState(surface,'speaking');status.textContent='Speaking…';};audio.onended=()=>{setAskGptState(surface,'idle');status.textContent='Response complete.';};audio.onerror=()=>{setAskGptState(surface,'idle');status.textContent='Audio playback is unavailable right now.';};setAskGptState(surface,'speaking');status.textContent='Speaking…';await audio.play();
-  }catch(error){setAskGptState(surface,'idle');if(surface._askGptAudioUrl){audio.hidden=false;audio.setAttribute('controls','');}status.textContent=error.name==='NotAllowedError'?'Audio is ready. Tap play to hear the response.':error.message||'Audio playback is unavailable right now.';}
+    if(!response.ok){const errorText=await response.text();console.error('[Agent Rise AI voice] generate-medicare-minute failed:',response.status,errorText);let message=`Audio request failed (${response.status}).`;try{message=JSON.parse(errorText).error||message;}catch{if(errorText)message=`${message} ${errorText.slice(0,300)}`;}throw Error(message);}
+    const blob=await response.blob();
+    if(!blob.size)throw Error('Voice generation returned an empty audio file.');
+    console.log('[Agent Rise AI voice] Audio blob received:',{type:blob.type,size:blob.size});
+    resetAskGptAudio(surface);surface._askGptAudioUrl=URL.createObjectURL(blob);surface._askGptAudioResponse=text;
+    const audio=new Audio(surface._askGptAudioUrl);surface._askGptAudio=audio;audio.preload='auto';
+    audio.onplaying=()=>{setAskGptState(surface,'speaking');status.textContent='Speaking…';};
+    audio.onended=()=>{setAskGptState(surface,'idle');status.textContent='Response complete.';};
+    audio.onerror=()=>{console.error('[Agent Rise AI voice] Audio object playback failed.',audio.error);setAskGptState(surface,'idle');status.textContent='Audio playback is unavailable right now.';};
+    setAskGptState(surface,'speaking');status.textContent='Speaking…';await audio.play();
+  }catch(error){console.error('[Agent Rise AI voice] Playback pipeline failed:',error);setAskGptState(surface,'idle');if(surface._askGptAudioUrl){fallbackAudio.src=surface._askGptAudioUrl;fallbackAudio.hidden=false;fallbackAudio.setAttribute('controls','');}status.textContent=error.name==='NotAllowedError'?'Audio is ready. Tap play to hear the response.':error.message||'Audio playback is unavailable right now.';}
 }
 async function saveAskGptToNotes(button){
   const surface=button.closest('.ask-ai-surface'),status=surface?.querySelector('[data-ask-gpt-status]'),entry=surface?._lastAskGpt;
