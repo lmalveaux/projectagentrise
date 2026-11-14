@@ -1365,6 +1365,22 @@ body[data-theme^='sky-view'] .ar-header {
   overflow: hidden;
 }
 
+.jazz-avatar-inline,
+.fresh-jazz-avatar {
+  box-sizing: border-box;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid #C9A227;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.fresh-jazz-button {
+  gap: 7px;
+}
+
 .jazz-command-field {
   min-width: 0;
 }
