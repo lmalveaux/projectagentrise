@@ -458,8 +458,8 @@ async function playAskGptAudio(surface){
     audio.onplaying=()=>{setAskGptState(surface,'speaking');status.textContent='Speaking…';};
     audio.onended=()=>{setAskGptState(surface,'idle');status.textContent='Response complete.';};
     audio.onerror=()=>{console.error('[Agent Rise AI voice] Audio object playback failed.',audio.error);setAskGptState(surface,'idle');status.textContent='Audio playback is unavailable right now.';};
-    setAskGptState(surface,'speaking');status.textContent='Speaking…';await audio.play();
-  }catch(error){console.error('[Agent Rise AI voice] Playback pipeline failed:',error);setAskGptState(surface,'idle');if(surface._askGptAudioUrl){fallbackAudio.src=surface._askGptAudioUrl;fallbackAudio.hidden=false;fallbackAudio.setAttribute('controls','');}status.textContent=error.name==='NotAllowedError'?'Audio is ready. Tap play to hear the response.':error.message||'Audio playback is unavailable right now.';}
+    setAskGptState(surface,'speaking');status.textContent='Speaking…';await audio.play();return true;
+  }catch(error){console.error('[Agent Rise AI voice] Playback pipeline failed:',error);setAskGptState(surface,'idle');if(surface._askGptAudioUrl){fallbackAudio.src=surface._askGptAudioUrl;fallbackAudio.hidden=false;fallbackAudio.setAttribute('controls','');}status.textContent=error.name==='NotAllowedError'?'Audio is ready. Tap play to hear the response.':error.message||'Audio playback is unavailable right now.';return false;}
 }
 async function saveAskGptToNotes(button){
   const surface=button.closest('.ask-ai-surface'),status=surface?.querySelector('[data-ask-gpt-status]'),entry=surface?._lastAskGpt;
@@ -485,26 +485,26 @@ async function submitDashboardJazzQuery(value){
   const input=$('jazzCommandInput'),surface=$('agentNotesAskGptDetails');
   const query=String(value??input?.value??'').trim();
   if(!input||!query)return input?.focus();
-  if(premiumGate())return;
+  if(!(hasPremiumAccess()||isAdminAccount()||isOwner(pilot.user?.email))&&premiumGate())return;
   if(!surface){notify('Jazz is temporarily unavailable.',true);return;}
   const status=surface.querySelector('[data-ask-gpt-status]'),responsePanel=surface.querySelector('[data-ask-gpt-response-panel]'),responseText=surface.querySelector('[data-ask-gpt-response]');
   if(!status||!responsePanel||!responseText)return notify('Jazz is temporarily unavailable.',true);
   input.disabled=true;input.value='';input.placeholder='Jazz is thinking…';setAskGptState(surface,'thinking');status.textContent='Thinking…';
   try{
     const response=await askGPT(query);
-    surface._lastAskGpt={question:query,response};responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';await playAskGptAudio(surface);
+    surface._lastAskGpt={question:query,response};responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';const played=await playAskGptAudio(surface);if(!played&&'speechSynthesis' in window){window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(response);utterance.onstart=()=>setJazzAvatarSpeaking(true);utterance.onend=utterance.onerror=()=>setJazzAvatarSpeaking(false);window.speechSynthesis.speak(utterance);}
   }catch(error){setAskGptState(surface,'idle');notify(error.message||'Jazz is temporarily unavailable.',true);}
   finally{input.disabled=false;input.placeholder='Ask or tell Jazz';input.focus();}
 }
 async function captureDashboardJazzQuestion(){
   const button=$('jazzCommandMic'),input=$('jazzCommandInput');
   if(!button||!input)return;
-  if(premiumGate())return;
+  if(!(hasPremiumAccess()||isAdminAccount()||isOwner(pilot.user?.email))&&premiumGate())return;
   if(activeVoiceCapture){stopVoiceInput();return;}
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
   button.setAttribute('aria-pressed','true');button.textContent='■';input.placeholder='Listening…';
   try{
-    const transcript=await captureVoiceInput({silenceMs:pause*1000,onTranscript:value=>{if(value)input.value=value;}});
+    const transcript=await captureVoiceInput({silenceMs:pause*1000,onListeningChange:listening=>{input.placeholder=listening?'Listening…':'Ask or tell Jazz';},onTranscript:value=>{if(value)input.value=value;}});
     if(transcript){input.value=transcript;await submitDashboardJazzQuery(transcript);}else input.placeholder='Ask or tell Jazz';
   }catch(error){notify(error.message||'Speech-to-text is unavailable right now.',true);input.placeholder='Ask or tell Jazz';}
   finally{button.setAttribute('aria-pressed','false');button.textContent='🎙';}

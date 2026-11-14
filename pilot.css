@@ -1346,6 +1346,20 @@ body[data-theme^='sky-view'] .ar-header {
   text-transform: uppercase;
 }
 
+.jazz-command-name {
+  display: grid;
+  gap: 1px;
+  line-height: 1;
+}
+
+.jazz-command-name small {
+  color: rgba(245, 241, 234, .82);
+  font-size: .62rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
 .jazz-command-mark {
   display: grid;
   width: 32px;
@@ -1561,7 +1575,7 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button:focus-visible {
     padding: 8px 10px;
   }
 
-  .jazz-command-identity strong {
+  .jazz-command-name {
     display: none;
   }
 
