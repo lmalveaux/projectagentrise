@@ -481,6 +481,34 @@ async function captureAskGptQuestion(button){
   catch(error){status.textContent=error.message||'Speech-to-text is unavailable right now.';}
   finally{button.setAttribute('aria-pressed','false');button.textContent='🎙';if(surface.dataset.aiState!=='thinking')setAskGptState(surface,'idle');}
 }
+async function submitDashboardJazzQuery(value){
+  const input=$('jazzCommandInput'),surface=$('agentNotesAskGptDetails');
+  const query=String(value??input?.value??'').trim();
+  if(!input||!query)return input?.focus();
+  if(premiumGate())return;
+  if(!surface){notify('Jazz is temporarily unavailable.',true);return;}
+  const status=surface.querySelector('[data-ask-gpt-status]'),responsePanel=surface.querySelector('[data-ask-gpt-response-panel]'),responseText=surface.querySelector('[data-ask-gpt-response]');
+  if(!status||!responsePanel||!responseText)return notify('Jazz is temporarily unavailable.',true);
+  input.disabled=true;input.value='';input.placeholder='Jazz is thinking…';setAskGptState(surface,'thinking');status.textContent='Thinking…';
+  try{
+    const response=await askGPT(query);
+    surface._lastAskGpt={question:query,response};responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';await playAskGptAudio(surface);
+  }catch(error){setAskGptState(surface,'idle');notify(error.message||'Jazz is temporarily unavailable.',true);}
+  finally{input.disabled=false;input.placeholder='Ask or tell Jazz';input.focus();}
+}
+async function captureDashboardJazzQuestion(){
+  const button=$('jazzCommandMic'),input=$('jazzCommandInput');
+  if(!button||!input)return;
+  if(premiumGate())return;
+  if(activeVoiceCapture){stopVoiceInput();return;}
+  const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
+  button.setAttribute('aria-pressed','true');button.textContent='■';input.placeholder='Listening…';
+  try{
+    const transcript=await captureVoiceInput({silenceMs:pause*1000,onTranscript:value=>{if(value)input.value=value;}});
+    if(transcript){input.value=transcript;await submitDashboardJazzQuery(transcript);}else input.placeholder='Ask or tell Jazz';
+  }catch(error){notify(error.message||'Speech-to-text is unavailable right now.',true);input.placeholder='Ask or tell Jazz';}
+  finally{button.setAttribute('aria-pressed','false');button.textContent='🎙';}
+}
 const passwordChecks={length:value=>value.length>=12,upper:value=>/[A-Z]/.test(value),lower:value=>/[a-z]/.test(value),number:value=>/\d/.test(value),symbol:value=>/[!@#$%^&*]/.test(value)};
 function validPassword(value){return Object.values(passwordChecks).every(check=>check(value));}
 function updatePasswordRules(input,scope){const value=input.value;document.querySelectorAll(`[data-password-rules="${scope}"] [data-rule]`).forEach(item=>item.classList.toggle('is-valid',passwordChecks[item.dataset.rule](value)));}
@@ -1071,6 +1099,8 @@ function bindPilot(){
   bindAuthenticationControls();
   installDemoWriteGuard();
   initFreshPourMusic();
+  $('jazzCommandInput').onkeydown=event=>{if(event.key==='Enter'&&!event.isComposing){event.preventDefault();submitDashboardJazzQuery(event.currentTarget.value);}};
+  guardClick($('jazzCommandMic')).onclick=captureDashboardJazzQuestion;
   document.addEventListener('click',event=>{const control=event.target.closest(DOWNLOAD_CONTROL_SELECTOR);if(!control||hasDownloadAccess())return;event.preventDefault();event.stopImmediatePropagation();requestDownloadAccess();},true);
   document.addEventListener('click',event=>{const locked=event.target.closest('[data-premium-locked="true"]');if(!locked)return;event.preventDefault();event.stopImmediatePropagation();if(locked.id==='marketingButton'){notify('This is a Pro feature. Upgrade to unlock.');return;}premiumGate();},true);
   document.addEventListener('click',event=>{if(!event.target.closest('[data-blueprint-signin]'))return;event.preventDefault();premiumGate();});

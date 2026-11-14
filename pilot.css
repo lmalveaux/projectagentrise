@@ -1365,8 +1365,7 @@ body[data-theme^='sky-view'] .ar-header {
   overflow: hidden;
 }
 
-.jazz-avatar-inline,
-.fresh-jazz-avatar {
+.jazz-avatar-inline {
   box-sizing: border-box;
   width: 32px;
   min-width: 32px;
@@ -1375,10 +1374,6 @@ body[data-theme^='sky-view'] .ar-header {
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
-}
-
-.fresh-jazz-button {
-  gap: 7px;
 }
 
 .jazz-command-field {
