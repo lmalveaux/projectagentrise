@@ -1738,3 +1738,67 @@ body.notifications-open { overflow: hidden; }
     max-height: calc(100vh - 24px) !important;
   }
 }
+
+/* Installed/mobile browsers may expose a desktop layout viewport. Keep the dashboard phone-native. */
+@media (max-width: 760px), (max-device-width: 760px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body[data-theme^='sky-view'] .app {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 8px !important;
+  }
+
+  body[data-theme^='sky-view'] .ar-header,
+  body[data-theme^='sky-view'] .dashboard-frame {
+    box-sizing: border-box;
+    width: calc(100% - 4px) !important;
+    max-width: none !important;
+    margin: 4px auto !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-frame {
+    padding: 10px !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-frame > .jazz-command-bar {
+    grid-template-columns: 32px minmax(0, 1fr) 42px !important;
+    gap: 8px !important;
+    min-width: 0;
+    padding: 8px 10px !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-main-actions,
+  body[data-theme^='sky-view'] .dashboard-secondary-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-main-actions > button,
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap,
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap > button,
+  body[data-theme^='sky-view'] .dashboard-secondary-actions > button {
+    box-sizing: border-box;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    padding: 6px 8px !important;
+    white-space: normal !important;
+  }
+
+  body[data-theme^='sky-view'] .agent-dashboard-bar {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+}
