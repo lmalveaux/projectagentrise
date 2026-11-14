@@ -572,7 +572,11 @@ body[data-theme="plain-light"] .breakroom-panel,body[data-theme="sky-view-day"] 
 .fresh-brief-actions{display:flex;justify-content:flex-end}.fresh-brief-actions .button,.fresh-brief-get-up{min-height:44px}.fresh-brief-get-up{justify-self:end}.fresh-brief-panel h2{margin-top:0}
 .agent-notes-shell[hidden]{display:none!important}
 .notifications-menu,#notificationsMenu{z-index:9999!important}
-.notification-dot.has-new{background:#35c96f!important;box-shadow:0 0 0 3px rgba(53,201,111,.24),0 0 10px rgba(53,201,111,.72)}
+.notification-dot{width:10px;height:10px;background:#3B82F6;transition:background-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.notification-dot.has-new,.notification-dot[data-status="new"]{background:#35C96F!important}
+.notification-dot.is-urgent,.notification-dot[data-status="urgent"]{background:#D64545!important}
+.notification-dot.is-read,.notification-dot[data-status="read"]{background:#3B82F6!important;box-shadow:none}
+.notification-dot.is-waiting{box-shadow:0 0 0 3px rgba(245,241,234,.24),0 0 12px currentColor;transform:scale(1.08)}
 body.is-signed-in .pilot-status{background:transparent!important;border:1px solid #C9A227!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:var(--theme-text)!important}
 .profile-choice,.agent-notes-profile{display:flex;align-items:center;gap:12px}.profile-choice{padding:10px 0}.profile-choice p{margin:3px 0}
 .account-menu-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}.account-menu-head>button{width:auto;height:auto;min-height:44px;padding:8px 10px;border-radius:8px;font-weight:800;cursor:pointer}.account-menu-head .account-menu-signout{border-color:#9F1D2D;background:rgba(159,29,45,.1);color:#9F1D2D}.account-menu-head .account-settings-title{justify-self:stretch;border-color:var(--gold);background:var(--surface);color:var(--cream)}.account-menu-head .account-menu-exit{border-color:#2F3A6B;background:#2F3A6B;color:#F5F1EA}.account-menu-bottom-exit{width:100%;margin-top:18px}.plan-tiles span{display:grid;place-items:center;min-height:48px;padding:10px;border:1px solid currentColor;border-radius:10px;font-weight:800;cursor:default}.fresh-brief-links a{cursor:pointer}
@@ -1344,14 +1348,20 @@ body[data-theme^='sky-view'] .ar-header {
 
 .jazz-command-mark {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
   place-items: center;
-  border: 1px solid rgba(201, 162, 39, .75);
+  border: 1px solid #C9A227;
   border-radius: 50%;
   background: rgba(12, 30, 43, .62);
+  background-position: center;
+  background-size: cover;
   color: #C9A227;
-  font-size: 1.15rem;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .03em;
+  overflow: hidden;
 }
 
 .jazz-command-field {
@@ -1544,8 +1554,8 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button:focus-visible {
   }
 
   .jazz-command-mark {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   body[data-theme^='sky-view'] .dashboard-main-actions,
@@ -1681,4 +1691,3 @@ body.notifications-open { overflow: hidden; }
     max-height: calc(100vh - 24px) !important;
   }
 }
-
