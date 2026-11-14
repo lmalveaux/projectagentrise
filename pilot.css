@@ -1353,7 +1353,7 @@ body[data-theme^='sky-view'] .ar-header {
   height: 32px;
   place-items: center;
   border: 1px solid #C9A227;
-  border-radius: 8px;
+  border-radius: 50%;
   background: rgba(12, 30, 43, .62);
   background-position: center;
   background-size: cover;
