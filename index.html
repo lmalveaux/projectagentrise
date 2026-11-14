@@ -1371,7 +1371,7 @@ body[data-theme^="sky-view"] .topbar .date {
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout106" />
+    <link rel="stylesheet" href="pilot.css?v=layout107" />
     <div id="marketingLanding" class="marketing-landing" hidden>
       <section class="marketing-hero" aria-labelledby="marketingHeroTitle">
         <div class="marketing-hero-content">
@@ -1480,16 +1480,13 @@ body[data-theme^="sky-view"] .topbar .date {
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
-      <nav class="dashboard-secondary-actions premium-actions" aria-label="Premium workspace tools">
-        <button type="button" id="marketingButton">Marketing <span class="tier-star gold-star" title="Premium">★</span></button>
-        <button type="button" id="bookBusinessButton">Book of Business <span class="tier-star gold-star" title="Premium">★</span></button>
-        <button type="button" data-coming-soon="Agent Rise GPT">GPT <span class="tier-star gold-star" title="Premium">★</span></button>
-        <button type="button" id="agencyButton" class="locked-control">Agency <span class="tier-star gold-star" title="Premium">★</span></button>
+      <nav class="dashboard-secondary-actions" aria-label="Additional workspace tools">
         <button type="button" id="learningLibraryButton">Library</button>
         <button type="button" id="medicareComparisonButton">Medicare Comparison</button>
+        <button type="button" class="dashboard-notes-button" id="dashboardAgentNotesButton">Agent Notes</button>
       </nav>
       <div class="gold-dashboard-divider" aria-hidden="true"></div>
-      <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary dashboard-notes-button" type="button" id="dashboardAgentNotesButton" title="Agent Notes" aria-label="Open Agent Notes">📝 <span>Agent Notes</span></button><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
+      <section class="agent-dashboard-bar" aria-label="Agent Dashboard controls"><strong>Agent Dashboard</strong><div><button class="button button-secondary" type="button" id="importExportButton">Import / Export</button><button class="button button-primary" type="button" id="clientJourneyToggle" aria-expanded="false">Open Client Journey</button></div></section>
       </div>
       <section id="prospectsWorkspace" class="prospects-workspace" hidden>
         <div class="prospects-actions prospects-actions-top"><button class="button button-primary" id="prospectsSaveTop" type="button">Save</button><button class="button button-secondary" id="prospectsExitTop" type="button">Exit</button></div>

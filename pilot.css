@@ -1491,6 +1491,10 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions {
   background: transparent !important;
 }
 
+body[data-theme^='sky-view'] .dashboard-secondary-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
 body[data-theme^='sky-view'] .dashboard-main-actions > button,
 body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap,
 body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap > button,
@@ -1881,5 +1885,37 @@ body.notifications-open { overflow: hidden; }
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
+  }
+}
+
+/* The Notifications grid wrapper is structural only; its child is the visible tab. */
+body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap > #notificationsButton {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 760px), (max-device-width: 760px) {
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap,
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap > #notificationsButton {
+    height: 44px !important;
+    min-height: 44px !important;
   }
 }
