@@ -1361,6 +1361,7 @@ body[data-theme^='sky-view'] .ar-header {
   font-size: .72rem;
   font-weight: 900;
   letter-spacing: .03em;
+  object-fit: cover;
   overflow: hidden;
 }
 
