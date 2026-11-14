@@ -1353,7 +1353,7 @@ body[data-theme^='sky-view'] .ar-header {
   height: 32px;
   place-items: center;
   border: 1px solid #C9A227;
-  border-radius: 50%;
+  border-radius: 8px;
   background: rgba(12, 30, 43, .62);
   background-position: center;
   background-size: cover;
@@ -1585,6 +1585,41 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions button:focus-visible {
     min-height: 44px !important;
     padding: 6px 8px !important;
     font-size: .76rem !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .ar-header,
+  .jazz-command-bar {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+  }
+
+  .jazz-command-bar {
+    grid-template-columns: 32px minmax(0, 1fr) 42px;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-main-actions,
+  body[data-theme^='sky-view'] .dashboard-secondary-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-main-actions > button,
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap,
+  body[data-theme^='sky-view'] .dashboard-secondary-actions > button {
+    flex: 1 1 30% !important;
+    min-width: 100px !important;
+    white-space: normal !important;
+  }
+
+  body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap > button {
+    width: 100% !important;
+    min-width: 100px !important;
+    white-space: normal !important;
   }
 }
 
