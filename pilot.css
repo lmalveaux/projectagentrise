@@ -1650,4 +1650,35 @@ body[data-theme^='sky-view'] .ar-header {
   background: rgba(45, 90, 150, 0.2) !important;
   border-color: var(--soft-gold) !important;
 }
+/* Notifications are portaled to the document body so dashboard glass layers cannot cover them. */
+.notifications-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 199990;
+  background: rgba(10, 12, 16, .58);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.notifications-overlay[hidden] { display: none !important; }
+body.notifications-open { overflow: hidden; }
+#notificationsMenu.notifications-center {
+  position: fixed !important;
+  z-index: 200000 !important;
+  top: max(24px, 7vh) !important;
+  right: max(12px, calc((100vw - min(560px, calc(100vw - 24px))) / 2)) !important;
+  left: auto !important;
+  width: min(560px, calc(100vw - 24px)) !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+@media (max-width: 620px) {
+  #notificationsMenu.notifications-center {
+    top: 12px !important;
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+    max-height: calc(100vh - 24px) !important;
+  }
+}
 
