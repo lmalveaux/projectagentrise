@@ -1315,6 +1315,42 @@ body[data-theme^='sky-view'] .ar-header {
   letter-spacing: .01em;
 }
 
+.jazz-quick-questions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 0 2px 4px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.jazz-quick-questions[hidden] {
+  display: none !important;
+}
+
+.jazz-quick-questions button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid rgba(201, 162, 39, .58);
+  border-radius: 999px;
+  background: rgba(45, 90, 150, .34);
+  color: #F5F1EA;
+  font: 700 .76rem/1.15 var(--arp-body-font);
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.jazz-quick-questions button:hover,
+.jazz-quick-questions button:focus-visible {
+  background: rgba(45, 90, 150, .54);
+  border-color: rgba(245, 241, 234, .68);
+}
+
 .jazz-command-bar {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1414,11 +1450,30 @@ body[data-theme^='sky-view'] .ar-header {
   padding: 0;
   border: 1px solid rgba(245, 241, 234, .48);
   border-radius: 50%;
-  background: rgba(11, 40, 57, .72);
+  background: #2563EB;
   color: #F5F1EA;
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
+}
+
+.jazz-command-mic[data-mic-state='idle'] {
+  background: #2563EB;
+}
+
+.jazz-command-mic[data-mic-state='recording'] {
+  background: #C62828;
+  animation: jazz-mic-recording 1.5s ease-in-out infinite;
+}
+
+.jazz-command-mic[data-mic-state='thinking'] {
+  background: #198754;
+  animation: none;
+}
+
+@keyframes jazz-mic-recording {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .48; }
 }
 
 body[data-theme^='sky-view'] .dashboard-main-actions,
@@ -1728,6 +1783,32 @@ body.notifications-open { overflow: hidden; }
   max-height: 85vh !important;
   overflow-y: auto !important;
   overscroll-behavior: contain;
+}
+.notifications-panel-head {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px -4px 10px;
+  padding: 4px 4px 10px;
+  background: inherit;
+}
+.notifications-panel-head > button {
+  display: grid;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(245, 241, 234, .48);
+  border-radius: 50%;
+  background: rgba(10, 12, 16, .42);
+  color: #F5F1EA;
+  font: 700 1.35rem/1 var(--arp-body-font);
+  cursor: pointer;
 }
 @media (max-width: 620px) {
   #notificationsMenu.notifications-center {

@@ -1371,7 +1371,7 @@ body[data-theme^="sky-view"] .topbar .date {
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout105" />
+    <link rel="stylesheet" href="pilot.css?v=layout106" />
     <div id="marketingLanding" class="marketing-landing" hidden>
       <section class="marketing-hero" aria-labelledby="marketingHeroTitle">
         <div class="marketing-hero-content">
@@ -1459,10 +1459,16 @@ body[data-theme^="sky-view"] .topbar .date {
       </div>
 
       <div class="dashboard-frame">
+      <nav class="jazz-quick-questions" id="jazzQuickQuestions" aria-label="Quick questions">
+        <button type="button" data-jazz-question="Draft a professional follow-up email for a Medicare prospect.">Draft an email</button>
+        <button type="button" data-jazz-question="What is my next follow-up?">What is my next follow-up?</button>
+        <button type="button" data-jazz-question="Help me prioritize today's work.">Prioritize my day</button>
+        <button type="button" data-jazz-question="Help me prepare for my next client call.">Prepare for a client call</button>
+      </nav>
       <section class="jazz-command-bar" aria-label="Jazz assistant">
         <div class="jazz-command-identity"><img class="jazz-command-mark" id="jazzAvatar" data-jazz-avatar src="assets/images/jazz-avatar-static.png" data-static-src="assets/images/jazz-avatar-static.png" data-animated-src="assets/images/jazz-avatar.gif" alt="Jazz assistant avatar" width="32" height="32" /><strong>Jazz</strong></div>
         <label class="jazz-command-field" for="jazzCommandInput"><span class="sr-only">Ask or tell Jazz</span><input id="jazzCommandInput" type="text" maxlength="4000" autocomplete="off" placeholder="Ask or tell Jazz" /></label>
-        <button class="jazz-command-mic" type="button" id="jazzCommandMic" aria-label="Speak to Jazz">🎙</button>
+        <button class="jazz-command-mic" type="button" id="jazzCommandMic" data-mic-state="idle" aria-label="Speak to Jazz">🎙</button>
       </section>
 
       <section class="dashboard-main-actions" aria-label="First line of business">
@@ -1470,7 +1476,7 @@ body[data-theme^="sky-view"] .topbar .date {
         <button type="button" id="carriersButton">Carriers</button>
         <button type="button" id="prospectsButton">Prospects</button>
         <button type="button" id="leadsButton">Leads</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><section class="notification-section" aria-labelledby="notificationBriefTitle"><h3 id="notificationBriefTitle">The 121 Brief</h3><div id="medicareMinuteNotification"></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><div class="notifications-panel-head"><strong>Notifications</strong><button type="button" id="closeNotificationsButton" aria-label="Close Notifications">×</button></div><section class="notification-section" aria-labelledby="notificationBriefTitle"><h3 id="notificationBriefTitle">The 121 Brief</h3><div id="medicareMinuteNotification"></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -4166,7 +4172,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout104" defer></script>
+    <script src="pilot.js?v=layout106" defer></script>
     <script src="medicare-minute.js?v=layout65" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
