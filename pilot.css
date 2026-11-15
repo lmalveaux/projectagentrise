@@ -734,12 +734,12 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 .marketing-jazz-intro{
   display:flex;
   align-items:center;
-  gap:16px;
-  width:min(650px,100%);
-  margin:0 0 26px;
-  padding:16px 20px;
+  gap:12px;
+  width:min(440px,100%);
+  margin:18px 0 0;
+  padding:10px 12px;
   border:1px solid rgba(245,241,234,.34);
-  border-radius:18px;
+  border-radius:12px;
   background:rgba(45,90,150,.22);
   box-shadow:0 16px 38px rgba(4,18,30,.22);
   backdrop-filter:blur(12px);
@@ -748,9 +748,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   text-align:left;
 }
 .marketing-jazz-intro img{
-  flex:0 0 72px;
-  width:72px;
-  height:72px;
+  flex:0 0 48px;
+  width:48px;
+  height:48px;
   border:1px solid rgba(201,162,39,.72);
   border-radius:50%;
   object-fit:cover;
@@ -760,21 +760,28 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   margin:0;
   color:#F5F1EA;
   font-family:var(--arp-heading-font);
-  font-size:clamp(1.25rem,2.3vw,1.8rem);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);
   font-weight:600;
   line-height:1.12;
 }
 .marketing-jazz-intro p{
-  margin:7px 0 0;
+  margin:4px 0 0;
   color:rgba(245,241,234,.82);
-  font-size:.9rem;
-  line-height:1.45;
+  font-size:.78rem;
+  line-height:1.35;
+}
+.marketing-ease{padding-bottom:42px}
+.marketing-deep-features{padding-top:42px}
+.marketing-ease .marketing-jazz-intro{
+  grid-column:1/-1;
+  grid-row:3;
+  justify-self:center;
 }
 @media(max-width:720px){
-  .marketing-jazz-intro{gap:12px;padding:13px 14px;border-radius:14px}
-  .marketing-jazz-intro img{flex-basis:58px;width:58px;height:58px}
-  .marketing-jazz-intro h2{font-size:1.18rem}
-  .marketing-jazz-intro p{font-size:.78rem}
+  .marketing-jazz-intro{gap:10px;padding:9px 10px}
+  .marketing-jazz-intro img{flex-basis:44px;width:44px;height:44px}
+  .marketing-jazz-intro h2{font-size:1.05rem}
+  .marketing-jazz-intro p{font-size:.72rem}
 }
 .marketing-subheadline{
   width:100%;
@@ -2005,4 +2012,5 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
     min-height: 44px !important;
   }
 }
+
 
