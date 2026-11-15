@@ -674,18 +674,18 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   align-items:center!important;
   justify-content:center!important;
   box-sizing:border-box!important;
-  width:78px!important;
-  min-width:78px!important;
-  height:36px!important;
-  min-height:36px!important;
+  width:62px!important;
+  min-width:62px!important;
+  height:30px!important;
+  min-height:30px!important;
   margin:0!important;
-  padding:4px 12px!important;
-  border:1px solid rgba(201,162,39,.82)!important;
+  padding:3px 8px!important;
+  border:1px solid rgba(201,162,39,.48)!important;
   border-radius:999px!important;
   background:rgba(25,31,35,.5)!important;
   color:#F5F1EA!important;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important;
-  font-size:13px!important;
+  font-size:11px!important;
   font-style:normal!important;
   font-weight:750!important;
   line-height:1!important;
@@ -696,6 +696,14 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   box-shadow:0 4px 14px rgba(0,0,0,.18)!important;
   backdrop-filter:blur(8px)!important;
   -webkit-backdrop-filter:blur(8px)!important;
+}
+.breakroom-top .fresh-pour-selector-row>.ambience-toggle{
+  width:56px!important;
+  min-width:56px!important;
+  height:26px!important;
+  min-height:26px!important;
+  padding:2px 6px!important;
+  font-size:9px!important;
 }
 .breakroom-top .fresh-pour-back:hover,
 .breakroom-top .fresh-pour-back:focus-visible,
@@ -709,17 +717,16 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   opacity:.58!important;
   cursor:not-allowed!important;
 }
-.breakroom-top .ambience-dot{flex:0 0 auto!important;margin:0 5px 0 0!important}
+.breakroom-top .ambience-dot{flex:0 0 6px!important;width:6px!important;height:6px!important;margin:0 3px 0 0!important}
 @media(max-width:420px){
   .breakroom-top{gap:6px!important}
   .breakroom-top .fresh-pour-selector-row{gap:6px!important}
   .breakroom-top .fresh-pour-back,
   .breakroom-top .fresh-pour-selector-row>.ambience-toggle{
-    width:70px!important;
-    min-width:70px!important;
-    padding:4px 8px!important;
-    font-size:12px!important;
+    padding:2px 5px!important;
   }
+  .breakroom-top .fresh-pour-back{width:58px!important;min-width:58px!important;font-size:10px!important}
+  .breakroom-top .fresh-pour-selector-row>.ambience-toggle{width:52px!important;min-width:52px!important;font-size:8.5px!important}
 }
 
 /* Landing polish: a contained hero and full-width alternating feature rows. */
@@ -1125,13 +1132,58 @@ body[data-theme^="sky-view"] #settingsButton{
   line-height: 1 !important;
 }
 .ask-ai-input-row .ask-ai-save {
-  min-width: 64px;
+  min-width: 96px;
   min-height: 44px;
   padding: 6px 10px !important;
   border: 1px solid #1E2B52 !important;
   background: #2F3A6B !important;
   color: #FFFFFF !important;
+  white-space: nowrap;
 }
+.brief-playback-toggle{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:fit-content;
+  min-height:36px;
+  font-size:.82rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.brief-playback-toggle input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+.brief-toggle-track{
+  display:inline-flex;
+  align-items:center;
+  width:38px;
+  height:20px;
+  padding:2px;
+  border:1px solid rgba(92,64,51,.34);
+  border-radius:999px;
+  background:rgba(92,64,51,.18);
+  box-sizing:border-box;
+  transition:background .18s ease,border-color .18s ease;
+}
+.brief-toggle-track span{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#F5F1EA;
+  box-shadow:0 1px 4px rgba(0,0,0,.28);
+  transition:transform .18s ease;
+}
+.brief-playback-toggle input:checked + .brief-toggle-track{
+  border-color:#2F3A6B;
+  background:#2F3A6B;
+}
+.brief-playback-toggle input:checked + .brief-toggle-track span{transform:translateX(17px)}
+.brief-playback-toggle input:focus-visible + .brief-toggle-track{outline:2px solid #C9A227;outline-offset:2px}
+.brief-toggle-state{min-width:22px;color:inherit;font-size:.72rem;opacity:.72}
 .ask-ai-input-row .ask-ai-save.is-saved {
   border-color: #1F3D2B !important;
   background: #1F3D2B !important;
@@ -2012,5 +2064,6 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
     min-height: 44px !important;
   }
 }
+
 
 
