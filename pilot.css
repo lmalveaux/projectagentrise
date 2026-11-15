@@ -897,6 +897,25 @@ body[data-theme^="sky-view"] #settingsButton{
   list-style: none;
 }
 .ask-ai-surface > summary::-webkit-details-marker { display: none; }
+.jazz-agent-name {
+  display: grid;
+  gap: 0;
+  line-height: 1;
+}
+.jazz-agent-name strong {
+  font-family: "Great Vibes","Segoe Script",cursive;
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1;
+}
+.jazz-agent-name small {
+  margin-top: 2px;
+  font-family: Inter,system-ui,sans-serif;
+  font-size: .52rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  opacity: .68;
+}
 .ask-ai-icon {
   display: inline-grid;
   place-items: center;
@@ -930,6 +949,16 @@ body[data-theme^="sky-view"] #settingsButton{
   min-width: 0;
   padding: 0 12px 12px;
   border-top: 1px solid rgba(92,64,51,.2);
+}
+.ask-ai-how-to {
+  margin: 8px 0 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(92,64,51,.16);
+  border-radius: 6px;
+  background: rgba(245,241,234,.24);
+  font-size: .72rem;
+  line-height: 1.35;
+  opacity: .8;
 }
 .ask-ai-panel-tools {
   display: flex;
@@ -987,7 +1016,7 @@ body[data-theme^="sky-view"] #settingsButton{
 }
 .ask-ai-input-row {
   display: grid;
-  grid-template-columns: minmax(0,1fr) 44px;
+  grid-template-columns: minmax(0,1fr) 44px auto;
   align-items: end;
   gap: 8px;
   width: 100%;
@@ -1042,6 +1071,18 @@ body[data-theme^="sky-view"] #settingsButton{
   align-self: end;
   font-size: 1rem !important;
   line-height: 1 !important;
+}
+.ask-ai-input-row .ask-ai-save {
+  min-width: 64px;
+  min-height: 44px;
+  padding: 6px 10px !important;
+  border: 1px solid #1E2B52 !important;
+  background: #2F3A6B !important;
+  color: #FFFFFF !important;
+}
+.ask-ai-input-row .ask-ai-save.is-saved {
+  border-color: #1F3D2B !important;
+  background: #1F3D2B !important;
 }
 .ask-ai-response {
   display: grid;
@@ -1919,3 +1960,4 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
     min-height: 44px !important;
   }
 }
+
