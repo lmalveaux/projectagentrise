@@ -450,9 +450,14 @@ async function playAskGptAudio(surface){
   try{
     const client=await ensureClient(),{data,error}=await client.auth.getSession();
     if(error||!data.session)throw error||Error('Sign in again to play audio.');
-    console.log('[Agent Rise AI voice] Sending text to generate-medicare-minute:',text);
-    const response=await fetch(`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,publish:false})});
-    if(!response.ok){const errorText=await response.text();console.error('[Agent Rise AI voice] generate-medicare-minute failed:',response.status,errorText);let message=`Audio request failed (${response.status}).`;try{message=JSON.parse(errorText).error||message;}catch{if(errorText)message=`${message} ${errorText.slice(0,300)}`;}throw Error(message);}
+    const audioEndpoint=`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/generate-medicare-minute`;
+    console.log('[Agent Rise AI voice] Fetch starting:',{endpoint:audioEndpoint,text,characterCount:text.length,publish:false});
+    let response;
+    try{
+      response=await fetch(audioEndpoint,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,publish:false})});
+      console.log('[Agent Rise AI voice] Fetch completed:',{ok:response.ok,status:response.status,statusText:response.statusText,contentType:response.headers.get('content-type')});
+    }catch(fetchError){console.error('[Agent Rise AI voice] Fetch threw an error:',fetchError);throw fetchError;}
+    if(!response.ok){const errorText=await response.text();console.error('[Agent Rise AI voice] generate-medicare-minute rejected the request:',{status:response.status,statusText:response.statusText,errorText});let message=`Audio request failed (${response.status}).`;try{message=JSON.parse(errorText).error||message;}catch{if(errorText)message=`${message} ${errorText.slice(0,300)}`;}throw Error(message);}
     const blob=await response.blob();
     if(!blob.size)throw Error('Voice generation returned an empty audio file.');
     console.log('[Agent Rise AI voice] Audio blob received:',{type:blob.type,size:blob.size});
