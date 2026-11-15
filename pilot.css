@@ -731,6 +731,51 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   overflow-wrap:normal;
 }
 .marketing-hero-content{font-family:var(--arp-body-font)}
+.marketing-jazz-intro{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  width:min(650px,100%);
+  margin:0 0 26px;
+  padding:16px 20px;
+  border:1px solid rgba(245,241,234,.34);
+  border-radius:18px;
+  background:rgba(45,90,150,.22);
+  box-shadow:0 16px 38px rgba(4,18,30,.22);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-sizing:border-box;
+  text-align:left;
+}
+.marketing-jazz-intro img{
+  flex:0 0 72px;
+  width:72px;
+  height:72px;
+  border:1px solid rgba(201,162,39,.72);
+  border-radius:50%;
+  object-fit:cover;
+  box-shadow:0 8px 22px rgba(0,0,0,.22);
+}
+.marketing-jazz-intro h2{
+  margin:0;
+  color:#F5F1EA;
+  font-family:var(--arp-heading-font);
+  font-size:clamp(1.25rem,2.3vw,1.8rem);
+  font-weight:600;
+  line-height:1.12;
+}
+.marketing-jazz-intro p{
+  margin:7px 0 0;
+  color:rgba(245,241,234,.82);
+  font-size:.9rem;
+  line-height:1.45;
+}
+@media(max-width:720px){
+  .marketing-jazz-intro{gap:12px;padding:13px 14px;border-radius:14px}
+  .marketing-jazz-intro img{flex-basis:58px;width:58px;height:58px}
+  .marketing-jazz-intro h2{font-size:1.18rem}
+  .marketing-jazz-intro p{font-size:.78rem}
+}
 .marketing-subheadline{
   width:100%;
   margin-inline:auto;
