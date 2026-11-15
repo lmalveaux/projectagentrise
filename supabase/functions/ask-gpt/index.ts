@@ -69,7 +69,7 @@ Deno.serve(async (request) => {
 
     const { data: recentHistory, error: historyError } = await admin
       .from("chat_history")
-      .select("role,content")
+      .select("role,content,created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(6);
@@ -77,7 +77,7 @@ Deno.serve(async (request) => {
 
     const historyMessages = (recentHistory ?? [])
       .slice()
-      .reverse()
+      .sort((left, right) => Date.parse(left.created_at) - Date.parse(right.created_at))
       .filter((message) => message.role === "user" || message.role === "assistant")
       .map((message) => ({ role: message.role, content: message.content }));
 
@@ -121,3 +121,4 @@ Deno.serve(async (request) => {
     return json({ error: "The A.I. Assistant is unavailable." }, 500, origin);
   }
 });
+
