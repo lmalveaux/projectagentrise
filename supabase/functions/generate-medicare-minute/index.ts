@@ -58,8 +58,9 @@ Deno.serve(async (request) => {
     if (!allowed) return json({ error: "Voice generation requires an active Pro subscription." }, 403);
 
     const body = await request.json();
-    const script = String(body?.text ?? body?.script ?? "").trim();
-    if (!script) return json({ error: "Text is required." }, 400);
+    const text = String(body?.text ?? body?.script ?? "").trim();
+    if (!text) return json({ error: "Text is required." }, 400);
+    const script = text;
     if (body?.publish === true && !adminResult.data) return json({ error: "Owner access is required to publish The 121 Brief." }, 403);
     if (script.length > ELEVENLABS_CHARACTER_LIMIT) {
       throw new Error(`Script exceeds ${ELEVENLABS_CHARACTER_LIMIT} character limit. Current length: ${script.length}`);
@@ -141,3 +142,4 @@ Deno.serve(async (request) => {
     return json({ error: error instanceof Error ? error.message : String(error) }, 500);
   }
 });
+
