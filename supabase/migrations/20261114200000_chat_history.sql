@@ -10,7 +10,8 @@ create index if not exists chat_history_user_created_at_idx
   on public.chat_history (user_id, created_at desc);
 
 alter table public.chat_history enable row level security;
-grant select, insert on public.chat_history to authenticated;
+revoke all on public.chat_history from anon, authenticated;
+grant select on public.chat_history to authenticated;
 
 drop policy if exists chat_history_read_own on public.chat_history;
 create policy chat_history_read_own on public.chat_history
@@ -18,6 +19,3 @@ create policy chat_history_read_own on public.chat_history
   using (user_id = auth.uid());
 
 drop policy if exists chat_history_insert_own on public.chat_history;
-create policy chat_history_insert_own on public.chat_history
-  for insert to authenticated
-  with check (user_id = auth.uid());
