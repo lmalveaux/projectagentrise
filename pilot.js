@@ -454,7 +454,7 @@ async function playAskGptAudio(surface){
     console.log('[Agent Rise AI voice] Fetch starting:',{endpoint:audioEndpoint,text,characterCount:text.length,publish:false});
     let response;
     try{
-      response=await fetch(audioEndpoint,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,publish:false})});
+      response=await fetch(audioEndpoint,{method:'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({text,script:text,publish:false})});
       console.log('[Agent Rise AI voice] Fetch completed:',{ok:response.ok,status:response.status,statusText:response.statusText,contentType:response.headers.get('content-type')});
     }catch(fetchError){console.error('[Agent Rise AI voice] Fetch threw an error:',fetchError);throw fetchError;}
     if(!response.ok){const errorText=await response.text();console.error('[Agent Rise AI voice] generate-medicare-minute rejected the request:',{status:response.status,statusText:response.statusText,errorText});let message=`Audio request failed (${response.status}).`;try{message=JSON.parse(errorText).error||message;}catch{if(errorText)message=`${message} ${errorText.slice(0,300)}`;}throw Error(message);}
@@ -1257,6 +1257,7 @@ if(config.supabaseUrl&&config.supabaseAnonKey){ensureClient().then(async db=>{co
 // with a $19.99 first-month trial CTA. Copy: "Time is running out. AEP is almost here.
 // Create your account now and be ready with Agent Rise Pro. First month $19.99."
 // Popup fires once per session. Dismissible. Links to the signup flow.
+
 
 
 
