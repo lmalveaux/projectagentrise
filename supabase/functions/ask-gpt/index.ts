@@ -67,6 +67,20 @@ Deno.serve(async (request) => {
     if (!query) return json({ error: "Enter a question for the A.I. Assistant." }, 400, origin);
     if (query.length > 4000) return json({ error: "Keep your question under 4,000 characters." }, 400, origin);
 
+    const { data: recentHistory, error: historyError } = await admin
+      .from("chat_history")
+      .select("role,content")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(6);
+    if (historyError) throw historyError;
+
+    const historyMessages = (recentHistory ?? [])
+      .slice()
+      .reverse()
+      .filter((message) => message.role === "user" || message.role === "assistant")
+      .map((message) => ({ role: message.role, content: message.content }));
+
     const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -77,6 +91,7 @@ Deno.serve(async (request) => {
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
+          ...historyMessages,
           { role: "user", content: query },
         ],
       }),
@@ -92,6 +107,13 @@ Deno.serve(async (request) => {
       ? openAIData.choices[0].message.content.trim()
       : "";
     if (!text) return json({ error: "The A.I. Assistant returned an empty response." }, 502, origin);
+
+    const exchangeCreatedAt = Date.now();
+    const { error: saveHistoryError } = await admin.from("chat_history").insert([
+      { user_id: user.id, role: "user", content: query, created_at: new Date(exchangeCreatedAt).toISOString() },
+      { user_id: user.id, role: "assistant", content: text, created_at: new Date(exchangeCreatedAt + 1).toISOString() },
+    ]);
+    if (saveHistoryError) throw saveHistoryError;
 
     return json({ text }, 200, origin);
   } catch (error) {
