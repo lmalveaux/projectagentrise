@@ -1574,16 +1574,17 @@ body[data-theme^='sky-view'] .ar-header {
 }
 
 .jazz-quick-questions-dashboard {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
+  gap: 12px;
   margin: 8px 0 0;
   padding: 0 2px 2px;
   overflow-x: visible;
 }
 
 .jazz-quick-questions-dashboard button {
-  flex: 1 1 180px;
-  max-width: 320px;
+  flex: 0 1 320px;
+  width: min(100%, 320px);
   min-height: 36px;
   background: rgba(45, 90, 150, .22);
   font-weight: 600;

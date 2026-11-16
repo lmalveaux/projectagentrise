@@ -137,12 +137,12 @@ function injectUI(){
   const jazzBar=document.querySelector('.jazz-command-bar'),quickQuestions=$('jazzQuickQuestions');
   if(jazzBar&&quickQuestions){
     const dashboardQuestions=[
-      'What carriers am I contracted with for Final Expense?',
+      'What final expense carriers are in JIT?',
       'What is on my calendar today?',
-      'How do I use the JIT library?'
+      'What news came through my RSS feed today?'
     ];
+    quickQuestions.replaceChildren();
     dashboardQuestions.forEach(question=>{
-      if(quickQuestions.querySelector(`[data-jazz-question="${question}"]`))return;
       const chip=document.createElement('button');
       chip.type='button';
       chip.dataset.jazzQuestion=question;
