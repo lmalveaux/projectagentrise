@@ -901,13 +901,21 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   padding:0;
   align-self:center;
 }
-.marketing-entrepreneur .marketing-section-inner{
+.marketing-business-intro{
   text-align:center;
+  margin-bottom:24px;
 }
-.marketing-entrepreneur h2,
-.marketing-entrepreneur .marketing-narrative-copy{
+.marketing-business-intro h2,
+.marketing-business-intro .marketing-narrative-copy{
   margin-left:auto;
   margin-right:auto;
+}
+.marketing-business-flow{
+  padding-top:48px;
+  padding-bottom:48px;
+}
+.marketing-business-flow #marketingFeaturesTitle{
+  margin-bottom:24px;
 }
 .marketing-deep-feature-list{
   gap:16.5px;
