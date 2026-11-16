@@ -1091,10 +1091,16 @@ body[data-theme^="sky-view"] #settingsButton{
   padding: 7px 9px;
   border: 1px solid rgba(92,64,51,.16);
   border-radius: 6px;
-  background: rgba(245,241,234,.24);
+  background: transparent;
   font-size: .72rem;
   line-height: 1.35;
-  opacity: .8;
+  opacity: 1;
+}
+.ask-ai-how-to .jazz-quick-questions button {
+  opacity: 1;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .ask-ai-panel-tools {
   display: flex;
@@ -2227,6 +2233,8 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
   font-size:.7rem;
   font-weight:700;
   white-space:nowrap;
+  transform:scale(.5);
+  transform-origin:right center;
 }
 .ask-ai-response-style select{
   min-height:34px;
