@@ -903,19 +903,23 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-business-intro{
   text-align:center;
-  margin-bottom:24px;
+  margin-bottom:14px;
 }
 .marketing-business-intro h2,
 .marketing-business-intro .marketing-narrative-copy{
   margin-left:auto;
   margin-right:auto;
 }
+.marketing-business-intro .marketing-narrative-copy{
+  font-size:clamp(.98rem,1.6vw,1.16rem);
+  line-height:1.65;
+}
 .marketing-business-flow{
-  padding-top:48px;
-  padding-bottom:48px;
+  padding-top:24px;
+  padding-bottom:24px;
 }
 .marketing-business-flow #marketingFeaturesTitle{
-  margin-bottom:24px;
+  margin-bottom:12px;
 }
 .marketing-deep-feature-list{
   gap:16.5px;
