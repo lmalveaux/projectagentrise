@@ -133,7 +133,7 @@ function injectUI(){
   elements.followUpQueue.insertAdjacentHTML('beforebegin','<section id="activityStrip" class="pilot-strip" aria-label="This week activity"></section>');
   (document.querySelector('.jazz-command-bar')||document.querySelector('.topbar'))?.insertAdjacentHTML('afterend','<section id="demoBanner" class="demo-banner" hidden><span>You\'re in demo mode — Sign in to save your work.</span><button class="auth-link" id="demoSignIn" type="button">Sign In</button></section>');
   document.body.insertAdjacentHTML('beforeend','<button id="demoFloatingSignIn" class="demo-floating-signin" type="button" hidden>Sign In to Save</button><footer id="pilotStatus" class="pilot-status" role="status"><span id="saveState">Not connected</span><a class="pilot-legal-link" href="/legal">Legal</a><button id="footerAccountAction" class="button button-secondary" type="button">Sign In</button></footer><aside id="rcPanel" class="pilot-rc" hidden><button id="hideRc" type="button" class="button button-secondary">Collapse phone</button><p id="rcStatus">RingCentral phone</p><div id="rcHost"></div></aside>');
-  const jazzField=document.querySelector('.jazz-command-field');if(jazzField&&!$('jazzResponseStyle'))jazzField.insertAdjacentHTML('afterend','<span class="jazz-inline-controls"><label class="jazz-context-toggle" for="jazzResponseStyle"><span>Contextual</span><input id="jazzResponseStyle" data-ask-gpt-style-toggle type="checkbox" role="switch" aria-label="Use contextual responses"><span class="jazz-context-track" aria-hidden="true"><span></span></span></label><button class="jazz-stop-button" id="jazzStopButton" data-ask-gpt-stop="dashboard" type="button" disabled aria-label="Stop Jazz response" title="Stop"><span aria-hidden="true">■</span></button></span>');
+  const jazzField=document.querySelector('.jazz-command-field');if(jazzField&&!$('jazzResponseStyle'))jazzField.insertAdjacentHTML('afterend','<span class="jazz-inline-controls"><label class="jazz-context-toggle" for="jazzResponseStyle"><span>Context</span><input id="jazzResponseStyle" data-ask-gpt-style-toggle type="checkbox" role="switch" aria-label="Use contextual responses"><span class="jazz-context-track" aria-hidden="true"><span></span></span></label><button class="jazz-stop-button" id="jazzStopButton" data-ask-gpt-stop="dashboard" type="button" disabled aria-label="Stop Jazz response" title="Stop"><span aria-hidden="true">■</span></button></span>');
   dialog('accountDialog','Agent Rise Pro',`<button class="auth-modal-close" id="closeAuthDialog" type="button" aria-label="Close sign in">×</button><p class="auth-subhead">Medicare Advantage Agent Operating System</p><div id="authSignIn" class="auth-view"><h3>Welcome back</h3><div id="accountState" class="pilot-notice"></div><form id="connectionForm">${field('loginEmail','Email','email')}${passwordField('loginPassword')}<button class="button button-primary" id="signInSubmit" type="submit">Sign In</button></form><button class="auth-link" id="magicLinkSignIn" type="button">Email me a sign-in link</button><button class="auth-link" id="showSignup" type="button">Create account</button><a class="auth-link" href="/legal">Legal</a><button class="auth-link" id="showForgot" type="button">Forgot password?</button></div><div id="authSignup" class="auth-view" hidden><h3>Create your account</h3><form id="signupForm">${field('signupEmail','Email','email')}${passwordField('signupPassword')}<ul class="password-rules" data-password-rules="signup"><li data-rule="length">✓ At least 12 characters</li><li data-rule="upper">✓ One uppercase letter</li><li data-rule="lower">✓ One lowercase letter</li><li data-rule="number">✓ One number</li><li data-rule="symbol">✓ One symbol (!@#$%^&amp;*)</li></ul><button class="button button-primary" id="createAccountSubmit" type="submit">Create account</button></form><button class="auth-link" data-auth-view="signin" type="button">Already have an account? Sign in</button></div><div id="authForgot" class="auth-view" hidden><h3>Reset your password</h3><form id="forgotForm">${field('forgotEmail','Email','email')}<button class="button button-primary" type="submit">Send reset link</button></form><p id="forgotState" class="pilot-notice" hidden></p><button class="auth-link" data-auth-view="signin" type="button">Back to Sign In</button></div><div id="authRecovery" class="auth-view" hidden><h3>Choose a new password</h3><form id="recoveryForm">${field('recoveryPassword','New password','password')}<ul class="password-rules" data-password-rules="recovery"><li data-rule="length">✓ At least 12 characters</li><li data-rule="upper">✓ One uppercase letter</li><li data-rule="lower">✓ One lowercase letter</li><li data-rule="number">✓ One number</li><li data-rule="symbol">✓ One symbol (!@#$%^&amp;*)</li></ul><button class="button button-primary" type="submit">Update password</button></form><p id="recoveryState" class="pilot-notice" hidden></p><button class="auth-link" id="recoveryRetry" type="button" hidden>Request another reset link</button></div>`);
 
   $('signupEmail').placeholder='name@example.com';
@@ -390,8 +390,10 @@ async function ensureClient(){
 let activeAskGptController=null;
 let activeAskGptSurface=null;
 let todayAskGptQuestions=[];
+let dashboardJazzMicLock=false;
+let dashboardJazzMicLastClick=0;
 function askGptWasCancelled(error){return error?.name==='AbortError'||/abort|cancel/i.test(String(error?.message||''));}
-function renderAskGptResponseStyle(){const style=pilot.workspaceData.aiResponseStyle==='brief'?'brief':'contextual';document.querySelectorAll('[data-ask-gpt-style]').forEach(select=>{select.value=style;});document.querySelectorAll('[data-ask-gpt-style-toggle]').forEach(toggle=>{toggle.checked=style==='contextual';});}
+function renderAskGptResponseStyle(){const style=pilot.workspaceData.aiResponseStyle==='brief'?'brief':'contextual';document.querySelectorAll('[data-ask-gpt-style]').forEach(select=>{select.value=style;});document.querySelectorAll('[data-ask-gpt-style-toggle]').forEach(toggle=>{const active=style==='contextual';toggle.checked=active;toggle.closest('.jazz-context-toggle')?.classList.toggle('is-active',active);});}
 async function saveAskGptResponseStyle(event){const style=event.target.matches('[type="checkbox"]')?(event.target.checked?'contextual':'brief'):(event.target.value==='brief'?'brief':'contextual');pilot.workspaceData.aiResponseStyle=style;renderAskGptResponseStyle();await persistWorkspace();}
 function beginAskGptRequest(surface){if(activeAskGptController||surface?._askGptAudio||surface?._askGptAudioController||window.speechSynthesis?.speaking){activeAskGptSurface=surface;stopAskGptInteraction({silent:true});}const controller=new AbortController();activeAskGptController=controller;activeAskGptSurface=surface;return controller;}
 function confirmAskGptStop(button){if(!button)return;button.hidden=false;button.disabled=false;button.classList.add('is-stopped');clearTimeout(button._stopConfirmTimer);button._stopConfirmTimer=setTimeout(()=>{button.classList.remove('is-stopped');if(button.dataset.askGptStop==='dashboard')button.disabled=true;else button.hidden=true;},850);}
@@ -420,6 +422,8 @@ function setAskGptState(surface,state){
   if(!surface)return;
   surface.dataset.aiState=state;
   setJazzAvatarSpeaking(state==='speaking');
+  if(state==='thinking'||state==='speaking')setDashboardJazzMicState(state);
+  else if(state==='idle'&&!activeVoiceCapture)setDashboardJazzMicState('idle');
   const canStop=state==='thinking'||state==='speaking';
   document.querySelectorAll('[data-ask-gpt-stop]').forEach(button=>{button.classList.toggle('is-active',canStop);button.classList.remove('is-stopped');if(button.dataset.askGptStop==='dashboard'){button.hidden=false;button.disabled=!canStop;}else button.hidden=!canStop;});
   const light=surface.querySelector('[data-ask-gpt-status-light]');
@@ -482,9 +486,9 @@ async function playAskGptAudio(surface){
     console.log('[Agent Rise AI voice] Audio blob received:',{type:blob.type,size:blob.size});
     resetAskGptAudio(surface);surface._askGptAudioUrl=URL.createObjectURL(blob);surface._askGptAudioResponse=text;
     const audio=new Audio(surface._askGptAudioUrl);surface._askGptAudio=audio;audio.preload='auto';
-    audio.onplaying=()=>{setAskGptState(surface,'speaking');status.textContent='Speaking…';};
-    audio.onended=()=>{setAskGptState(surface,'idle');status.textContent='Response complete.';};
-    audio.onerror=()=>{console.error('[Agent Rise AI voice] Audio object playback failed.',audio.error);setAskGptState(surface,'idle');status.textContent='Audio playback is unavailable right now.';};
+    audio.onplaying=()=>{setAskGptState(surface,'speaking');setDashboardJazzMicState('speaking');status.textContent='Speaking…';};
+    audio.onended=()=>{setAskGptState(surface,'idle');setDashboardJazzMicState('idle');status.textContent='Response complete.';};
+    audio.onerror=()=>{console.error('[Agent Rise AI voice] Audio object playback failed.',audio.error);setAskGptState(surface,'idle');setDashboardJazzMicState('idle');status.textContent='Audio playback is unavailable right now.';};
     setAskGptState(surface,'speaking');status.textContent='Speaking…';await audio.play();return true;
   }catch(error){if(askGptWasCancelled(error)){setAskGptState(surface,'idle');status.textContent='Stopped.';return false;}console.error('[Agent Rise AI voice] Playback pipeline failed:',error);setAskGptState(surface,'idle');if(surface._askGptAudioUrl){fallbackAudio.src=surface._askGptAudioUrl;fallbackAudio.hidden=false;fallbackAudio.setAttribute('controls','');}status.textContent=error.name==='NotAllowedError'?'Audio is ready. Tap play to hear the response.':error.message||'Audio playback is unavailable right now.';return false;}
   finally{surface._askGptAudioController=null;}
@@ -513,7 +517,9 @@ async function captureAskGptQuestion(button){
 function setDashboardJazzMicState(state='idle'){
   const button=$('jazzCommandMic');if(!button)return;
   button.dataset.micState=state;
-  button.setAttribute('aria-label',state==='recording'?'Stop recording':state==='thinking'?'Jazz is processing':'Speak to Jazz');
+  button.disabled=state==='thinking'||state==='speaking';
+  button.setAttribute('aria-disabled',String(button.disabled));
+  button.setAttribute('aria-label',state==='recording'?'Recording with Jazz':state==='thinking'?'Jazz is processing':state==='speaking'?'Jazz is speaking':'Speak to Jazz');
 }
 async function submitDashboardJazzQuery(value){
   const input=$('jazzCommandInput'),surface=$('agentNotesAskGptDetails');
@@ -528,22 +534,24 @@ async function submitDashboardJazzQuery(value){
   try{
     const response=await askGPT(query,{signal:controller.signal});
     if(controller.signal.aborted)return;
-    surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';const played=await playAskGptAudio(surface);if(!played&&!controller.signal.aborted&&'speechSynthesis' in window){window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(response);utterance.onstart=()=>setJazzAvatarSpeaking(true);utterance.onend=utterance.onerror=()=>setJazzAvatarSpeaking(false);window.speechSynthesis.speak(utterance);}
+    surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';const played=await playAskGptAudio(surface);if(!played&&!controller.signal.aborted&&'speechSynthesis' in window){window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(response);utterance.onstart=()=>{setJazzAvatarSpeaking(true);setDashboardJazzMicState('speaking');};utterance.onend=utterance.onerror=()=>{setJazzAvatarSpeaking(false);setDashboardJazzMicState('idle');input.placeholder='Ask or tell Jazz';};setDashboardJazzMicState('speaking');window.speechSynthesis.speak(utterance);}
   }catch(error){setAskGptState(surface,'idle');if(!askGptWasCancelled(error))notify(error.message||'Jazz is temporarily unavailable.',true);else status.textContent='Stopped.';}
-  finally{if(activeAskGptController===controller){activeAskGptController=null;activeAskGptSurface=null;}setDashboardJazzMicState('idle');input.disabled=false;input.placeholder='Ask or tell Jazz';input.focus();}
+  finally{if(activeAskGptController===controller){activeAskGptController=null;activeAskGptSurface=null;}const stillSpeaking=Boolean(surface._askGptAudio&&!surface._askGptAudio.paused&&!surface._askGptAudio.ended)||Boolean(window.speechSynthesis?.speaking);setDashboardJazzMicState(stillSpeaking?'speaking':'idle');input.disabled=false;input.placeholder=stillSpeaking?'Jazz is speaking…':'Ask or tell Jazz';if(!stillSpeaking)input.focus();}
 }
 async function captureDashboardJazzQuestion(){
   const button=$('jazzCommandMic'),input=$('jazzCommandInput');
   if(!button||!input)return;
   if(!(hasPremiumAccess()||isAdminAccount()||isOwner(pilot.user?.email))&&premiumGate())return;
+  const now=Date.now();if(button.disabled||dashboardJazzMicLock||activeAskGptController||activeAskGptSurface?._askGptAudioController||activeAskGptSurface?._askGptAudio&&!activeAskGptSurface._askGptAudio.paused||window.speechSynthesis?.speaking)return;if(now-dashboardJazzMicLastClick<500)return;dashboardJazzMicLastClick=now;
   if(activeVoiceCapture){stopVoiceInput();setDashboardJazzMicState('idle');return;}
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
+  dashboardJazzMicLock=true;
   setDashboardJazzMicState('recording');button.setAttribute('aria-pressed','true');button.textContent='■';input.placeholder='Listening…';
   try{
     const transcript=await captureVoiceInput({silenceMs:pause*1000,onListeningChange:listening=>{if(listening){setDashboardJazzMicState('recording');input.placeholder='Listening…';}else if(input.value.trim()){setDashboardJazzMicState('thinking');input.placeholder='Jazz is thinking…';}else{setDashboardJazzMicState('idle');input.placeholder='Ask or tell Jazz';}},onTranscript:value=>{if(value)input.value=value;}});
     if(transcript){input.value=transcript;await submitDashboardJazzQuery(transcript);}else input.placeholder='Ask or tell Jazz';
   }catch(error){notify(error.message||'Speech-to-text is unavailable right now.',true);input.placeholder='Ask or tell Jazz';}
-  finally{setDashboardJazzMicState('idle');button.setAttribute('aria-pressed','false');button.textContent='🎙';}
+  finally{dashboardJazzMicLock=false;const surface=$('agentNotesAskGptDetails'),stillBusy=Boolean(activeAskGptController)||Boolean(surface?._askGptAudioController)||Boolean(surface?._askGptAudio&&!surface._askGptAudio.paused&&!surface._askGptAudio.ended)||Boolean(window.speechSynthesis?.speaking);setDashboardJazzMicState(stillBusy?'speaking':'idle');button.setAttribute('aria-pressed','false');button.textContent='🎙';}
 }
 const passwordChecks={length:value=>value.length>=12,upper:value=>/[A-Z]/.test(value),lower:value=>/[a-z]/.test(value),number:value=>/\d/.test(value),symbol:value=>/[!@#$%^&*]/.test(value)};
 function validPassword(value){return Object.values(passwordChecks).every(check=>check(value));}
