@@ -902,7 +902,8 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   align-self:center;
 }
 .marketing-business-intro{
-  max-width:980px;
+  width:100%;
+  max-width:none;
   margin:0 auto 8px;
 }
 .marketing-business-logo{
@@ -914,13 +915,13 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-business-logo img{
   display:block;
-  width:90px;
+  width:72px;
   height:auto;
 }
 .marketing-business-copy{
   position:relative;
   display:block;
-  padding:10px 12px;
+  padding:8px 12px;
   text-align:left;
   border:1px solid rgba(201,162,39,.45);
   border-left:3px solid rgba(201,162,39,.72);
@@ -940,16 +941,16 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   margin-right:auto;
 }
 .marketing-business-copy h2{
-  margin-bottom:8px;
-  padding-right:100px;
-  font-size:clamp(1.65rem,3vw,2.55rem);
-  line-height:1.15;
+  margin-bottom:4px;
+  padding-right:82px;
+  font-size:clamp(1.5rem,2.6vw,2.25rem);
+  line-height:1.08;
   letter-spacing:-.025em;
   text-transform:none;
 }
 .marketing-business-copy .marketing-narrative-copy{
   font-size:clamp(.98rem,1.6vw,1.16rem);
-  line-height:1.65;
+  line-height:1.5;
 }
 .marketing-business-flow{
   padding-top:12px;
@@ -978,21 +979,35 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-pricing-content{
   display:grid;
-  grid-template-columns:minmax(0,260px) minmax(0,1fr);
+  grid-template-columns:repeat(2,minmax(0,360px));
   align-items:stretch;
+  justify-content:center;
   gap:24px;
+  max-width:744px;
+  margin:0 auto;
+}
+.marketing-pricing-content .marketing-price-grid{
+  width:100%;
+  max-width:none;
+}
+.marketing-pricing-content .marketing-price-card,
+.marketing-pricing-visual{
+  min-height:240px;
+  height:240px;
+  box-sizing:border-box;
 }
 .marketing-pricing-visual{
   min-width:0;
   overflow:hidden;
   border:1px solid rgba(201,162,39,.45);
   border-radius:12px;
+  background:#0F3F63;
 }
 .marketing-pricing-visual img{
   display:block;
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center;
 }
 .marketing-deep-feature:nth-child(4) .marketing-feature-visual{
