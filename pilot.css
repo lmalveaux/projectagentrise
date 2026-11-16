@@ -974,6 +974,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
     gap:20px;
     padding:18px;
   }
+  .marketing-business-logo{
+    order:-1;
+  }
   .marketing-business-copy h2{
     padding-right:0;
   }
