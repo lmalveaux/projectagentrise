@@ -979,25 +979,29 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-pricing-content{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,360px));
-  align-items:stretch;
-  justify-content:center;
+  grid-template-columns:minmax(0,260px) minmax(0,430px);
+  align-items:start;
+  justify-content:start;
   gap:24px;
-  max-width:744px;
-  margin:0 auto;
+  max-width:714px;
+  margin:0;
 }
 .marketing-pricing-content .marketing-price-grid{
   width:100%;
   max-width:none;
 }
-.marketing-pricing-content .marketing-price-card,
-.marketing-pricing-visual{
-  min-height:240px;
-  height:240px;
+.marketing-pricing-content .marketing-price-card{
+  min-height:246px;
+  height:246px;
   box-sizing:border-box;
 }
 .marketing-pricing-visual{
+  width:100%;
+  max-width:430px;
+  aspect-ratio:430 / 246;
   min-width:0;
+  min-height:0;
+  height:auto;
   overflow:hidden;
   border:1px solid rgba(201,162,39,.45);
   border-radius:12px;
@@ -1033,7 +1037,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
     grid-template-columns:minmax(0,1fr);
   }
   .marketing-pricing-visual{
-    aspect-ratio:16 / 9;
+    aspect-ratio:430 / 246;
   }
 }
 
