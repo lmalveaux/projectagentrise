@@ -906,21 +906,21 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   margin:0 auto 8px;
 }
 .marketing-business-logo{
+  position:absolute;
+  top:8px;
+  right:10px;
   display:grid;
   place-items:center;
-  flex:0 0 auto;
 }
 .marketing-business-logo img{
   display:block;
-  width:min(180px,22vw);
+  width:90px;
   height:auto;
 }
 .marketing-business-copy{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:24px;
-  padding:12px 14px;
+  position:relative;
+  display:block;
+  padding:10px 12px;
   text-align:left;
   border:1px solid rgba(201,162,39,.45);
   border-left:3px solid rgba(201,162,39,.72);
@@ -931,7 +931,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   -webkit-backdrop-filter:blur(8px);
 }
 .marketing-business-text{
-  flex:1 1 auto;
+  width:100%;
   min-width:0;
 }
 .marketing-business-copy h2,
@@ -941,6 +941,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-business-copy h2{
   margin-bottom:8px;
+  padding-right:100px;
   font-size:clamp(1.65rem,3vw,2.55rem);
   line-height:1.15;
   letter-spacing:-.025em;
@@ -956,10 +957,17 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 @media(max-width:600px){
   .marketing-business-copy{
-    gap:12px;
+    padding:9px 10px;
+  }
+  .marketing-business-logo{
+    top:7px;
+    right:8px;
   }
   .marketing-business-logo img{
-    width:110px;
+    width:64px;
+  }
+  .marketing-business-copy h2{
+    padding-right:72px;
   }
 }
 .marketing-deep-feature-list{
