@@ -303,7 +303,7 @@ function requestDownloadAccess(){
   return false;
 }
 function decorateProFeatures(){
-  const controls=['bookBusinessButton','freshBookBusinessButton','freshGptButton','freshJitCarriersButton','agencyButton','premiumPhoneButton'];
+  const controls=['bookBusinessButton','freshGptButton','freshJitCarriersButton','agencyButton','premiumPhoneButton'];
   controls.forEach(id=>{const control=$(id);if(control&&!control.querySelector('.gold-star'))control.insertAdjacentHTML('beforeend',' <span class="tier-star gold-star" title="Pro">★</span>');});
   document.querySelectorAll('[data-action="ringcentral"],[data-action="call-e"]').forEach(control=>{if(!control.querySelector('.gold-star'))control.insertAdjacentHTML('beforeend',' <span class="tier-star gold-star" title="Pro">★</span>');});
   document.querySelectorAll('.minute-owner-panel').forEach(panel=>{const title=panel.querySelector('h3');if(title&&!title.querySelector('.gold-star'))title.insertAdjacentHTML('beforeend',' <span class="tier-star gold-star" title="Pro">★</span>');});
@@ -1247,7 +1247,6 @@ function bindPilot(){
   guardClick($('openJitFromNotes')).onclick=()=>{$('agentNotesDialog').close();openJitCarriers();};$('offTimeForm').onsubmit=saveOffTime;guardClick($('cancelOffTime')).onclick=resetOffTime;guardClick($('offTimeRows')).onclick=async event=>{const edit=event.target.closest('[data-offtime-edit]'),del=event.target.closest('[data-offtime-delete]');if(edit)return editOffTime(edit.dataset.offtimeEdit);if(del&&confirm('Delete this entry?')){pilot.workspaceData.offTimeEntries=pilot.workspaceData.offTimeEntries.filter(item=>item.id!==del.dataset.offtimeDelete);await persistWorkspace();renderOffTime();renderDisciplineCalendar();}};guardClick($('disciplineLeads')).onclick=event=>{if(!event.target.closest('[data-open-lead-desk]'))return;$('agentNotesDialog').close();renderLeadDesk();$('leadDeskDialog').showModal();};
   const setFreshGoalOpen=open=>{const panel=document.querySelector('.fresh-goal-tracker'),button=$('freshGoalTrackerButton');panel.hidden=!open;button.setAttribute('aria-expanded',String(open));button.classList.toggle('is-active',open);if(open)setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),0);};
   guardClick($('freshGoalTrackerButton')).onclick=()=>setFreshGoalOpen(document.querySelector('.fresh-goal-tracker').hidden);
-  guardClick($('freshBookBusinessButton')).onclick=()=>{renderContracts();$('contractsDialog').showModal();};
   ['closeFreshGoalTracker','closeFreshGoalTrackerBottom'].forEach(id=>guardClick($(id)).onclick=closeGoalTracker);
   guardClick($('freshTurning65Button')).onclick=()=>openLearningLibrary('Turning 65');guardClick($('freshPdpButton')).onclick=()=>openLearningLibrary('PDP');guardClick($('freshIncentivesButton')).onclick=()=>openDiscipline('Fresh Pour','incentives');
   renderLaunchKitVoices();renderLibraryVoices();if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>{renderLaunchKitVoices();renderLibraryVoices();};
