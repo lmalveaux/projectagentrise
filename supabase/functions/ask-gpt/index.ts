@@ -64,6 +64,7 @@ Deno.serve(async (request) => {
 
     const body = await request.json().catch(() => ({}));
     const query = typeof body.query === "string" ? body.query.trim() : "";
+    const responseStyle = body.responseStyle === "brief" ? "brief" : "contextual";
     if (!query) return json({ error: "Enter a question for the A.I. Assistant." }, 400, origin);
     if (query.length > 4000) return json({ error: "Keep your question under 4,000 characters." }, 400, origin);
 
@@ -90,11 +91,12 @@ Deno.serve(async (request) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: responseStyle === "brief" ? `${SYSTEM_PROMPT} Keep your answers extremely concise, under 3 sentences.` : SYSTEM_PROMPT },
           ...historyMessages,
           { role: "user", content: query },
         ],
       }),
+      signal: request.signal,
     });
 
     const openAIData = await openAIResponse.json().catch(() => ({}));
