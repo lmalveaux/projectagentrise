@@ -976,6 +976,25 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 .marketing-pricing{
   padding-top:72px;
 }
+.marketing-pricing-content{
+  display:grid;
+  grid-template-columns:minmax(0,260px) minmax(0,1fr);
+  align-items:stretch;
+  gap:24px;
+}
+.marketing-pricing-visual{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid rgba(201,162,39,.45);
+  border-radius:12px;
+}
+.marketing-pricing-visual img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
 .marketing-deep-feature:nth-child(4) .marketing-feature-visual{
   aspect-ratio:3 / 2;
 }
@@ -995,6 +1014,12 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
     padding:18px;
   }
   .marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
+  .marketing-pricing-content{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .marketing-pricing-visual{
+    aspect-ratio:16 / 9;
+  }
 }
 
 /* Sky View glass system. Plain Dark and Plain Light intentionally remain untouched. */
