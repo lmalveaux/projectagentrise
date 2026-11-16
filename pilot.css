@@ -904,21 +904,22 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 .marketing-business-intro{
   max-width:980px;
   margin:0 auto 8px;
-  display:grid;
-  grid-template-columns:minmax(120px,.34fr) minmax(0,1.66fr);
-  align-items:center;
-  gap:18px;
 }
 .marketing-business-logo{
   display:grid;
   place-items:center;
+  flex:0 0 auto;
 }
 .marketing-business-logo img{
   display:block;
-  width:min(120px,100%);
+  width:min(180px,22vw);
   height:auto;
 }
 .marketing-business-copy{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
   padding:12px 14px;
   text-align:left;
   border:1px solid rgba(201,162,39,.45);
@@ -928,6 +929,10 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   box-shadow:0 12px 30px rgba(15,63,99,.12);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
+}
+.marketing-business-text{
+  flex:1 1 auto;
+  min-width:0;
 }
 .marketing-business-copy h2,
 .marketing-business-copy .marketing-narrative-copy{
@@ -950,12 +955,11 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   padding-bottom:12px;
 }
 @media(max-width:600px){
-  .marketing-business-intro{
-    grid-template-columns:1fr;
-    gap:8px;
+  .marketing-business-copy{
+    gap:12px;
   }
   .marketing-business-logo img{
-    width:84px;
+    width:110px;
   }
 }
 .marketing-deep-feature-list{
