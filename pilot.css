@@ -1731,7 +1731,7 @@ body[data-theme^='sky-view'] .ar-header {
 body[data-theme^='sky-view'] .dashboard-main-actions,
 body[data-theme^='sky-view'] .dashboard-secondary-actions {
   display: grid !important;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   align-items: stretch !important;
   gap: 12px !important;
   width: 100% !important;
@@ -1741,10 +1741,6 @@ body[data-theme^='sky-view'] .dashboard-secondary-actions {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-}
-
-body[data-theme^='sky-view'] .dashboard-secondary-actions {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
 body[data-theme^='sky-view'] .dashboard-main-actions > button,
