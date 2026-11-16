@@ -1573,6 +1573,35 @@ body[data-theme^='sky-view'] .ar-header {
   border-color: rgba(245, 241, 234, .68);
 }
 
+.jazz-quick-questions-dashboard {
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 8px 0 0;
+  padding: 0 2px 2px;
+  overflow-x: visible;
+}
+
+.jazz-quick-questions-dashboard button {
+  flex: 1 1 180px;
+  max-width: 320px;
+  min-height: 36px;
+  background: rgba(45, 90, 150, .22);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .jazz-quick-questions-dashboard {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+
+  .jazz-quick-questions-dashboard button {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+}
+
 .jazz-command-bar {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
