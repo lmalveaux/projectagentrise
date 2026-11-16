@@ -1053,6 +1053,28 @@ body[data-theme^="sky-view"] #settingsButton{
   background: #3B82F6;
   box-shadow: 0 0 0 3px rgba(59,130,246,.2),0 0 9px rgba(59,130,246,.55);
 }
+.ask-ai-summary-stop {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0;
+  border: 1px solid rgba(159,29,45,.58);
+  border-radius: 6px;
+  background: rgba(159,29,45,.14);
+  color: #9F1D2D;
+  font: 700 .62rem/1 var(--arp-body-font);
+  cursor: pointer;
+}
+.ask-ai-summary-stop:hover,
+.ask-ai-summary-stop:focus-visible {
+  background: rgba(159,29,45,.24);
+  border-color: rgba(159,29,45,.82);
+}
+.ask-ai-summary-stop[hidden] { display: none !important; }
 .ask-ai-body {
   box-sizing: border-box;
   min-width: 0;
@@ -2139,8 +2161,7 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
   color:#F5F1EA!important;
   font:inherit;
 }
-.jazz-stop-button,
-.ask-ai-stop{
+.jazz-stop-button{
   min-width:58px;
   min-height:44px;
   padding:6px 11px!important;
@@ -2151,8 +2172,7 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
   font:800 .75rem/1 var(--arp-body-font);
   cursor:pointer;
 }
-.jazz-stop-button[hidden],
-.ask-ai-stop[hidden]{display:none!important}
+.jazz-stop-button[hidden]{display:none!important}
 .ask-ai-input-row{
   grid-template-columns:minmax(0,1fr) 44px auto auto;
 }
@@ -2183,7 +2203,6 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
   }
   .ask-ai-input-line{grid-column:1;grid-row:1}
   .ask-ai-mic{grid-column:2;grid-row:1}
-  .ask-ai-stop{grid-column:1 / -1;grid-row:2}
   .ask-ai-input-row .ask-ai-save{grid-column:1 / -1;grid-row:3;width:100%}
 }
 
