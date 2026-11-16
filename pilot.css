@@ -781,7 +781,8 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 
 /* Landing polish: a contained hero and full-width alternating feature rows. */
 .marketing-hero h1{
-  max-width:min(860px,100%);
+  width:100%;
+  max-width:980px;
   font-size:clamp(1.952756rem,4.731678vw,4.471016rem);
   font-family:var(--arp-heading-font);
   text-align:center;
@@ -978,9 +979,18 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-pricing-content{
   display:grid;
-  grid-template-columns:minmax(0,260px) minmax(0,1fr);
+  grid-template-columns:repeat(2,minmax(0,1fr));
   align-items:stretch;
   gap:24px;
+}
+.marketing-pricing-content .marketing-price-grid{
+  width:100%;
+  max-width:none;
+}
+.marketing-pricing-content .marketing-price-card,
+.marketing-pricing-visual{
+  min-height:280px;
+  box-sizing:border-box;
 }
 .marketing-pricing-visual{
   min-width:0;
