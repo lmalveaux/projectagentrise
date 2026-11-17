@@ -1014,23 +1014,10 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 .system-updating-card h1{margin:0;font-family:var(--arp-heading-font,Georgia,serif);font-size:clamp(2.45rem,8vw,4.7rem);line-height:1;color:#F5F1EA}
 .system-updating-card>p:not(.system-updating-kicker){max-width:430px;margin:18px 0 26px;color:rgba(245,241,234,.86);line-height:1.6}
 .system-updating-card .button{min-height:48px;padding:11px 22px;border-color:#C9A227;background:#2F3A6B;color:#F5F1EA}
-.system-updating-jazz-trigger{
-  position:relative;
-  display:grid;
-  justify-items:center;
-  gap:8px;
-  margin:0 0 22px;
-  padding:0;
-  border:0;
-  background:transparent;
-  color:#F5F1EA;
-  font:700 .78rem/1.2 var(--arp-body-font,system-ui,sans-serif);
-  cursor:pointer;
-}
-.system-updating-jazz-frame{position:relative;display:grid;place-items:center;border-radius:50%}
 .system-updating-jazz{
   position:static;
   display:block;
+  margin:0 0 22px;
   width:clamp(64px,9vw,112px);
   height:clamp(64px,9vw,112px);
   border:2px solid #C9A227;
@@ -1039,11 +1026,6 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   object-fit:cover;
   box-shadow:0 12px 34px rgba(0,0,0,.38);
 }
-.system-updating-jazz-play{position:absolute;right:-2px;bottom:4px;display:grid;place-items:center;width:28px;height:28px;border:1px solid #C9A227;border-radius:50%;background:#2F3A6B;color:#F5F1EA;font-size:.68rem;box-shadow:0 4px 12px rgba(0,0,0,.35)}
-.system-updating-jazz-trigger::before{content:"";position:absolute;width:clamp(74px,10vw,122px);height:clamp(74px,10vw,122px);border:1px solid rgba(201,162,39,.7);border-radius:50%;animation:system-jazz-pulse 2.2s ease-out infinite;pointer-events:none}
-.system-updating-jazz-trigger.is-playing .system-updating-jazz-play{background:#9F1D2D}
-@keyframes system-jazz-pulse{0%{transform:scale(.88);opacity:.8}70%,100%{transform:scale(1.16);opacity:0}}
-@media(prefers-reduced-motion:reduce){.system-updating-jazz-trigger::before{animation:none}}
 @media(max-width:600px){.system-updating-shield{padding:18px}.system-updating-card{padding:28px 20px}.system-updating-jazz{width:64px;height:64px}}
 .marketing-deep-feature-list{
   gap:16.5px;
