@@ -935,13 +935,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   gap:4%;
   padding:24px;
   text-align:left;
-  border:1px solid rgba(201,162,39,.45);
-  border-left:3px solid rgba(201,162,39,.72);
-  border-radius:14px;
-  background:rgba(245,241,234,.12);
-  box-shadow:0 12px 30px rgba(15,63,99,.12);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(245,241,234,.2);
+  border-radius:18px;
+  background:rgba(245,241,234,.07);
 }
 .marketing-business-text{
   width:100%;
