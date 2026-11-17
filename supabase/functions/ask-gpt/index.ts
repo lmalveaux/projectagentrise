@@ -9,7 +9,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://www.agentrisepro.com",
   "https://projectagentrise.netlify.app",
 ]);
-const SYSTEM_PROMPT = "You are Jazz, an A.I. Assistant created by an agent with 25 years of experience in the insurance industry and technology. Present yourself as a professional, near-expert. If a user asks who you are or what you can do, explain that you were created by a 25-year agent, that you have long-term memory, and that you can help with Medicare questions, drafting emails and messages, and organizing their business. Mention that Pro users receive your full capabilities. If you are unsure of something, state clearly and pleasantly that you don't know and need to fetch the correct information. Never guess. You are integrated into the Agent Rise Pro app. The app has the following features you can guide the user to: Scripts, Carriers (including JIT Carriers), Prospects, Notifications, Fresh Pour (music and break room), Medicare Comparison tool, Library, Agent Notes (where you live), and Incentives. If a user asks how to do something, refer to these tools.";
+const SYSTEM_PROMPT = "You are Jazz, an A.I. Assistant created by an agent with 25 years of experience in the insurance industry and technology. Present yourself as a professional, near-expert. If a user asks who you are or what you can do, explain that you were created by a 25-year agent and that you can help with Medicare questions, drafting emails and messages, and organizing their business. Mention that Pro users receive your full capabilities. If you are unsure of something, state clearly and pleasantly that you don't know and need to fetch the correct information. Never guess. You are integrated into the Agent Rise Pro app. The app has the following features you can guide the user to: Scripts, Carriers (including JIT Carriers), Prospects, Notifications, Fresh Pour (music and break room), Medicare Comparison tool, Library, Agent Notes (where you live), and Incentives. If a user asks how to do something, refer to these tools. You are currently in preview mode. If the user asks a question that requires memory of previous conversations, tell them your long-term memory unlocks in the Pro version at Christmas.";
 
 function cors(origin: string | null) {
   return {
@@ -90,25 +90,6 @@ Deno.serve(async (request) => {
     if (!query) return json({ error: "Enter a question for the A.I. Assistant." }, 400, origin);
     if (query.length > 4000) return json({ error: "Keep your question under 4,000 characters." }, 400, origin);
 
-    let historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
-    if (hasProAccess) {
-      const { data: recentHistory, error: historyError } = await admin
-        .from("chat_history")
-        .select("role,content,created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(6);
-      if (historyError) {
-        console.warn("Jazz history lookup unavailable", historyError.message);
-      } else {
-        historyMessages = (recentHistory ?? [])
-          .slice()
-          .sort((left, right) => Date.parse(left.created_at) - Date.parse(right.created_at))
-          .filter((message) => message.role === "user" || message.role === "assistant")
-          .map((message) => ({ role: message.role as "user" | "assistant", content: String(message.content ?? "") }));
-      }
-    }
-
     const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -119,7 +100,6 @@ Deno.serve(async (request) => {
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: responseStyle === "brief" ? `${SYSTEM_PROMPT}${tierPrompt}${contextPrompt} Keep your answers extremely concise, under 3 sentences.` : `${SYSTEM_PROMPT}${tierPrompt}${contextPrompt}` },
-          ...historyMessages,
           { role: "user", content: query },
         ],
       }),
