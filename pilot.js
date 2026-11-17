@@ -429,7 +429,7 @@ async function askGPT(userQuery,{signal,responseStyle=pilot.workspaceData.aiResp
   const endpoint=`${String(config.supabaseUrl).replace(/\/$/,'')}/functions/v1/ask-gpt`;
   const context={
     currentDate:todayIsoDate(),
-    calendarEvents:safeArray(pilot.workspaceData.calendarEvents).slice().sort((left,right)=>String(left.start||'').localeCompare(String(right.start||''))).slice(0,50).map(item=>({title:String(item.title||''),start:String(item.start||''),end:String(item.end||''),location:String(item.location||''),category:String(item.category||'')})),
+    calendarEvents:(Array.isArray(pilot.workspaceData.calendarEvents) ? pilot.workspaceData.calendarEvents : []).slice().sort((left,right)=>String(left.start||'').localeCompare(String(right.start||''))).slice(0,50).map(item=>({title:String(item.title||''),start:String(item.start||''),end:String(item.end||''),location:String(item.location||''),category:String(item.category||'')})),
     latestRssHeadline:String(pilot.workspaceData.latestRssHeadline||''),
     prospectNames:state.prospects.map(fullName).filter(Boolean).slice(0,100)
   };
