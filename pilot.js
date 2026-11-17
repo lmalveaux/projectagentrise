@@ -619,6 +619,8 @@ const passwordChecks={length:value=>value.length>=12,upper:value=>/[A-Z]/.test(v
 function validPassword(value){return Object.values(passwordChecks).every(check=>check(value));}
 function updatePasswordRules(input,scope){const value=input.value;document.querySelectorAll(`[data-password-rules="${scope}"] [data-rule]`).forEach(item=>item.classList.toggle('is-valid',passwordChecks[item.dataset.rule](value)));}
 function showAuthView(name='signin'){if(name==='landing')name='signin';const views={signin:'authSignIn',signup:'authSignup',forgot:'authForgot',recovery:'authRecovery'};Object.entries(views).forEach(([key,id])=>{const view=$(id);if(view)view.hidden=key!==name;});if(!pilot.demo)$('demoBanner').hidden=true;if(!$('accountDialog').open)$('accountDialog').showModal();}
+function consumeExpiredOtpHash(){const params=new URLSearchParams(location.hash.replace(/^#/,''));if(params.get('error_code')!=='otp_expired')return false;history.replaceState(null,'',`${location.pathname}${location.search}`);return true;}
+function showExpiredOtpMessage(){showAuthView('signin');$('accountState').textContent='That sign-in link expired. Request a new one.';}
 function showAccountError(e){const alreadyRegistered=e?.code==='user_already_exists'||/user already registered/i.test(String(e?.message||''));if(alreadyRegistered){const email=signupEmailValue();showAuthView('signin');if(email)$('loginEmail').value=email;$('accountState').textContent='An account already exists for this email. Sign in with your password, or close this window to cancel.';notify('This email already has an account. Please sign in instead.');return;}showAuthView('signin');const invalid=e?.code==='invalid_credentials',message=invalid?'Email or password not recognized. Check both entries or use Reset password.':e.message||String(e);$('accountState').textContent=message;notify(invalid?'Sign-in was not completed. Use Reset password if needed.':'Account error: '+message,true);if(!invalid)reportError('Supabase account failure',e);}
 function normalizeAccountEmail(value){return String(value||'').replace(/\s+/g,'').trim().toLowerCase();}
 function signupEmailValue(){return normalizeAccountEmail($('signupEmail').value);}
@@ -1469,8 +1471,9 @@ if($('adminSupabaseUrl')){$('adminSupabaseUrl').value=config.supabaseUrl||'';$('
 renderActivityStrip();
 renderContactRibbon();renderDash();renderTripIncentives();
 $('accountState').textContent='Sign in to save your Agent Rise workspace.';
+const expiredOtpLink=consumeExpiredOtpHash();
 showMarketingLanding();
-if(config.supabaseUrl&&config.supabaseAnonKey){ensureClient().then(async db=>{const {data,error}=await db.auth.getSession();if(error)throw error;if(data.session)await loadAccount(data.session.user);else showMarketingLanding();}).catch(error=>{console.warn('Account session could not be restored; opening the public landing page.',error);showMarketingLanding();});}else showMarketingLanding();
+if(config.supabaseUrl&&config.supabaseAnonKey){ensureClient().then(async db=>{const {data,error}=await db.auth.getSession();if(error)throw error;if(data.session)await loadAccount(data.session.user);else{showMarketingLanding();if(expiredOtpLink)showExpiredOtpMessage();}}).catch(error=>{console.warn('Account session could not be restored; opening the public landing page.',error);showMarketingLanding();if(expiredOtpLink)showExpiredOtpMessage();});}else{showMarketingLanding();if(expiredOtpLink)showExpiredOtpMessage();}
 
 // TODO: Exit Bonus Popup — see /docs/exit-popup-spec.md
 // When user attempts to leave the app, show a modal offering the Medicare Launch Kit bundle
