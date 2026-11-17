@@ -1,3 +1,4 @@
+console.log('Jazz script loaded');
 /* Agent Rise pilot extensions. Supabase stores account data; the Agent Rise
    platform owns the application, integrations, and provider callbacks. */
 const FMO_IMO_STARTERS=['Integrity Marketing Group','Ritter Insurance Marketing','HealthMarkets','NABIP','Precision Senior Marketing','New Horizons Insurance Marketing'];
@@ -456,7 +457,7 @@ function setAskGptState(surface,state){
 }
 async function submitAskGPT(event){
   event.preventDefault();
-  const form=event.currentTarget;
+  const form=event.target?.matches?.('form')?event.target:event.currentTarget?.matches?.('form')?event.currentTarget:event.target?.closest?.('form');
   const surface=form?.closest('.ask-ai-surface');
   const input=form?.querySelector('[data-ask-gpt-query],#askGptQuery');
   const status=surface?.querySelector('[data-ask-gpt-status]');
@@ -484,7 +485,7 @@ function playBrowserSpeechFallback(surface,text){
 function agentNotesAskGptMarkup(){
   const prefix='agentNotes';
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
-  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><img class="ask-ai-icon jazz-avatar-inline" data-jazz-avatar src="assets/images/jazz-avatar-static.png" data-static-src="assets/images/jazz-avatar-static.png" data-animated-src="assets/images/jazz-avatar.gif" alt="Jazz A.I. Assistant" width="32" height="32"><span class="jazz-agent-name"><strong>Jazz</strong><small>A.I. ASSISTANT</small></span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span><button class="ask-ai-summary-stop" data-ask-gpt-stop type="button" hidden aria-label="Stop Jazz response" title="Stop">■</button></summary><div class="ask-ai-body"><div class="ask-ai-how-to"><strong>Try asking…</strong><div class="jazz-quick-questions" data-agent-notes-starters aria-label="Starter questions"><button type="button" data-ask-gpt-question="Who are you and what can you do?">Who are you and what can you do?</button><button type="button" data-ask-gpt-question="What is included in the Pro version?">What is included in the Pro version?</button><button type="button" data-ask-gpt-question="Draft a follow-up text to a new lead.">Draft a follow-up text to a new lead.</button><button type="button" data-ask-gpt-question="What are the rules for a Scope of Appointment?">What are the rules for a Scope of Appointment?</button></div></div><div class="ask-ai-panel-tools"><div class="ask-ai-settings-control"><button class="ask-ai-settings-toggle" data-ask-gpt-settings type="button" aria-expanded="false" aria-label="Voice response settings">⚙</button><div class="ask-ai-settings-panel" data-ask-gpt-settings-panel hidden><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select><span>of silence</span></label></div></div><button class="ask-ai-close" data-ask-gpt-close type="button" aria-label="Close A.I. Assistant">×</button></div><form id="${prefix}AskGptForm"><div class="ask-ai-input-row"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Type a question and press Enter"></label><button class="button button-secondary ask-ai-mic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button><button class="button ask-ai-save" data-ask-gpt-save type="button">Save to Notes</button></div><div class="ask-ai-status pilot-muted" data-ask-gpt-status role="status" aria-live="polite">Ready for your question.</div></form><section class="ask-ai-response" data-ask-gpt-response-panel hidden><p data-ask-gpt-response></p><audio data-ask-gpt-audio preload="none" hidden></audio></section><section class="ask-ai-today"><h4>Today’s Questions</h4><p class="pilot-muted" data-ask-gpt-today-note></p><div data-ask-gpt-today><p class="pilot-muted">No questions yet today.</p></div></section></div></details>`;
+  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><img class="ask-ai-icon jazz-avatar-inline" data-jazz-avatar src="assets/images/jazz-avatar-static.png" data-static-src="assets/images/jazz-avatar-static.png" data-animated-src="assets/images/jazz-avatar.gif" alt="Jazz A.I. Assistant" width="32" height="32"><span class="jazz-agent-name"><strong>Jazz</strong><small>A.I. ASSISTANT</small></span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span><button class="ask-ai-summary-stop" id="${prefix}AskGptStop" data-ask-gpt-stop type="button" hidden aria-label="Stop Jazz response" title="Stop">■</button></summary><div class="ask-ai-body"><div class="ask-ai-how-to"><strong>Try asking…</strong><div class="jazz-quick-questions" id="${prefix}AskGptStarters" data-agent-notes-starters aria-label="Starter questions"><button type="button" data-ask-gpt-question="Who are you and what can you do?">Who are you and what can you do?</button><button type="button" data-ask-gpt-question="What is included in the Pro version?">What is included in the Pro version?</button><button type="button" data-ask-gpt-question="Draft a follow-up text to a new lead.">Draft a follow-up text to a new lead.</button><button type="button" data-ask-gpt-question="What are the rules for a Scope of Appointment?">What are the rules for a Scope of Appointment?</button></div></div><div class="ask-ai-panel-tools"><div class="ask-ai-settings-control"><button class="ask-ai-settings-toggle" data-ask-gpt-settings type="button" aria-expanded="false" aria-label="Voice response settings">⚙</button><div class="ask-ai-settings-panel" data-ask-gpt-settings-panel hidden><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select><span>of silence</span></label></div></div><button class="ask-ai-close" data-ask-gpt-close type="button" aria-label="Close A.I. Assistant">×</button></div><form id="${prefix}AskGptForm"><div class="ask-ai-input-row"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Type a question and press Enter"></label><button class="button button-secondary ask-ai-mic" id="${prefix}AskGptMic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button><button class="button ask-ai-save" id="${prefix}AskGptSave" data-ask-gpt-save type="button">Save to Notes</button></div><div class="ask-ai-status pilot-muted" data-ask-gpt-status role="status" aria-live="polite">Ready for your question.</div></form><section class="ask-ai-response" data-ask-gpt-response-panel hidden><p data-ask-gpt-response></p><audio data-ask-gpt-audio preload="none" hidden></audio></section><section class="ask-ai-today"><h4>Today’s Questions</h4><p class="pilot-muted" data-ask-gpt-today-note></p><div data-ask-gpt-today><p class="pilot-muted">No questions yet today.</p></div></section></div></details>`;
 }
 async function saveAskGptPause(event){
   const seconds=Number(event.target.value);
@@ -542,6 +543,7 @@ async function saveAskGptToNotes(button){
   finally{button.disabled=false;}
 }
 async function captureAskGptQuestion(button){
+  console.log('Mic clicked');
   const surface=button.closest('.ask-ai-surface'),form=surface?.querySelector('form'),input=surface?.querySelector('[data-ask-gpt-query]'),status=surface?.querySelector('[data-ask-gpt-status]'),pause=Number(surface?.querySelector('[data-ask-gpt-pause]')?.value)||5;
   if(!form||!input||!status)return;
   if(activeVoiceCapture){stopVoiceInput();return;}
@@ -575,6 +577,7 @@ async function submitDashboardJazzQuery(value){
   finally{if(activeAskGptController===controller){activeAskGptController=null;activeAskGptSurface=null;}const stillSpeaking=Boolean(surface._askGptAudio&&!surface._askGptAudio.paused&&!surface._askGptAudio.ended)||Boolean(window.speechSynthesis?.speaking);setDashboardJazzMicState(stillSpeaking?'speaking':'idle');input.disabled=false;input.placeholder=stillSpeaking?'Jazz is speaking…':'Ask or tell Jazz';if(!stillSpeaking)input.focus();}
 }
 async function captureDashboardJazzQuestion(){
+  console.log('Mic clicked');
   const button=$('jazzCommandMic'),input=$('jazzCommandInput');
   if(!button||!input)return;
   if(pilot.demo||!pilot.user){requestDemoSignIn();return;}
@@ -1177,6 +1180,100 @@ function installDemoWriteGuard(){
   },true);
   document.addEventListener('change',event=>{if(!pilot.demo||insideAuth(event.target))return;if(event.target.matches('input[type="file"]')){event.preventDefault();event.stopImmediatePropagation();event.target.value='';requestDemoSignIn();}},true);
 }
+let jazzBindingsInstalled=false;
+function bindJazzControlsWhenReady(){
+  if(jazzBindingsInstalled)return;
+  jazzBindingsInstalled=true;
+
+  // Remove the old one-time property handlers. Delegated listeners below keep
+  // working when Agent Notes is re-rendered and its controls are replaced.
+  ['jazzCommandInput','jazzCommandMic','jazzQuickQuestions','agentNotesAskGptForm','agentNotesAskGptQuery','agentNotesAskGptMic','agentNotesAskGptStop','agentNotesAskGptStarters','agentNotesAskGptSave'].forEach(id=>{
+    const control=$(id);
+    if(!control)return;
+    control.onclick=null;control.onkeydown=null;control.onsubmit=null;control.onchange=null;
+  });
+  document.querySelectorAll('[data-ask-gpt-mic],[data-ask-gpt-stop],[data-ask-gpt-save],[data-ask-gpt-settings],[data-ask-gpt-close],[data-agent-notes-starters],[data-ask-gpt-today],[data-ask-gpt-query],[data-ask-gpt-pause],[data-ask-gpt-style],[data-ask-gpt-style-toggle]').forEach(control=>{
+    control.onclick=null;control.onkeydown=null;control.onsubmit=null;control.onchange=null;
+  });
+
+  const jazzIds=['jazzCommandInput','jazzCommandMic','jazzStopButton','jazzQuickQuestions','agentNotesAskGptForm','agentNotesAskGptQuery','agentNotesAskGptMic','agentNotesAskGptStop','agentNotesAskGptStarters','agentNotesAskGptSave'];
+  const duplicateIds=jazzIds.filter(id=>document.querySelectorAll(`[id="${id}"]`).length>1);
+  if(duplicateIds.length)console.error('[Agent Rise Jazz] Duplicate control IDs:',duplicateIds);
+  console.log('[Agent Rise Jazz] controls bound',Object.fromEntries(jazzIds.map(id=>[id,Boolean($(id))])));
+
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='Enter'||event.isComposing)return;
+    const input=event.target;
+    if(input?.id==='jazzCommandInput'){
+      event.preventDefault();
+      submitDashboardJazzQuery(input.value);
+      return;
+    }
+    if(input?.matches?.('[data-ask-gpt-query]')){
+      event.preventDefault();
+      input.form?.requestSubmit();
+    }
+  });
+
+  document.addEventListener('submit',event=>{
+    if(event.target?.id!=='agentNotesAskGptForm')return;
+    event.preventDefault();
+    submitAskGPT(event);
+  });
+
+  document.addEventListener('click',event=>{
+    const target=event.target instanceof Element?event.target:null;
+    if(!target)return;
+
+    const dashboardPill=target.closest('#jazzQuickQuestions [data-jazz-question]');
+    if(dashboardPill){
+      event.preventDefault();
+      const input=$('jazzCommandInput');
+      if(!input)return;
+      input.value=dashboardPill.dataset.jazzQuestion||dashboardPill.textContent.trim();
+      submitDashboardJazzQuery(input.value);
+      return;
+    }
+    if(target.closest('#jazzCommandMic')){
+      event.preventDefault();
+      captureDashboardJazzQuestion();
+      return;
+    }
+    const agentNotesPill=target.closest('[data-agent-notes-starters] [data-ask-gpt-question]');
+    if(agentNotesPill){
+      event.preventDefault();
+      const surface=agentNotesPill.closest('.ask-ai-surface'),input=surface?.querySelector('[data-ask-gpt-query]'),form=surface?.querySelector('form');
+      if(!input||!form)return;
+      input.value=agentNotesPill.dataset.askGptQuestion||agentNotesPill.textContent.trim();
+      form.requestSubmit();
+      return;
+    }
+    const mic=target.closest('[data-ask-gpt-mic]');
+    if(mic){event.preventDefault();captureAskGptQuestion(mic);return;}
+    const stop=target.closest('[data-ask-gpt-stop]');
+    if(stop){event.preventDefault();event.stopPropagation();stopAskGptInteraction({triggerButton:stop});return;}
+    const save=target.closest('[data-ask-gpt-save]');
+    if(save){event.preventDefault();saveAskGptToNotes(save);return;}
+    const settings=target.closest('[data-ask-gpt-settings]');
+    if(settings){
+      event.preventDefault();
+      const panel=settings.parentElement?.querySelector('[data-ask-gpt-settings-panel]'),open=panel?.hidden===true;
+      if(!panel)return;
+      panel.hidden=!open;settings.setAttribute('aria-expanded',String(open));
+      return;
+    }
+    const close=target.closest('[data-ask-gpt-close]');
+    if(close){event.preventDefault();const panel=close.closest('.ask-ai-surface');if(panel)panel.open=false;return;}
+    const keep=target.closest('[data-ask-gpt-keep]'),remove=target.closest('[data-ask-gpt-delete]');
+    if(keep){event.preventDefault();keepTodayAskGptQuestion(keep.dataset.askGptKeep,keep);return;}
+    if(remove){event.preventDefault();deleteTodayAskGptQuestion(remove.dataset.askGptDelete);}
+  });
+
+  document.addEventListener('change',event=>{
+    if(event.target?.matches?.('[data-ask-gpt-pause]'))saveAskGptPause(event);
+    else if(event.target?.matches?.('[data-ask-gpt-style],[data-ask-gpt-style-toggle]'))saveAskGptResponseStyle(event);
+  });
+}
 function bindPilot(){
   window.arReportError=reportError;
   bindAuthenticationControls();
@@ -1330,6 +1427,12 @@ if(config.supabaseUrl&&config.supabaseAnonKey){ensureClient().then(async db=>{co
 // with a $19.99 first-month trial CTA. Copy: "Time is running out. AEP is almost here.
 // Create your account now and be ready with Agent Rise Pro. First month $19.99."
 // Popup fires once per session. Dismissible. Links to the signup flow.
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',bindJazzControlsWhenReady,{once:true});
+}else{
+  bindJazzControlsWhenReady();
+}
 
 
 
