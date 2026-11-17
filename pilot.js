@@ -561,7 +561,7 @@ async function submitDashboardJazzQuery(value){
   const input=$('jazzCommandInput'),surface=$('agentNotesAskGptDetails');
   const query=String(value??input?.value??'').trim();
   if(!input||!query)return input?.focus();
-  if(!(hasPremiumAccess()||isAdminAccount()||isOwner(pilot.user?.email))&&premiumGate())return;
+  if(pilot.demo||!pilot.user){requestDemoSignIn();return;}
   if(!surface){notify('Jazz is temporarily unavailable.',true);return;}
   const status=surface.querySelector('[data-ask-gpt-status]'),responsePanel=surface.querySelector('[data-ask-gpt-response-panel]'),responseText=surface.querySelector('[data-ask-gpt-response]');
   if(!status||!responsePanel||!responseText)return notify('Jazz is temporarily unavailable.',true);
@@ -577,7 +577,7 @@ async function submitDashboardJazzQuery(value){
 async function captureDashboardJazzQuestion(){
   const button=$('jazzCommandMic'),input=$('jazzCommandInput');
   if(!button||!input)return;
-  if(!(hasPremiumAccess()||isAdminAccount()||isOwner(pilot.user?.email))&&premiumGate())return;
+  if(pilot.demo||!pilot.user){requestDemoSignIn();return;}
   const now=Date.now();if(button.disabled||dashboardJazzMicLock||activeAskGptController||activeAskGptSurface?._askGptAudioController||activeAskGptSurface?._askGptAudio&&!activeAskGptSurface._askGptAudio.paused||window.speechSynthesis?.speaking)return;if(now-dashboardJazzMicLastClick<500)return;dashboardJazzMicLastClick=now;
   if(activeVoiceCapture){stopVoiceInput();setDashboardJazzMicState('idle');return;}
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
