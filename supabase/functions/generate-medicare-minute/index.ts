@@ -16,6 +16,31 @@ function json(body: unknown, status = 200) {
   });
 }
 
+function plainSpeechText(value: unknown) {
+  return String(value ?? "")
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/```(?:\w+)?\s*([\s\S]*?)```/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "")
+    .replace(/^\s*>\s?/gm, "")
+    .replace(/^\s*[-=_]{3,}\s*$/gm, " ")
+    .replace(/\|/g, " ")
+    .replace(/[*_~]/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, " and ")
+    .replace(/&lt;/gi, " less than ")
+    .replace(/&gt;/gi, " greater than ")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
@@ -26,7 +51,7 @@ Deno.serve(async (request) => {
     // The project originally stored this secret with a trailing space in its name.
     // Accept that legacy name so production works until the secret is re-saved cleanly.
     const elevenLabsKey = Deno.env.get("ELEVENLABS_API_KEY") ?? Deno.env.get("ELEVENLABS_API_KEY ") ?? "";
-    const voiceId = Deno.env.get("ELEVENLABS_VOICE_ID") ?? "";
+    const voiceId = (Deno.env.get("ELEVENLABS_VOICE_ID") ?? "").trim();
     if (!elevenLabsKey) throw new Error("Missing ELEVENLABS_API_KEY");
     if (!voiceId) throw new Error("Missing ELEVENLABS_VOICE_ID");
     // These two values are supplied automatically by the Supabase Edge runtime.
@@ -58,9 +83,8 @@ Deno.serve(async (request) => {
     if (!allowed) return json({ error: "Voice generation requires an active Pro subscription." }, 403);
 
     const body = await request.json();
-    const text = String(body?.text ?? body?.script ?? "").trim();
-    if (!text) return json({ error: "Text is required." }, 400);
-    const script = text;
+    const script = plainSpeechText(body?.text ?? body?.script ?? "");
+    if (!script) return json({ error: "Text is required." }, 400);
     if (body?.publish === true && !adminResult.data) return json({ error: "Owner access is required to publish The 121 Brief." }, 403);
     if (script.length > ELEVENLABS_CHARACTER_LIMIT) {
       throw new Error(`Script exceeds ${ELEVENLABS_CHARACTER_LIMIT} character limit. Current length: ${script.length}`);
