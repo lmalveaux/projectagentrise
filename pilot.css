@@ -1021,7 +1021,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
     gap:20px;
     padding:18px;
   }
-  .marketing-deep-feature .marketing-feature-visual{order:0}
+  .marketing-deep-feature .marketing-feature-visual,
+  .marketing-deep-feature:nth-child(odd) .marketing-feature-visual,
+  .marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
   .marketing-pricing-content{
     grid-template-columns:minmax(0,1fr);
   }
