@@ -2488,5 +2488,38 @@ body[data-theme^='sky-view'] .dashboard-main-actions > .dash-notification-wrap >
   .ask-ai-question-log-item{align-items:flex-start;flex-direction:column}
 }
 
+/* Presentation polish: keep Jazz prompts crisp and unobstructed. */
+#jazzQuickQuestions button,
+.ask-ai-how-to .jazz-quick-questions button{
+  position:relative;
+  z-index:2;
+  isolation:isolate;
+  background:rgba(20,25,30,.76)!important;
+  color:#F5F1EA!important;
+  opacity:1!important;
+  filter:none!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  pointer-events:auto!important;
+}
+#jazzQuickQuestions button::before,
+#jazzQuickQuestions button::after,
+.ask-ai-how-to .jazz-quick-questions button::before,
+.ask-ai-how-to .jazz-quick-questions button::after{
+  content:none!important;
+  display:none!important;
+}
+.system-updating-jazz{
+  display:block;
+  right:clamp(16px,3vw,38px);
+  bottom:clamp(16px,3vw,38px);
+  width:clamp(72px,8vw,96px);
+  height:clamp(72px,8vw,96px);
+  object-fit:cover;
+  object-position:center center;
+}
+@media(max-width:600px){.system-updating-jazz{width:64px;height:64px}}
+
 
 
