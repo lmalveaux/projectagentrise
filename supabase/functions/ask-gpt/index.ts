@@ -3,6 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY") ?? "";
+const OWNER_EMAILS = new Set(["lisasjazz@gmail.com", "121media.info@gmail.com"]);
 const ALLOWED_ORIGINS = new Set([
   "https://agentrisepro.com",
   "https://www.agentrisepro.com",
@@ -53,18 +54,21 @@ Deno.serve(async (request) => {
       admin.from("admins").select("user_id").eq("user_id", user.id).maybeSingle(),
       admin.from("account_entitlements").select("tier,status,current_period_end").eq("user_id", user.id).maybeSingle(),
     ]);
-    if (adminResult.error) throw adminResult.error;
-    if (entitlementResult.error) throw entitlementResult.error;
+    if (adminResult.error) console.warn("Jazz admin lookup unavailable", adminResult.error.message);
+    if (entitlementResult.error) console.warn("Jazz entitlement lookup unavailable", entitlementResult.error.message);
 
     const entitlement = entitlementResult.data;
     const periodActive = !entitlement?.current_period_end || Date.parse(entitlement.current_period_end) > Date.now();
     const paidTier = ["pro", "pro-plus", "agency", "owner"].includes(entitlement?.tier ?? "");
-    const allowed = Boolean(adminResult.data || (entitlement?.status === "active" && paidTier && periodActive));
-    if (!allowed) return json({ error: "The A.I. Assistant requires an active Pro subscription." }, 403, origin);
+    const ownerAccount = OWNER_EMAILS.has(String(user.email ?? "").toLowerCase());
+    const hasProAccess = Boolean(ownerAccount || adminResult.data || (entitlement?.status === "active" && paidTier && periodActive));
 
     const body = await request.json().catch(() => ({}));
     const query = typeof body.query === "string" ? body.query.trim() : "";
     const responseStyle = body.responseStyle === "brief" ? "brief" : "contextual";
+    const tierPrompt = hasProAccess
+      ? " This user has Pro access. Act as a full business assistant: answer Medicare questions, draft emails, create marketing ideas, analyze business strategies, and help with general business tasks."
+      : " This user is on the Pilot tier. Restrict answers to Medicare and insurance questions, compliance, app functionality, and basic business organization. Long-term memory and deep business context are Pro features.";
     const rawContext = body.context && typeof body.context === "object" ? body.context : {};
     const appContext = {
       currentDate: String(rawContext.currentDate ?? "").slice(0, 20),
@@ -86,19 +90,24 @@ Deno.serve(async (request) => {
     if (!query) return json({ error: "Enter a question for the A.I. Assistant." }, 400, origin);
     if (query.length > 4000) return json({ error: "Keep your question under 4,000 characters." }, 400, origin);
 
-    const { data: recentHistory, error: historyError } = await admin
-      .from("chat_history")
-      .select("role,content,created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(6);
-    if (historyError) throw historyError;
-
-    const historyMessages = (recentHistory ?? [])
-      .slice()
-      .sort((left, right) => Date.parse(left.created_at) - Date.parse(right.created_at))
-      .filter((message) => message.role === "user" || message.role === "assistant")
-      .map((message) => ({ role: message.role, content: message.content }));
+    let historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
+    if (hasProAccess) {
+      const { data: recentHistory, error: historyError } = await admin
+        .from("chat_history")
+        .select("role,content,created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(6);
+      if (historyError) {
+        console.warn("Jazz history lookup unavailable", historyError.message);
+      } else {
+        historyMessages = (recentHistory ?? [])
+          .slice()
+          .sort((left, right) => Date.parse(left.created_at) - Date.parse(right.created_at))
+          .filter((message) => message.role === "user" || message.role === "assistant")
+          .map((message) => ({ role: message.role as "user" | "assistant", content: String(message.content ?? "") }));
+      }
+    }
 
     const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -109,7 +118,7 @@ Deno.serve(async (request) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: responseStyle === "brief" ? `${SYSTEM_PROMPT}${contextPrompt} Keep your answers extremely concise, under 3 sentences.` : `${SYSTEM_PROMPT}${contextPrompt}` },
+          { role: "system", content: responseStyle === "brief" ? `${SYSTEM_PROMPT}${tierPrompt}${contextPrompt} Keep your answers extremely concise, under 3 sentences.` : `${SYSTEM_PROMPT}${tierPrompt}${contextPrompt}` },
           ...historyMessages,
           { role: "user", content: query },
         ],
@@ -128,12 +137,14 @@ Deno.serve(async (request) => {
       : "";
     if (!text) return json({ error: "The A.I. Assistant returned an empty response." }, 502, origin);
 
-    const exchangeCreatedAt = Date.now();
-    const { error: saveHistoryError } = await admin.from("chat_history").insert([
-      { user_id: user.id, role: "user", content: query, created_at: new Date(exchangeCreatedAt).toISOString() },
-      { user_id: user.id, role: "assistant", content: text, created_at: new Date(exchangeCreatedAt + 1).toISOString() },
-    ]);
-    if (saveHistoryError) throw saveHistoryError;
+    if (hasProAccess) {
+      const exchangeCreatedAt = Date.now();
+      const { error: saveHistoryError } = await admin.from("chat_history").insert([
+        { user_id: user.id, role: "user", content: query, created_at: new Date(exchangeCreatedAt).toISOString() },
+        { user_id: user.id, role: "assistant", content: text, created_at: new Date(exchangeCreatedAt + 1).toISOString() },
+      ]);
+      if (saveHistoryError) console.warn("Jazz history save unavailable", saveHistoryError.message);
+    }
 
     return json({ text }, 200, origin);
   } catch (error) {

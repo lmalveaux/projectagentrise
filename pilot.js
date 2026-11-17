@@ -466,9 +466,20 @@ async function submitAskGPT(event){
   const query=input.value.trim();
   if(!query){input.focus();status.textContent='Enter a question first.';return;}
   const controller=beginAskGptRequest(surface);form.dataset.submitting='true';setAskGptState(surface,'thinking');status.textContent='Thinking…';
-  try{const response=await askGPT(query,{signal:controller.signal});if(controller.signal.aborted)return;surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);await playAskGptAudio(surface);}
+  try{const response=await askGPT(query,{signal:controller.signal});if(controller.signal.aborted)return;surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);const played=await playAskGptAudio(surface);if(!played&&!controller.signal.aborted)playBrowserSpeechFallback(surface,response);}
   catch(error){status.textContent=askGptWasCancelled(error)?'Stopped.':error.message||'Ask AI is temporarily unavailable.';}
   finally{if(activeAskGptController===controller){activeAskGptController=null;activeAskGptSurface=null;}delete form.dataset.submitting;if(surface.dataset.aiState!=='speaking')setAskGptState(surface,'idle');}
+}
+function playBrowserSpeechFallback(surface,text){
+  if(!surface||!String(text||'').trim()||!('speechSynthesis' in window))return false;
+  const status=surface.querySelector('[data-ask-gpt-status]');
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(String(text).trim());
+  utterance.onstart=()=>{setAskGptState(surface,'speaking');setDashboardJazzMicState('speaking');if(status)status.textContent='Speaking…';};
+  utterance.onend=()=>{setAskGptState(surface,'idle');setDashboardJazzMicState('idle');if(status)status.textContent='Response complete.';};
+  utterance.onerror=()=>{setAskGptState(surface,'idle');setDashboardJazzMicState('idle');if(status)status.textContent='The response is ready to read.';};
+  window.speechSynthesis.speak(utterance);
+  return true;
 }
 function agentNotesAskGptMarkup(){
   const prefix='agentNotes';
@@ -559,7 +570,7 @@ async function submitDashboardJazzQuery(value){
   try{
     const response=await askGPT(query,{signal:controller.signal});
     if(controller.signal.aborted)return;
-    surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';const played=await playAskGptAudio(surface);if(!played&&!controller.signal.aborted&&'speechSynthesis' in window){window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(response);utterance.onstart=()=>{setJazzAvatarSpeaking(true);setDashboardJazzMicState('speaking');};utterance.onend=utterance.onerror=()=>{setJazzAvatarSpeaking(false);setDashboardJazzMicState('idle');input.placeholder='Ask or tell Jazz';};setDashboardJazzMicState('speaking');window.speechSynthesis.speak(utterance);}
+    surface._lastAskGpt={question:query,response};addTodayAskGptQuestion(query,response);responseText.textContent=response;responsePanel.hidden=false;resetAskGptAudio(surface);input.placeholder='Jazz is speaking…';const played=await playAskGptAudio(surface);if(!played&&!controller.signal.aborted)playBrowserSpeechFallback(surface,response);
   }catch(error){setAskGptState(surface,'idle');if(!askGptWasCancelled(error))notify(error.message||'Jazz is temporarily unavailable.',true);else status.textContent='Stopped.';}
   finally{if(activeAskGptController===controller){activeAskGptController=null;activeAskGptSurface=null;}const stillSpeaking=Boolean(surface._askGptAudio&&!surface._askGptAudio.paused&&!surface._askGptAudio.ended)||Boolean(window.speechSynthesis?.speaking);setDashboardJazzMicState(stillSpeaking?'speaking':'idle');input.disabled=false;input.placeholder=stillSpeaking?'Jazz is speaking…':'Ask or tell Jazz';if(!stillSpeaking)input.focus();}
 }
