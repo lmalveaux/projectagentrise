@@ -116,6 +116,7 @@ function clearDemoSignInPrompt(){clearTimeout(demoSignInTimer);demoSignInTimer=n
 function setMarketingLandingVisible(visible){const landing=$('marketingLanding'),app=document.querySelector('main.app'),status=$('pilotStatus');if(landing)landing.hidden=!visible;if(app)app.hidden=visible;if(status)status.hidden=visible;document.body.classList.toggle('marketing-mode',visible);}
 function showMarketingLanding(){clearDemoSignInPrompt();pilot.loaded=false;pilot.demo=false;document.body.classList.remove('is-demo','is-signed-in');setMarketingLandingVisible(true);if($('accountDialog')?.open)$('accountDialog').close();}
 function setSystemShieldActive(active){const shield=$('systemUpdatingShield');document.querySelectorAll('body>:not(script):not(link):not(style)').forEach(element=>{if(element!==shield)element.inert=active;});if(shield)shield.hidden=!active;}
+async function playSystemJazzVoice(){const audio=$('systemJazzVoiceAudio'),button=$('systemJazzVoiceButton');if(!audio||!button)return;if(!audio.paused){audio.pause();audio.currentTime=0;button.classList.remove('is-playing');button.setAttribute('aria-label','Hear from Jazz');return;}try{audio.currentTime=0;await audio.play();button.classList.add('is-playing');button.setAttribute('aria-label','Stop Jazz voice');audio.onended=()=>{button.classList.remove('is-playing');button.setAttribute('aria-label','Hear from Jazz');};}catch(error){button.classList.remove('is-playing');button.setAttribute('aria-label','Hear from Jazz');notify('Jazz voice is unavailable right now.');console.warn('Jazz splash audio failed to play:',error);}}
 function openSystemPreview(){launchPreviewActive=true;setSystemShieldActive(false);pilot.user=null;loadDemoWorkspace();}
 function premiumGate(){if(hasPremiumAccess())return false;if(pilot.demo){requestDemoSignIn();return true;}$('premiumGateDialog').showModal();return true;}
 function closeGoalTracker(){const panel=document.querySelector('.fresh-goal-tracker'),button=$('freshGoalTrackerButton');if(panel)panel.hidden=true;if(button){button.setAttribute('aria-expanded','false');button.classList.remove('is-active');}document.body.classList.remove('scroll-lock','modal-open','no-scroll');document.body.style.overflow='';}
@@ -1323,6 +1324,7 @@ function bindJazzControlsWhenReady(){
 function bindPilot(){
   setSystemShieldActive(true);
   guardClick($('systemPreviewButton')).onclick=openSystemPreview;
+  guardClick($('systemJazzVoiceButton')).onclick=playSystemJazzVoice;
   window.arReportError=reportError;
   bindAuthenticationControls();
   installDemoWriteGuard();

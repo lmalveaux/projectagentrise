@@ -1378,9 +1378,16 @@ body[data-theme^="sky-view"] .topbar .date {
         <p class="system-updating-kicker">Agent Rise Pro</p>
         <h1 id="systemUpdatingTitle">System Updating</h1>
         <p>We are preparing a simpler, more stable Agent Rise Pro experience.</p>
+        <button class="system-updating-jazz-trigger" id="systemJazzVoiceButton" type="button" aria-label="Hear from Jazz">
+          <span class="system-updating-jazz-frame">
+            <img class="system-updating-jazz" src="assets/images/jazz-avatar.gif" alt="Jazz, the Agent Rise Pro A.I. assistant" />
+            <span class="system-updating-jazz-play" aria-hidden="true">▶</span>
+          </span>
+          <span>Hear from Jazz</span>
+        </button>
+        <audio id="systemJazzVoiceAudio" src="assets/audio/jazz-takes5.mp3" preload="metadata"></audio>
         <button class="button button-primary" id="systemPreviewButton" type="button">Preview the Demo</button>
       </div>
-      <img class="system-updating-jazz" src="assets/images/jazz-avatar.gif" alt="Jazz, the Agent Rise Pro A.I. assistant" />
     </section>
     <div id="marketingLanding" class="marketing-landing" hidden>
       <section class="marketing-hero" aria-labelledby="marketingHeroTitle">
