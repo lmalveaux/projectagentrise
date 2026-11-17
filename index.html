@@ -1371,7 +1371,7 @@ body[data-theme^="sky-view"] .topbar .date {
     </style>
   </head>
   <body>
-    <link rel="stylesheet" href="pilot.css?v=layout129" />
+    <link rel="stylesheet" href="pilot.css?v=layout130" />
     <section class="system-updating-shield" id="systemUpdatingShield" role="dialog" aria-modal="true" aria-labelledby="systemUpdatingTitle">
       <div class="system-updating-card">
         <img class="system-updating-logo" src="assets/images/arp-logo.png" alt="Agent Rise Pro" />
@@ -1422,7 +1422,7 @@ body[data-theme^="sky-view"] .topbar .date {
             </article>
             <article class="marketing-deep-feature">
               <div class="marketing-feature-visual"><img src="assets/images/landing/daily-brief-driving.gif?v=6" alt="Your private morning notes, in your own voice." /></div>
-              <div><p class="marketing-feature-kicker">The Daily Brief · Your Voice</p><h3>Your Daily Brief</h3><p>Record your own voice notes for self-reminders or meeting notes for your team. Everything is saved right where you need it.<br /><small>Plus, get The 121 Brief—a special add-on from the founder to keep you sharp on industry news.</small></p></div>
+              <div><p class="marketing-feature-kicker">The Daily Brief · Your Voice</p><h3>Your Daily Brief</h3><p>Record your own voice notes for self-reminders or meeting notes for your team. Everything is saved right where you need it.<br /><small>Plus, keep up with current Medicare headlines through the built-in Industry News feed.</small></p></div>
             </article>
             <article class="marketing-deep-feature">
               <div class="marketing-feature-visual"><img src="assets/images/landing/fresh-pour-car-mount.gif?v=2" alt="Fresh Pour displayed on a phone mounted in a car with Back, Sound, and Menu controls" /></div>
@@ -1482,7 +1482,7 @@ body[data-theme^="sky-view"] .topbar .date {
       <section class="dashboard-main-actions" aria-label="First line of business">
         <button type="button" id="openScriptsButton">Scripts</button>
         <button type="button" id="carriersButton">Carriers</button>
-        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><div class="notifications-panel-head"><strong>Notifications</strong><button type="button" id="closeNotificationsButton" aria-label="Close Notifications">×</button></div><section class="notification-section" aria-labelledby="notificationBriefTitle"><h3 id="notificationBriefTitle">The 121 Brief</h3><div id="medicareMinuteNotification"></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
+        <div class="dash-notification-wrap"><button type="button" id="notificationsButton">Notifications <span class="notification-dot" aria-label="New notifications"></span></button><div id="notificationsMenu" class="notifications-menu notifications-center" hidden><div class="notifications-panel-head"><strong>Notifications</strong><button type="button" id="closeNotificationsButton" aria-label="Close Notifications">×</button></div><section class="notification-section" aria-labelledby="notificationIndustryNewsTitle"><h3 id="notificationIndustryNewsTitle">Industry News</h3><div id="notificationIndustryNews"><p>Open Notifications to load the latest Medicare headlines.</p></div></section><section class="notification-section" aria-labelledby="notificationCalendarUpdatesTitle"><h3 id="notificationCalendarUpdatesTitle">Calendar Updates</h3><div id="notificationCalendarUpdates"></div></section><section class="notification-section" aria-labelledby="notificationRemindersTitle"><h3 id="notificationRemindersTitle">Reminders</h3><div id="notificationReminderList"></div><button class="auth-link" type="button" id="notificationLeadDesk">Open Lead Desk →</button></section></div></div>
         <button type="button" id="openBreakroomButton">Fresh Pour</button>
       </section>
 
@@ -1783,14 +1783,15 @@ body[data-theme^="sky-view"] .topbar .date {
             <button class="button button-secondary" type="button" id="freshJitCarriersButton">JIT Carriers</button>
             <button class="button button-secondary" type="button" id="freshMedicareComparisonButton">Medicare Comparison</button>
             <button class="button button-secondary" type="button" id="freshLibraryButton">Library</button>
+            <button class="button button-secondary" type="button" id="freshIndustryNewsButton" aria-expanded="false" aria-controls="freshIndustryNewsPanel">Industry News</button>
             <button class="button button-secondary" type="button" id="freshMoreProFeaturesButton">Features</button>
             <button class="button button-secondary" type="button" id="freshFeedbackButton">Pilot Feedback</button>
             <button class="button button-secondary" type="button" id="openTrainingButton">Training Appointments</button>
           </nav>
 
-          <section class="fresh-brief-panel" id="freshPourBriefPanel" aria-labelledby="freshPourBriefTitle" hidden>
-            <div class="fresh-brief-heading"><h2 id="freshPourBriefTitle">The 121 Brief</h2><button class="button button-secondary" id="closeFreshPourBriefButton" type="button">Get Up</button></div>
-            <div id="freshBriefText"><p>Open The 121 Brief to load the latest audio and text.</p></div>
+          <section class="fresh-industry-news-panel" id="freshIndustryNewsPanel" aria-labelledby="freshIndustryNewsTitle" hidden>
+            <div class="fresh-industry-news-heading"><div><p class="pilot-muted">Latest Medicare reporting from KFF</p><h2 id="freshIndustryNewsTitle">Industry News</h2></div><button class="button button-secondary" id="closeFreshIndustryNewsButton" type="button">Get Up</button></div>
+            <div id="freshIndustryNewsList" aria-live="polite"><p>Open Industry News to load the latest headlines.</p></div>
           </section>
 
           <section class="fresh-goal-tracker" aria-labelledby="freshGoalTitle" hidden>
@@ -3867,31 +3868,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
         }
       }
 
-      async function toggleFreshPourBrief() {
-        const panel = document.querySelector("#freshPourBriefPanel");
-        const button = document.querySelector("#freshPourBriefButton");
-        if (!panel || !button) return;
-        const willOpen = panel.hidden;
-        panel.hidden = !willOpen;
-        button.setAttribute("aria-expanded", String(willOpen));
-        if (!willOpen) return;
-        const host = document.querySelector("#freshBriefText");
-        if (host) host.innerHTML = "<p>Loading The 121 Brief…</p>";
-        await window.AgentRiseMedicareMinute?.loadBriefs?.();
-        window.AgentRiseMedicareMinute?.renderInto?.(host);
-        const legacyAudio = document.querySelector("#freshBriefAudio");
-        if (legacyAudio) { legacyAudio.pause(); legacyAudio.hidden = true; legacyAudio.removeAttribute("src"); }
-        setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
-      }
-
-      function closeFreshPourBrief() {
-        const panel = document.querySelector("#freshPourBriefPanel");
-        const button = document.querySelector("#freshPourBriefButton");
-        if (panel) panel.hidden = true;
-        if (button) button.setAttribute("aria-expanded", "false");
-        document.querySelector("#breakroomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-
       function roomAudioTracks() {
         return [breakroomElements.ambienceAudio, breakroomElements.musicAudio]
           .filter((track) => track.getAttribute("src"));
@@ -4125,8 +4101,6 @@ Would you like to ask a quick question now, or schedule a short review at a bett
           stopConversationAudio(true);
         });
         document.querySelector("#freshStripClose")?.addEventListener("click", hideBreakroomMenu);
-        document.querySelector("#freshPourBriefButton")?.addEventListener("click", toggleFreshPourBrief);
-        document.querySelector("#closeFreshPourBriefButton")?.addEventListener("click", closeFreshPourBrief);
         breakroomElements.musicAudio.addEventListener("play", () => {
           breakroomElements.ambienceToggle.setAttribute("aria-pressed", "true");
           breakroomElements.ambienceLabel.textContent = "Sound";
@@ -4169,7 +4143,7 @@ Would you like to ask a quick question now, or schedule a short review at a bett
     <script src="config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="pilot.js?v=layout131" defer></script>
+    <script src="pilot.js?v=layout132" defer></script>
     <script src="medicare-minute.js?v=layout65" defer></script>
     <aside id="ar-error-tray" class="ar-error-tray" role="alert" aria-live="assertive" hidden>
       <div class="ar-error-card">
