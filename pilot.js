@@ -1,7 +1,9 @@
-console.log('Jazz script loaded');
+console.log('Jazz interface loaded');
 /* Agent Rise pilot extensions. Supabase stores account data; the Agent Rise
    platform owns the application, integrations, and provider callbacks. */
 const FMO_IMO_STARTERS=['Integrity Marketing Group','Ritter Insurance Marketing','HealthMarkets','NABIP','Precision Senior Marketing','New Horizons Insurance Marketing'];
+const JAZZ_STARTER_QUESTIONS=['What final expense carriers are in JIT?','What is on my calendar today?','Help me write a follow-up email.'];
+const safeArray=value=>Array.isArray(value)?value:[];
 const pilot = { db:null,user:null,demo:false,trialActive:false,loaded:false,revision:0,calls:[],carriers:[],events:[],soaRecords:[],soaCarrierForms:[],demoProspects:[],demoCalls:[],demoCarriers:[],demoTraining:[],demoTripIncentives:[],jitMasterCarriers:[],serverEntitlements:{tier:'trial',status:'inactive',proAccess:false,isAdmin:false},calendarErrors:{},workspaceData:{appearanceTheme:'sky-view-day',dailyGoal:5,goalTargets:{leads:5,calls:10,closes:1,incentiveName:'',incentiveCloses:10},campaigns:[],referrals:[],jitState:'',jitPersonal:{},jitPersonalCarriers:[],freshPourNotes:{},agentNotes:[],dailyTasks:[],tomorrowPlans:[],fmoImoEntries:[],offTimeEntries:[],agentNotesOpen:false,musicPanelOpen:false,freshPourMenuOpen:false,freshPourTrack:'instrumental-1',freshPourMuted:false,show121Brief:true,showQuickQuestions:true,userRssFeeds:[],aiSilenceSeconds:5,aiResponseStyle:'contextual',calendarUrls:[],calendarEvents:[],hiddenCalendarEvents:[],notificationBatchId:'',notificationBatchStartedAt:'',notificationReminderDismissedBatch:'',notificationStatus:'read',notificationMessageWaiting:false,notificationUrgent:false,latestRssPublishedAt:'',tripIncentives:[],agentInfo:{},scriptProfiles:{},libraryPreferences:{voice:'',speed:1},signaturePhrases:["I smell opportunity.","Stay in the game.","Don't leave money on the table."]},dirty:false,saving:false,saveAgain:false,rcReady:false,rcAuthorized:false,rcCalls:new Map(),seenCalls:new Set(),pendingLogs:[],lastSaved:null };
 const config = {...window.AGENT_RISE_CONFIG};
 const OWNER_EMAILS = ['lisasjazz@gmail.com', '121media.info@gmail.com'];
@@ -137,13 +139,8 @@ function injectUI(){
   const jazzField=document.querySelector('.jazz-command-field');if(jazzField&&!$('jazzResponseStyle'))jazzField.insertAdjacentHTML('afterend','<span class="jazz-inline-controls"><label class="jazz-context-toggle" for="jazzResponseStyle"><span>Context</span><input id="jazzResponseStyle" data-ask-gpt-style-toggle type="checkbox" role="switch" aria-label="Use contextual responses"><span class="jazz-context-track" aria-hidden="true"><span></span></span></label><button class="jazz-stop-button" id="jazzStopButton" data-ask-gpt-stop="dashboard" type="button" disabled aria-label="Stop Jazz response" title="Stop"><span aria-hidden="true">■</span></button></span>');
   const jazzBar=document.querySelector('.jazz-command-bar'),quickQuestions=$('jazzQuickQuestions');
   if(jazzBar&&quickQuestions){
-    const dashboardQuestions=[
-      'What final expense carriers are in JIT?',
-      'What is on my calendar today?',
-      'Help me write a follow-up email.'
-    ];
     quickQuestions.replaceChildren();
-    dashboardQuestions.forEach(question=>{
+    JAZZ_STARTER_QUESTIONS.forEach(question=>{
       const chip=document.createElement('button');
       chip.type='button';
       chip.dataset.jazzQuestion=question;
@@ -436,12 +433,27 @@ async function askGPT(userQuery,{signal,responseStyle=pilot.workspaceData.aiResp
     latestRssHeadline:String(pilot.workspaceData.latestRssHeadline||''),
     prospectNames:state.prospects.map(fullName).filter(Boolean).slice(0,100)
   };
-  const result=await fetch(endpoint,{method:'POST',headers:{Authorization:`Bearer ${sessionData.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({query,responseStyle:responseStyle==='brief'?'brief':'contextual',context}),signal});
-  const data=await result.json().catch(()=>({}));
-  if(!result.ok)throw Error(data?.error||'Ask AI is temporarily unavailable.');
-  const response=String(data?.text||'').trim();
-  if(!response)throw Error('Ask AI returned an empty response. Please try again.');
-  return response;
+  const requestController=new AbortController();
+  let timedOut=false;
+  const abortFromCaller=()=>requestController.abort(signal?.reason);
+  if(signal?.aborted)abortFromCaller();
+  else signal?.addEventListener('abort',abortFromCaller,{once:true});
+  const timeoutId=setTimeout(()=>{timedOut=true;requestController.abort();},3000);
+  console.log('Sending to ask-gpt',query);
+  try{
+    const result=await fetch(endpoint,{method:'POST',headers:{Authorization:`Bearer ${sessionData.session.access_token}`,apikey:config.supabaseAnonKey,'Content-Type':'application/json'},body:JSON.stringify({query,responseStyle:responseStyle==='brief'?'brief':'contextual',context}),signal:requestController.signal});
+    const data=await result.json().catch(()=>({}));
+    if(!result.ok)throw Error(data?.error||'Ask AI is temporarily unavailable.');
+    const response=String(data?.text||'').trim();
+    if(!response)throw Error('Ask AI returned an empty response. Please try again.');
+    return response;
+  }catch(error){
+    if(timedOut)throw Error('Jazz is taking too long to respond. Please try again.');
+    throw error;
+  }finally{
+    clearTimeout(timeoutId);
+    signal?.removeEventListener('abort',abortFromCaller);
+  }
 }
 window.askGPT=askGPT;
 function setAskGptState(surface,state){
@@ -485,7 +497,7 @@ function playBrowserSpeechFallback(surface,text){
 function agentNotesAskGptMarkup(){
   const prefix='agentNotes';
   const pause=Number(pilot.workspaceData.aiSilenceSeconds)||5;
-  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><img class="ask-ai-icon jazz-avatar-inline" data-jazz-avatar src="assets/images/jazz-avatar-static.png" data-static-src="assets/images/jazz-avatar-static.png" data-animated-src="assets/images/jazz-avatar.gif" alt="Jazz A.I. Assistant" width="32" height="32"><span class="jazz-agent-name"><strong>Jazz</strong><small>A.I. ASSISTANT</small></span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span><button class="ask-ai-summary-stop" id="${prefix}AskGptStop" data-ask-gpt-stop type="button" hidden aria-label="Stop Jazz response" title="Stop">■</button></summary><div class="ask-ai-body"><div class="ask-ai-how-to"><strong>Try asking…</strong><div class="jazz-quick-questions" id="${prefix}AskGptStarters" data-agent-notes-starters aria-label="Starter questions"><button type="button" data-ask-gpt-question="Who are you and what can you do?">Who are you and what can you do?</button><button type="button" data-ask-gpt-question="What is included in the Pro version?">What is included in the Pro version?</button><button type="button" data-ask-gpt-question="Draft a follow-up text to a new lead.">Draft a follow-up text to a new lead.</button><button type="button" data-ask-gpt-question="What are the rules for a Scope of Appointment?">What are the rules for a Scope of Appointment?</button></div></div><div class="ask-ai-panel-tools"><div class="ask-ai-settings-control"><button class="ask-ai-settings-toggle" data-ask-gpt-settings type="button" aria-expanded="false" aria-label="Voice response settings">⚙</button><div class="ask-ai-settings-panel" data-ask-gpt-settings-panel hidden><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select><span>of silence</span></label></div></div><button class="ask-ai-close" data-ask-gpt-close type="button" aria-label="Close A.I. Assistant">×</button></div><form id="${prefix}AskGptForm"><div class="ask-ai-input-row"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Type a question and press Enter"></label><button class="button button-secondary ask-ai-mic" id="${prefix}AskGptMic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button><button class="button ask-ai-save" id="${prefix}AskGptSave" data-ask-gpt-save type="button">Save to Notes</button></div><div class="ask-ai-status pilot-muted" data-ask-gpt-status role="status" aria-live="polite">Ready for your question.</div></form><section class="ask-ai-response" data-ask-gpt-response-panel hidden><p data-ask-gpt-response></p><audio data-ask-gpt-audio preload="none" hidden></audio></section><section class="ask-ai-today"><h4>Today’s Questions</h4><p class="pilot-muted" data-ask-gpt-today-note></p><div data-ask-gpt-today><p class="pilot-muted">No questions yet today.</p></div></section></div></details>`;
+  return `<details class="ask-ai-surface ask-ai-compact" id="${prefix}AskGptDetails" data-ai-state="idle"><summary><img class="ask-ai-icon jazz-avatar-inline" data-jazz-avatar src="assets/images/jazz-avatar-static.png" data-static-src="assets/images/jazz-avatar-static.png" data-animated-src="assets/images/jazz-avatar.gif" alt="Jazz A.I. Assistant" width="32" height="32"><span class="jazz-agent-name"><strong>Jazz</strong><small>A.I. ASSISTANT</small></span><span class="ask-ai-status-light" data-ask-gpt-status-light data-state="idle" role="status" aria-label="A.I. Assistant is ready"></span><button class="ask-ai-summary-stop" id="${prefix}AskGptStop" data-ask-gpt-stop type="button" hidden aria-label="Stop Jazz response" title="Stop">■</button></summary><div class="ask-ai-body"><div class="ask-ai-how-to"><strong>Try asking…</strong><div class="jazz-quick-questions" id="${prefix}AskGptStarters" data-agent-notes-starters aria-label="Starter questions">${JAZZ_STARTER_QUESTIONS.map(question=>`<button type="button" data-ask-gpt-question="${html(question)}">${html(question)}</button>`).join('')}</div></div><div class="ask-ai-panel-tools"><div class="ask-ai-settings-control"><button class="ask-ai-settings-toggle" data-ask-gpt-settings type="button" aria-expanded="false" aria-label="Voice response settings">⚙</button><div class="ask-ai-settings-panel" data-ask-gpt-settings-panel hidden><label class="ask-ai-pause">Respond after<select data-ask-gpt-pause aria-label="Seconds of silence before the A.I. Assistant responds">${[3,5,8,10].map(seconds=>`<option value="${seconds}" ${pause===seconds?'selected':''}>${seconds}s</option>`).join('')}</select><span>of silence</span></label></div></div><button class="ask-ai-close" data-ask-gpt-close type="button" aria-label="Close A.I. Assistant">×</button></div><form id="${prefix}AskGptForm"><div class="ask-ai-input-row"><label class="ask-ai-input-line" for="${prefix}AskGptQuery"><span>Ask a question</span><input id="${prefix}AskGptQuery" data-ask-gpt-query type="text" maxlength="4000" autocomplete="off" placeholder="Type a question and press Enter"></label><button class="button button-secondary ask-ai-mic" id="${prefix}AskGptMic" data-ask-gpt-mic type="button" aria-pressed="false" aria-label="Speak your question">🎙</button><button class="button ask-ai-save" id="${prefix}AskGptSave" data-ask-gpt-save type="button">Save to Notes</button></div><div class="ask-ai-status pilot-muted" data-ask-gpt-status role="status" aria-live="polite">Ready for your question.</div></form><section class="ask-ai-response" data-ask-gpt-response-panel hidden><p data-ask-gpt-response></p><audio data-ask-gpt-audio preload="none" hidden></audio></section><section class="ask-ai-today"><h4>Today’s Questions</h4><p class="pilot-muted" data-ask-gpt-today-note></p><div data-ask-gpt-today><p class="pilot-muted">No questions yet today.</p></div></section></div></details>`;
 }
 async function saveAskGptPause(event){
   const seconds=Number(event.target.value);
