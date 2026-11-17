@@ -1500,6 +1500,7 @@ body[data-theme^="sky-view"] #settingsButton{
   border-color: currentColor;
   background: rgba(92,64,51,.08);
 }
+.agent-notes-mode-tabs button[data-agent-notes-tab="jazz"]::after{content:"★  🔒";margin-left:6px;color:#C9A227;font-size:.72rem}.jazz-memory-lock{display:flex;align-items:center;gap:7px;margin:0 0 8px;padding:7px 10px;border:1px solid rgba(201,162,39,.55);border-radius:8px;background:rgba(201,162,39,.08);color:inherit;font-size:.72rem;font-weight:750}.jazz-memory-lock span{color:#C9A227}
 body[data-theme="sky-view-day"] .header-greeting {
   box-sizing: border-box;
   padding: 8px 14px;
