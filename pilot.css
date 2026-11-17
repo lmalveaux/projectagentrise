@@ -852,10 +852,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   align-items:stretch;
   gap:12px;
 }
-.marketing-deep-feature,
-.marketing-deep-feature:nth-child(even){
+.marketing-deep-feature{
   display:grid;
-  grid-template-columns:minmax(0,34%) minmax(0,58%);
+  grid-template-columns:minmax(0,58%) minmax(0,34%);
   justify-content:space-between;
   align-items:center;
   gap:4%;
@@ -864,7 +863,9 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
   padding:24px;
   overflow:hidden;
 }
-.marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:2}
+.marketing-deep-feature:nth-child(even){grid-template-columns:minmax(0,34%) minmax(0,58%)}
+.marketing-deep-feature:nth-child(odd) .marketing-feature-visual{order:2}
+.marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
 .marketing-feature-visual{
   display:block;
   width:100%;
@@ -908,6 +909,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 }
 .marketing-business-logo{
   display:block;
+  order:-1;
   width:100%;
   max-width:430px;
   aspect-ratio:430 / 246;
@@ -929,7 +931,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
 .marketing-business-copy{
   position:relative;
   display:grid;
-  grid-template-columns:minmax(0,58%) minmax(0,34%);
+  grid-template-columns:minmax(0,34%) minmax(0,58%);
   justify-content:space-between;
   align-items:center;
   gap:4%;
@@ -1019,7 +1021,7 @@ body:before,.breakroom-fallback{background-size:cover!important;background-posit
     gap:20px;
     padding:18px;
   }
-  .marketing-deep-feature:nth-child(even) .marketing-feature-visual{order:0}
+  .marketing-deep-feature .marketing-feature-visual{order:0}
   .marketing-pricing-content{
     grid-template-columns:minmax(0,1fr);
   }
